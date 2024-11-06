@@ -3,23 +3,23 @@ import Spacer from "../components/spacer";
 import ProfileBadge from "../components/profileBadge";
 import ListingImagesSlider from "../components/listingImageSlider";
 import ListingInformation from "../components/itemView/listingInformation";
+import FloatingIsland from "../components/itemView/floatingIsland";
 
 const ItemView = () => {
     return (
-        <div>
+        <div className="relative pb-20">
             <MobileNav/>
 
-            <div className="mt-20 px-4">
-                <ProfileBadge/>
+            <div className="mt-20">
+                <ProfileBadge />
             </div>
-
             <div className="item-view-slider mt-2 px-4">
                 <ListingImagesSlider/>
             </div>
 
-            <div className="mt-6 px-4">
-                <ListingInformation/>
-            </div>
+            <ListingInformation/>
+
+            <FloatingIsland/>
 
             <Spacer/>
         </div>

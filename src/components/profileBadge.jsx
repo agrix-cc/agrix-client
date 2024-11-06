@@ -1,7 +1,7 @@
 const ProfileBadge = (props) => {
 
     return (
-        <div className="flex justify-start items-center gap-2">
+        <div className="flex justify-start items-center gap-2 px-4">
             <div className="w-11 h-11 rounded-full overflow-hidden">
                 <img src="assets/profile-pic.webp" alt="" className="w-full h-full object-cover"/>
             </div>

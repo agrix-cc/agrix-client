@@ -3,7 +3,7 @@ import ListingProgressBar from "./listingProgressBar";
 
 const ListingInformation = () => {
     return (
-        <>
+        <div className="mt-6 mb-[120px] px-4">
             <div className="mb-2">
                 <p className="text-2xl font-medium">Fresh Tomatoes for Sale</p>
                 <p className="text-gray-500">Crop</p>
@@ -33,7 +33,7 @@ const ListingInformation = () => {
                     <li>Harvested date: 28/09/2024</li>
                 </ul>
             </div>
-        </>
+        </div>
     );
 };
 
