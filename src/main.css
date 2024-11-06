@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.feed-post-image-slider .slick-slider .slick-track {
+    display: flex !important;
+}
+
+.feed-post-image-slider .slick-slider .slick-slide {
+    height: inherit !important;
+}
+
+.feed-post-image-slider .slick-slider .slick-slide div {
+    height: 100%;
+}
