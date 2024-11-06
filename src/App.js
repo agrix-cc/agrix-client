@@ -8,11 +8,12 @@ import Connections from "./pages/connections";
 import Profile from "./pages/profile";
 import AddListing from "./components/dashboard/addNew";
 import {useTheme} from "next-themes";
+import ItemView from "./pages/itemView";
 
 function App() {
 
     // Change default theme to light theme
-    const {theme, setTheme} = useTheme();
+    const {setTheme} = useTheme();
     setTheme('light');
 
     return (
@@ -27,6 +28,8 @@ function App() {
                 <Route path="/connections" element={<Connections/>}/>
                 <Route path="/profile" element={<Profile/>}/>
                 <Route path="/add" element={<AddListing/>}/>
+
+                <Route path="/product" element={<ItemView/>}/>
 
                 {/* Default route for 404 page */}
                 <Route path="*" element={<PageNotFound/>}/>

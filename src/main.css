@@ -2,14 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-.feed-post-image-slider .slick-slider .slick-track {
+.listing-image-slider .slick-slider .slick-track {
     display: flex !important;
 }
 
-.feed-post-image-slider .slick-slider .slick-slide {
+.listing-image-slider .slick-slider .slick-slide {
     height: inherit !important;
 }
 
-.feed-post-image-slider .slick-slider .slick-slide div {
+.listing-image-slider .slick-slider .slick-slide div {
     height: 100%;
+}
+
+.item-view-slider .slick-list {
+    @apply rounded-xl overflow-hidden;
 }

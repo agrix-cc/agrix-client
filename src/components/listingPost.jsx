@@ -1,46 +1,12 @@
 import {Link} from "react-router-dom";
-import Slider from "react-slick";
+import ProfileBadge from "./profileBadge";
+import ListingImagesSlider from "./listingImageSlider";
 
 const Post = () => {
     return (
         <div className="bg-mint-green p-4 my-4">
-            <ProfileBadge/>
+            <ProfileBadge profileType="Farmer"/>
             <Card/>
-        </div>
-    )
-}
-
-const ListingImagesSlider = () => {
-    const settings = {
-        dots: true,
-        infinite: false,
-        arrows: false,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        speed: 300,
-        cssEase: "linear"
-    };
-    return (
-        <Slider {...settings}>
-            <img src="assets/tomatoes.webp" alt="" className="w-full h-full object-cover"/>
-            <img src="assets/tomatoes.webp" alt="" className="w-full h-full object-cover"/>
-            <img src="assets/hero.webp" alt="" className="w-full h-full object-cover"/>
-            <img src="assets/tomatoes.webp" alt="" className="w-full h-full object-cover"/>
-            <img src="assets/tomatoes.webp" alt="" className="w-full h-full object-cover"/>
-        </Slider>
-    );
-}
-
-const ProfileBadge = () => {
-    return (
-        <div className="flex justify-start items-center gap-2">
-            <div className="w-11 h-11 rounded-full overflow-hidden">
-                <img src="assets/profile-pic.webp" alt="" className="w-full h-full object-cover"/>
-            </div>
-            <div>
-                <p>Tom Davis</p>
-                <p className="text-gray-500">Farmer</p>
-            </div>
         </div>
     )
 }
@@ -48,9 +14,7 @@ const ProfileBadge = () => {
 const Card = () => {
     return (
         <div className="bg-white my-2 overflow-hidden rounded-xl">
-            <div className="mb-4 feed-post-image-slider">
-                <ListingImagesSlider/>
-            </div>
+            <ListingImagesSlider/>
             <div className="p-4">
                 <p className="mb-2 text-lg">Fresh Tomatoes for sale</p>
                 <div className="mb-2">
