@@ -9,12 +9,16 @@ import Profile from "./pages/profile";
 import AddListing from "./components/dashboard/addNew";
 import {useTheme} from "next-themes";
 import ItemView from "./pages/itemView";
+import {useEffect} from "react";
 
 function App() {
 
     // Change default theme to light theme
     const {setTheme} = useTheme();
-    setTheme('light');
+
+    useEffect(() => {
+        setTheme('light');
+    }, [setTheme]);
 
     return (
         <div>
