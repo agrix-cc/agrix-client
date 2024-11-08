@@ -145,7 +145,7 @@ const SignUp = () => {
             })
             .catch(err => {
                 if (err.response) {
-                    setError({...error, serverResponse: {message: err.response.data.message.name}});
+                    setError({...error, serverResponse: {message: err.response.data.message}});
                 } else {
                     setError({...error, serverResponse: {message: err.message}});
                 }
@@ -250,9 +250,15 @@ const SignUp = () => {
                                 onChange={(e) => {
                                     handleChange(e);
                                     if (data.password !== data.confirmPassword) {
-                                        setError({...error, confirmPassword: {...error.confirmPassword, isActive: true}});
+                                        setError({
+                                            ...error,
+                                            confirmPassword: {...error.confirmPassword, isActive: true}
+                                        });
                                     } else {
-                                        setError({...error, confirmPassword: {...error.confirmPassword, isActive: false}});
+                                        setError({
+                                            ...error,
+                                            confirmPassword: {...error.confirmPassword, isActive: false}
+                                        });
                                     }
                                 }}
                                 error={error.password.isActive}
@@ -291,8 +297,9 @@ const SignUp = () => {
                         </div>
                         {
                             error.serverResponse.message ?
-                                <p className="text-center text-red-500 font-medium mt-2">Please enter valid
-                                    information</p> : ""
+                                <p className="text-center text-red-500 font-medium mt-2">
+                                    {error.serverResponse.message}
+                                </p> : ""
                         }
                         <p className="text-center text-gray-500 mt-4">
                             Already have an account?
@@ -313,7 +320,8 @@ const ProfileType = (props) => {
             onValueChange={(select) => props.onChange(select.value[0])}
             size="sm">
             <SelectLabel className="text-[16px] font-normal">{props.label}</SelectLabel>
-            <SelectTrigger className={`border ${props.error ? 'border-red-500' : 'border-lime-green'} border-opacity-50 rounded-full px-4 py-1`}>
+            <SelectTrigger
+                className={`border ${props.error ? 'border-red-500' : 'border-lime-green'} border-opacity-50 rounded-full px-4 py-1`}>
                 <SelectValueText placeholder={props.title}/>
             </SelectTrigger>
             <SelectContent>
