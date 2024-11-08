@@ -10,7 +10,7 @@ const ItemView = () => {
         <div className="relative pb-20">
             <MobileNav/>
 
-            <div className="mt-20">
+            <div className="mt-20 px-4">
                 <ProfileBadge />
             </div>
             <div className="item-view-slider mt-2 px-4">

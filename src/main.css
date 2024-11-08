@@ -17,3 +17,54 @@
 .item-view-slider .slick-list {
     @apply rounded-xl overflow-hidden;
 }
+
+.welcome-slider .slick-dots li.slick-active button:before {
+    @apply text-white;
+}
+
+.welcome-slider .slick-dots li button:before {
+    @apply text-white;
+}
+
+.welcomeHero {
+    position: relative;
+    width: 100%;
+    height: 70vh;
+    overflow: hidden;
+    @apply px-4;
+}
+
+.welcomeHero:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to top, #0ba360 0%, #3cba92 100%);
+    border-radius: 0 0 50% 50% / 0 0 100% 100%;
+    transform: scaleX(3);
+    mask-image: url("../public/assets/hero.webp");
+    mask-clip: content-box;
+}
+
+.signin-header {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    @apply px-4 pt-24 pb-20;
+}
+
+.signin-header:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to top, #0ba360 0%, #3cba92 100%);
+    border-radius: 0 0 50% 50% / 0 0 100% 100%;
+    transform: scaleX(2.5);
+    mask-image: url("../public/assets/hero.webp");
+    mask-clip: content-box;
+}

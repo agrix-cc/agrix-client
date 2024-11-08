@@ -1,7 +1,7 @@
 import {Routes, Route} from 'react-router-dom';
 import Home from "./pages/home";
 import PageNotFound from "./pages/404";
-import Login from "./pages/login";
+import SignIn from "./pages/signin";
 import SignUp from "./pages/signup";
 import Market from "./pages/market";
 import Connections from "./pages/connections";
@@ -10,6 +10,8 @@ import AddListing from "./components/dashboard/addNew";
 import {useTheme} from "next-themes";
 import ItemView from "./pages/itemView";
 import {useEffect} from "react";
+import Onboarding from "./pages/onboarding";
+import ProtectedRoutes from "./components/protectedRoutes";
 
 function App() {
 
@@ -25,15 +27,20 @@ function App() {
             {/* Routes for pages */}
             <Routes>
                 <Route path="/" element={<Home/>}/>
-                <Route path="/login" element={<Login/>}/>
+                <Route path="/signin" element={<SignIn/>}/>
                 <Route path="/signup" element={<SignUp/>}/>
+                <Route path="/onboarding" element={<Onboarding/>}/>
 
                 <Route path="/market" element={<Market/>}/>
-                <Route path="/connections" element={<Connections/>}/>
-                <Route path="/profile" element={<Profile/>}/>
-                <Route path="/add" element={<AddListing/>}/>
 
                 <Route path="/product" element={<ItemView/>}/>
+
+                {/*Protected routes*/}
+                <Route element={<ProtectedRoutes/>}>
+                    <Route path="/profile" element={<Profile/>}/>
+                    <Route path="/add" element={<AddListing/>}/>
+                    <Route path="/connections" element={<Connections/>}/>
+                </Route>
 
                 {/* Default route for 404 page */}
                 <Route path="*" element={<PageNotFound/>}/>
