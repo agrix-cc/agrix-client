@@ -1,8 +1,20 @@
 import WelcomeSlider from "../components/onboarding/welcomeSlider";
 import Button from "../components/onboarding/button";
 import BackToHome from "../components/onboarding/backtohome";
+import {useEffect} from "react";
+import {useNavigate} from "react-router-dom";
 
 const Onboarding = () => {
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem('jwtToken');
+        if (token) {
+            return navigate('/');
+        }
+    }, []);
+
     return (
         <div>
             <BackToHome/>

@@ -61,9 +61,11 @@ const SignUp = () => {
                         />
                         <div className="mb-4">
                             <Button
-                                link="/signup"
                                 label="Sign up"
                                 primary={true}
+                                onClick={() => {
+                                    console.log("From sign in")
+                                }}
                             />
                         </div>
                         <p className="text-center text-gray-500">
