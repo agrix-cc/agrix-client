@@ -61,6 +61,7 @@ const SignIn = () => {
                             type="email"
                             value={data.email}
                             onChange={(e) => handleChange(e)}
+                            autoComplete="email"
                         />
                         <InputField
                             label="Password"
@@ -70,6 +71,7 @@ const SignIn = () => {
                             type="password"
                             value={data.password}
                             onChange={(e) => handleChange(e)}
+                            autoComplete="current-password"
                         />
                         <div className="mb-2 pt-2">
                             <Button

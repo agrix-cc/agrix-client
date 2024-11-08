@@ -1,20 +1,33 @@
-const InputField = (props) => {
+const InputField = ({
+                        required = false,
+                        styles = "mb-4",
+                        type = "text",
+                        autoComplete = "off",
+                        id,
+                        label,
+                        placeholder,
+                        name,
+                        data,
+                        onChange,
+                        error
+                    }) => {
     return (
-        <div className={props.styles}>
-            <label className="block text-gray-700 font-medium mb-2" htmlFor={props.id}>
-                {props.label}
+        <div className={styles}>
+            <label className="block text-gray-700 font-medium mb-2" htmlFor={id}>
+                {label}
             </label>
             <input
-                id={props.id}
-                type={props.type}
-                placeholder={props.placeholder}
-                name={props.name} required={props.required}
-                value={props.data}
-                onChange={(e) => props.onChange(e)}
+                id={id}
+                type={type}
+                placeholder={placeholder}
+                name={name} required={required}
+                value={data}
+                onChange={(e) => onChange(e)}
+                autoComplete={autoComplete}
                 className={
                     `appearance-none
                     rounded-full
-                    ${props.error ? 'border-red-500' : 'border-green-300'}
+                    ${error ? 'border-red-500' : 'border-green-300'}
                     border
                     w-full
                     py-3
@@ -28,11 +41,5 @@ const InputField = (props) => {
         </div>
     );
 };
-
-InputField.defaultProps = {
-    required: false,
-    styles: "mb-4",
-    type: "text"
-}
 
 export default InputField;
