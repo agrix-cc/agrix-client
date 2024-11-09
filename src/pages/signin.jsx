@@ -24,7 +24,7 @@ const SignIn = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await axios.post('http://127.0.0.1:5050/signin', data)
+        await axios.post(`${process.env.REACT_APP_SERVER_URL}/signin`, data)
             .then(response => {
                 const token = response.data.token;
                 localStorage.setItem('jwtToken', token);

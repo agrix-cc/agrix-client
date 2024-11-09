@@ -136,7 +136,7 @@ const SignUp = () => {
         if (!validateForm()) {
             return
         }
-        await axios.post('http://127.0.0.1:5050/signup', data)
+        await axios.post(`${process.env.REACT_APP_SERVER_URL}/signup`, data)
             .then(response => {
                 const token = response.data.token;
                 localStorage.setItem('jwtToken', token);

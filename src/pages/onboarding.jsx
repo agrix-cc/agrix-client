@@ -13,7 +13,7 @@ const Onboarding = () => {
         if (token) {
             return navigate('/');
         }
-    }, []);
+    }, [navigate]);
 
     return (
         <div>

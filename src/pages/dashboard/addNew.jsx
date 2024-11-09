@@ -82,7 +82,7 @@ const AddListing = () => {
         });
 
         // TODO axios post request
-        await axios.post('http://127.0.0.1:5050/add-new', formData, {
+        await axios.post(`${process.env.REACT_APP_SERVER_URL}/add-new`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             }
@@ -206,10 +206,6 @@ const AddListing = () => {
     useEffect(() => {
         setData(data => ({...data, images: files}));
     }, [files]);
-
-    useEffect(() => {
-        console.log(errors);
-    }, [errors])
 
     return (
         <div className="mb-20 pb-8">
