@@ -11,10 +11,11 @@ import DateInput from "../../components/dashboard/addListing/components/dateInpu
 import {useEffect, useState} from "react";
 import {jwtDecode} from "jwt-decode";
 import {citiesByDistrict, districts} from "../../assets/citiesByDistrict";
+import axios from "axios";
 
 const AddListing = () => {
 
-    const [listingType, setListingType] = useState("transport");
+    const [listingType, setListingType] = useState("crop");
 
     const [files, setFiles] = useState([]);
 
@@ -31,7 +32,7 @@ const AddListing = () => {
         price_per_kg: "",
         quality_condition: "",
         quality_grade: "",
-        delivery_option: "",
+        delivery_options: "",
         organic: "",
         vehicle_type: "",
         vehicle_model: "",
@@ -67,13 +68,31 @@ const AddListing = () => {
         setErrors({...errors, [name]: ""});
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validateForm()) {
             return;
         }
+
+        const formData = new FormData();
+        formData.append('data', JSON.stringify({...listingInfo, ...additionalInfo, listing_type: listingType}));
+
+        files.forEach((file, index) => {
+            formData.append(`images`, file);
+        });
+
         // TODO axios post request
-        console.log(data);
+        await axios.post('http://127.0.0.1:5050/add-new', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+        })
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
     };
 
     let isValid = true;
@@ -85,8 +104,8 @@ const AddListing = () => {
             requiredFields: {
                 title: "Title can not be empty",
                 description: "Description can not be empty",
-                district: "District can not be empty",
-                city: "City can not be empty",
+                district: "Please select a district",
+                city: "Please select a city",
             },
             cropErrors: {
                 crop_name: "Crop name can not be empty",
@@ -96,7 +115,7 @@ const AddListing = () => {
                 price_per_kg: "Please enter the price",
                 quality_condition: "Please select the condition of crop",
                 quality_grade: "Please select the grade of crop",
-                delivery_option: "Please select a delivery option",
+                delivery_options: "Please select a delivery option",
             },
             transportErrors: {
                 vehicle_type: "Please select vehicle type",
@@ -117,41 +136,26 @@ const AddListing = () => {
 
         validateFields(errorMessages.requiredFields);
 
-        if (!listingInfo.city) {
+        switch (listingType) {
+            case "storage":
+                validateFields(errorMessages.storageErrors);
+                break;
+            case "transport":
+                validateFields(errorMessages.transportErrors);
+                break;
+            default:
+                validateFields(errorMessages.cropErrors);
+                break;
+        }
+
+        if ((listingType === "crop") && (data.harvested_date && new Date(data.harvested_date) > new Date())) {
             isValid = false;
-            errorState.city = "Please select a city";
+            errorState.harvested_date = "Please enter a valid harvested date";
         }
 
-        if (!listingInfo.district) {
+        if ((listingType === "transport" || listingType === "storage") && data.temperature_control && ((data.temperature_control_min > data.temperature_control_max))) {
             isValid = false;
-            errorState.district = "Please select a district";
-        }
-
-        if (listingType === "crop") {
-            validateFields(errorMessages.cropErrors);
-
-            if (data.harvested_date && new Date(data.harvested_date) > new Date()) {
-                isValid = false;
-                errorState.harvested_date = "Please enter a valid harvested date";
-            }
-        }
-
-        if (listingType === "transport") {
-            validateFields(errorMessages.transportErrors);
-
-            if (data.temperature_control && ((data.temperature_control_min > data.temperature_control_max) || !data.temperature_control_min || !data.temperature_control_max)) {
-                isValid = false;
-                errorState.temperature_control = "Please enter a valid temperature range";
-            }
-        }
-
-        if (listingType === "storage") {
-            validateFields(errorMessages.storageErrors);
-
-            if (data.temperature_control && ((data.temperature_control_min > data.temperature_control_max) || !data.temperature_control_min || !data.temperature_control_max)) {
-                isValid = false;
-                errorState.temperature_control = "Please enter a valid temperature range";
-            }
+            errorState.temperature_control = "Please enter a valid temperature range";
         }
 
         setErrors(errorState);
@@ -188,20 +192,24 @@ const AddListing = () => {
     }, []);
 
     useEffect(() => {
-        setData({...data, ...listingInfo});
-    }, [data, listingInfo]);
+        setData(data => ({...data, ...listingInfo}));
+    }, [listingInfo]);
 
     useEffect(() => {
-        setData({...data, ...additionalInfo});
-    }, [data, additionalInfo]);
+        setData(data => ({...data, ...additionalInfo}));
+    }, [additionalInfo]);
 
     useEffect(() => {
-        setData({...data, listing_type: listingType});
-    }, [data, listingType]);
+        setData(data => ({...data, listing_type: listingType}));
+    }, [listingType]);
 
     useEffect(() => {
-        setData({...data, images: files});
-    }, [data, files]);
+        setData(data => ({...data, images: files}));
+    }, [files]);
+
+    useEffect(() => {
+        console.log(errors);
+    }, [errors])
 
     return (
         <div className="mb-20 pb-8">

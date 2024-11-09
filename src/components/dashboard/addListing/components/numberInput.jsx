@@ -10,7 +10,7 @@ const NumberInput = (props) => {
             <p className="mb-2">{label}</p>
             <Field invalid={error} errorText={error}>
                 <NumberInputRoot
-                    defaultValue="1"
+                    defaultValue="0"
                     width="200px"
                     size="lg"
                     value={value}

@@ -1,21 +1,27 @@
+import {Field} from "../../../ui/field";
+
 const DateInput = (props) => {
     const {
         label,
         name,
-        onChange = (e) => {},
-        required
+        onChange = (e) => {
+        },
+        required,
+        error
     } = props;
 
     return (
         <div className="grid gap-2">
-            <label htmlFor={name}>{label}</label>
-            <input
-                type="date"
-                required={required}
-                id={name}
-                max={`${new Date().toISOString().split('T')[0]}`}
-                className="border-gray-400 border px-4 py-2 rounded"
-                onChange={(e) => onChange(e.target.value)}/>
+            <Field invalid={error} errorText={error}>
+                <label htmlFor={name}>{label}</label>
+                <input
+                    type="date"
+                    required={required}
+                    id={name}
+                    max={`${new Date().toISOString().split('T')[0]}`}
+                    className={`${error ? 'border-red-500' : 'border-gray-400'} border px-4 py-2 rounded w-full`}
+                    onChange={(e) => onChange(e.target.value)}/>
+            </Field>
         </div>
     );
 };

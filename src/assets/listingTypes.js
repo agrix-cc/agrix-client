@@ -42,7 +42,7 @@ const listingTypes = {
         {
             name: "price_per_kg",
             type: "number",
-            label: "Price per kg",
+            label: "Price per kg (Rs.)",
             min: 0,
             required: true
         },
@@ -71,7 +71,7 @@ const listingTypes = {
             required: true
         },
         {
-            name: "delivery_option",
+            name: "delivery_options",
             type: "select",
             label: "Delivery options",
             items: [
@@ -116,28 +116,28 @@ const listingTypes = {
         {
             name: "service_radius",
             type: "number",
-            label: "Enter maximum service radius",
+            label: "Enter maximum service radius (km)",
             min: 0,
             required: true
         },
         {
             name: "price_per_km",
             type: "number",
-            label: "Enter price per km",
+            label: "Enter price per km (Rs.)",
             min: 0,
             required: true
         },
         {
             name: "max_weight",
             type: "number",
-            label: "Enter maximum weight can transport",
+            label: "Enter maximum weight can transport (kg)",
             min: 0,
             required: true
         },
         {
             name: "max_volume",
             type: "number",
-            label: "Enter maximum volume can transport",
+            label: "Enter maximum volume can transport (m³)",
             min: 0,
             required: true
         },
@@ -177,7 +177,7 @@ const listingTypes = {
         {
             name: "price_per_unit",
             type: "number",
-            label: "Enter price per storage unit",
+            label: "Enter price per storage unit (Rs.)",
             min: 0,
             required: true
 
@@ -185,14 +185,14 @@ const listingTypes = {
         {
             name: "volume_per_unit",
             type: "number",
-            label: "Enter maximum volume can store per unit",
+            label: "Enter maximum volume can store per unit (m³)",
             min: 0,
             required: true
         },
         {
             name: "max_capacity_per_unit",
             type: "number",
-            label: "Enter maximum capacity can transport",
+            label: "Enter maximum capacity can transport (kg)",
             min: 0,
             required: true
         },
