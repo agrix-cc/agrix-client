@@ -68,3 +68,30 @@
     mask-image: url("../public/assets/hero.webp");
     mask-clip: content-box;
 }
+
+.chakraCheckBox div {
+    @apply !border !border-gray-400 z-30;
+}
+
+.chakraCheckBox span {
+    @apply text-[16px] font-normal;
+}
+
+.chakra-select__item {
+    @apply text-[16px] py-2 px-4;
+}
+.chakra-select__trigger {
+    @apply outline-none;
+}
+
+.chakra-file-upload__trigger {
+    @apply border border-gray-400 rounded px-4 py-2;
+}
+
+.chakra-file-upload__item {
+    @apply sm:justify-normal justify-between border-gray-400 border rounded;
+}
+
+.chakra-file-upload__itemContent {
+    @apply max-w-[240px] sm:max-w-none;
+}

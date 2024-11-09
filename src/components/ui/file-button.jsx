@@ -1,11 +1,4 @@
-function _nullishCoalesce(lhs, rhsFn) {
-  if (lhs != null) {
-    return lhs
-  } else {
-    return rhsFn()
-  }
-}
-;('use client')
+('use client')
 
 import {
   Button,
@@ -19,6 +12,15 @@ import {
 } from '@chakra-ui/react'
 import { forwardRef } from 'react'
 import { LuFile, LuUpload, LuX } from 'react-icons/lu'
+
+function _nullishCoalesce(lhs, rhsFn) {
+    if (lhs != null) {
+        return lhs
+    } else {
+        return rhsFn()
+    }
+}
+;
 
 export const FileUploadRoot = forwardRef(function FileUploadRoot(props, ref) {
   const { children, inputProps, ...rest } = props

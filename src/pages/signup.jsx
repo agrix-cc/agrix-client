@@ -129,7 +129,7 @@ const SignUp = () => {
             return;
         }
         validateForm();
-    }, [data]);
+    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();

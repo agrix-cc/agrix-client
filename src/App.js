@@ -6,7 +6,7 @@ import SignUp from "./pages/signup";
 import Market from "./pages/market";
 import Connections from "./pages/connections";
 import Profile from "./pages/profile";
-import AddListing from "./components/dashboard/addNew";
+import AddListing from "./pages/dashboard/addNew";
 import {useTheme} from "next-themes";
 import ItemView from "./pages/itemView";
 import {useEffect} from "react";
