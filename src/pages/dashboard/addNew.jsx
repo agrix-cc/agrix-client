@@ -25,6 +25,9 @@ const AddListing = () => {
     // This state object is the store user uploaded files
     const [files, setFiles] = useState([]);
 
+    // This state to keep the submit button disable until client side receives a response
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     // This state object holds all the possible errors to show error messages in input validations
     const [errors, setErrors] = useState({
         title: "",
@@ -87,6 +90,8 @@ const AddListing = () => {
             return;
         }
 
+        setIsSubmitting(true);
+
         // This is a helper function to append data to the formData according to the listing type
         const appendInfo = (listingType, formData) => {
             // Temporary object to hold information to append
@@ -129,13 +134,13 @@ const AddListing = () => {
         // attach jwt token to the request headers
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
 
-        // TODO axios post request
         await axios.post(`${process.env.REACT_APP_SERVER_URL}/add-new`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             }
         })
             .then((res) => {
+                setIsSubmitting(false);
                 toaster.create({
                     title: res.data.message,
                     type: "success",
@@ -148,6 +153,7 @@ const AddListing = () => {
                 });
             })
             .catch((error) => {
+                setIsSubmitting(false);
                 if (error.response) {
                     toaster.create({
                         title: error.response.data.message,
@@ -255,7 +261,7 @@ const AddListing = () => {
         })
     };
 
-    // This determine which listing should provide based on the user type
+    // This determines which listing should provide based on the user type
     useEffect(() => {
         // Decode the stored jwtToken to access user information
         const decoded = jwtDecode(localStorage.getItem("jwtToken"));
@@ -274,6 +280,16 @@ const AddListing = () => {
                 break;
         }
     }, []);
+
+    useEffect(() => {
+        if (isSubmitting) {
+            toaster.create({
+                title: "Submitting!",
+                type: "loading",
+                description: "Please wait until your listing is submitted!"
+            })
+        }
+    }, [isSubmitting])
 
     return (
         <div className="mb-20 pb-8">
@@ -445,6 +461,7 @@ const AddListing = () => {
                 </div>
                 <div className="px-4 mt-4">
                     <button
+                        disabled={isSubmitting}
                         type="submit"
                         className="px-4 py-2 rounded bg-primary-green text-white text-lg w-full shadow-lg active:shadow-md active:translate-y-0.5 translate-y-0 duration-300 transition-all"
                         onClick={handleSubmit}>
