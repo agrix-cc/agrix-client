@@ -15,7 +15,7 @@ const Profile = () => {
     useEffect(() => {
         const token = jwtDecode(localStorage.getItem("jwtToken"));
         setUser(token.user);
-    }, [user]);
+    }, []);
 
     return(
         <div>
@@ -30,7 +30,7 @@ const Profile = () => {
                     </ul>
                     <Button
                         className="border border-gray-400 rounded px-4 py-2"
-                        onClick={() => handleLogOut()}>
+                        onClick={handleLogOut}>
                         Log out
                     </Button>
                 </div>

@@ -192,7 +192,7 @@ const listingTypes = {
         {
             name: "max_capacity_per_unit",
             type: "number",
-            label: "Enter maximum capacity can transport (kg)",
+            label: "Enter maximum capacity can store per unit (kg)",
             min: 0,
             required: true
         },

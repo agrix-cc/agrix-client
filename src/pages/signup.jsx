@@ -1,12 +1,7 @@
 import {Link, useNavigate} from "react-router-dom";
 import WelcomeSlider from "../components/onboarding/welcomeSlider";
 import {
-    SelectContent,
-    SelectItem,
-    SelectRoot,
-    SelectTrigger,
-    SelectValueText,
-    SelectLabel
+    SelectContent, SelectItem, SelectRoot, SelectTrigger, SelectValueText, SelectLabel
 } from "../components/ui/select";
 import {createListCollection} from "@chakra-ui/react";
 import Button from "../components/onboarding/button";
@@ -46,7 +41,7 @@ const SignUp = () => {
         },
         password: {
             isActive: false,
-            message: "Password must be at least 8 characters and mixture of uppercase and lowercase letters."
+            message: "Password too weak. Use at least 8 characters with letters, numbers, and symbols."
         },
         confirmPassword: {
             isActive: false,
@@ -124,13 +119,6 @@ const SignUp = () => {
         return isValid;
     };
 
-    useEffect(() => {
-        if (isFirstRender.current) {
-            return;
-        }
-        validateForm();
-    }, [data]);
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validateForm()) {
@@ -151,196 +139,201 @@ const SignUp = () => {
             })
     };
 
-    return (
-        <div className="h-dvh relative">
-            <BackToHome/>
-            <div
-                className="signin-header">
-                <div className="relative">
-                    <WelcomeSlider/>
-                </div>
-            </div>
-            <div className="px-4 flex justify-center items-center w-full mt-11">
-                <div className="w-full">
-                    <form>
-                        <div className="mb-4 flex justify-between gap-4">
-                            <div>
-                                <InputField
-                                    label="First name"
-                                    id="first_name"
-                                    name="first_name"
-                                    placeholder="Your first name"
-                                    type="text"
-                                    value={data.first_name}
-                                    styles=""
-                                    onChange={(e) => handleChange(e)}
-                                    error={error.first_name.isActive}
-                                    autoComplete="given-name"
-                                />
-                                {
-                                    error.first_name.isActive ?
-                                        <p className="text-center text-red-500 font-medium">{error.first_name.message}</p> : ""
-                                }
-                            </div>
+    // Validate password on input change
+    useEffect(() => {
+        if (isFirstRender.current) {
+            return;
+        }
+        setError(prevError => {
+            // Temporary object to hold error
+            const passwordError = {...prevError.password};
+            // Check password strength
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&^])[A-Za-z\d@.#$!%*?&]{8,}$/;
+            // Set is active to be false when password is not match with regex
+            passwordError.isActive = !passwordRegex.test(data.password);
+            // update error state
+            return {...prevError, password: passwordError};
+        });
+    }, [data.password]);
 
-                            <div>
-                                <InputField
-                                    label="Last name"
-                                    id="last_name"
-                                    name="last_name"
-                                    placeholder="Your last name"
-                                    type="text"
-                                    value={data.last_name}
-                                    styles=""
-                                    onChange={(e) => handleChange(e)}
-                                    error={error.last_name.isActive}
-                                    autoComplete="family-name"
-                                />
-                                {
-                                    error.last_name.isActive ?
-                                        <p className="text-center text-red-500 font-medium">{error.last_name.message}</p> : ""
-                                }
-                            </div>
+    // Validate confirm password on input change
+    useEffect(() => {
+        if (isFirstRender.current) {
+            return;
+        }
+        setError(prevError => {
+            // Temporary object to hold error
+            const confirmPasswordError = {...prevError.confirmPassword};
+            // Set is active to be false when confirm password and password doesn't match
+            confirmPasswordError.isActive = data.confirmPassword !== data.password;
+            // update error state
+            return {...prevError, confirmPassword: confirmPasswordError};
+        });
+    }, [data.confirmPassword, data.password]);
 
-                        </div>
-                        <div className="mb-4">
-                            <ProfileType
-                                options={profileTypes}
-                                onChange={(value) => {
-                                    isFirstRender.current = false;
-                                    setData({...data, profile_type: value});
-                                }}
-                                error={error.profile_type.isActive}
-                                title="Select a profile type"
-                                label="Profile type"/>
-                            {
-                                error.profile_type.isActive ?
-                                    <p className="text-center text-red-500 font-medium">{error.profile_type.message}</p> : ""
-                            }
-                        </div>
-                        <div className="mb-4">
-                            <InputField
-                                label="Email Address"
-                                id="email"
-                                name="email"
-                                placeholder="Enter your email address"
-                                type="email"
-                                styles=""
-                                value={data.email}
-                                onChange={(e) => handleChange(e)}
-                                error={error.email.isActive}
-                                autoComplete="email"
-                            />
-                            {
-                                error.email.isActive ?
-                                    <p className="text-center text-red-500 font-medium">{error.email.message}</p> : ""
-                            }
-                        </div>
-                        <div className="mb-4">
-                            <InputField
-                                label="Password"
-                                id="password"
-                                name="password"
-                                placeholder="********"
-                                type="password"
-                                styles=""
-                                value={data.password}
-                                autoComplete="new-password"
-                                onChange={(e) => {
-                                    handleChange(e);
-                                    if (data.password !== data.confirmPassword) {
-                                        setError({
-                                            ...error,
-                                            confirmPassword: {...error.confirmPassword, isActive: true}
-                                        });
-                                    } else {
-                                        setError({
-                                            ...error,
-                                            confirmPassword: {...error.confirmPassword, isActive: false}
-                                        });
-                                    }
-                                }}
-                                error={error.password.isActive}
-                            />
-                            {
-                                error.password.isActive ?
-                                    <p className="text-center text-red-500 font-medium">{error.password.message}</p> : ""
-                            }
-                        </div>
-                        <div className="mb-4">
-                            <InputField
-                                label="Confirm password"
-                                id="confirmPassword"
-                                name="confirmPassword"
-                                placeholder="********"
-                                type="password"
-                                styles=""
-                                value={data.confirmPassword}
-                                autoComplete="new-password"
-                                onChange={(e) => {
-                                    handleChange(e)
-                                }}
-                                error={error.confirmPassword.isActive}
-                            />
-                            {
-                                error.confirmPassword.isActive ?
-                                    <p className="text-center text-red-500 font-medium">{error.confirmPassword.message}</p> : ""
-                            }
-                        </div>
-                        <div className="pt-2">
-                            <Button
-                                label="Sign up"
-                                primary={true}
-                                onClick={(e) => handleSubmit(e)}
-                            />
-                        </div>
-                        {
-                            error.serverResponse.message ?
-                                <p className="text-center text-red-500 font-medium mt-2">
-                                    {error.serverResponse.message}
-                                </p> : ""
-                        }
-                        <p className="text-center text-gray-500 mt-4">
-                            Already have an account?
-                            <Link to="/signin" className="font-medium text-black"> Sign in</Link>
-                        </p>
-                    </form>
-                    <Spacer/>
-                </div>
+    return (<div className="h-dvh relative">
+        <BackToHome/>
+        <div
+            className="signin-header">
+            <div className="relative">
+                <WelcomeSlider/>
             </div>
         </div>
-    )
+        <div className="px-4 flex justify-center items-center w-full mt-11">
+            <div className="w-full">
+                <form>
+                    <div className="mb-4 flex justify-between gap-4">
+                        <div>
+                            <InputField
+                                label="First name"
+                                id="first_name"
+                                name="first_name"
+                                placeholder="Your first name"
+                                type="text"
+                                value={data.first_name}
+                                styles=""
+                                onChange={(e) => handleChange(e)}
+                                error={error.first_name.isActive}
+                                autoComplete="given-name"
+                            />
+                            {error.first_name.isActive ?
+                                <p className="text-center text-red-500 font-medium">{error.first_name.message}</p> : ""}
+                        </div>
+
+                        <div>
+                            <InputField
+                                label="Last name"
+                                id="last_name"
+                                name="last_name"
+                                placeholder="Your last name"
+                                type="text"
+                                value={data.last_name}
+                                styles=""
+                                onChange={(e) => handleChange(e)}
+                                error={error.last_name.isActive}
+                                autoComplete="family-name"
+                            />
+                            {error.last_name.isActive ?
+                                <p className="text-center text-red-500 font-medium">{error.last_name.message}</p> : ""}
+                        </div>
+
+                    </div>
+                    <div className="mb-4">
+                        <ProfileType
+                            options={profileTypes}
+                            onChange={(value) => {
+                                setData({...data, profile_type: value});
+                            }}
+                            error={error.profile_type.isActive}
+                            title="Select a profile type"
+                            label="Profile type"/>
+                        {error.profile_type.isActive ?
+                            <p className="text-center text-red-500 font-medium">{error.profile_type.message}</p> : ""}
+                    </div>
+                    <div className="mb-4">
+                        <InputField
+                            label="Email Address"
+                            id="email"
+                            name="email"
+                            placeholder="Enter your email address"
+                            type="email"
+                            styles=""
+                            value={data.email}
+                            onChange={(e) => handleChange(e)}
+                            error={error.email.isActive}
+                            autoComplete="email"
+                        />
+                        {error.email.isActive ?
+                            <p className="text-center text-red-500 font-medium">{error.email.message}</p> : ""}
+                    </div>
+                    <div className="mb-4">
+                        <InputField
+                            label="Password"
+                            id="password"
+                            name="password"
+                            placeholder="********"
+                            type="password"
+                            styles=""
+                            value={data.password}
+                            autoComplete="new-password"
+                            onChange={(e) => {
+                                handleChange(e);
+                                if (data.password !== data.confirmPassword) {
+                                    setError({
+                                        ...error, confirmPassword: {...error.confirmPassword, isActive: true}
+                                    });
+                                } else {
+                                    setError({
+                                        ...error, confirmPassword: {...error.confirmPassword, isActive: false}
+                                    });
+                                }
+                            }}
+                            error={error.password.isActive}
+                        />
+                        {error.password.isActive ?
+                            <p className="text-center text-red-500 font-medium">{error.password.message}</p> : ""}
+                    </div>
+                    <div className="mb-4">
+                        <InputField
+                            label="Confirm password"
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            placeholder="********"
+                            type="password"
+                            styles=""
+                            value={data.confirmPassword}
+                            autoComplete="new-password"
+                            onChange={(e) => {
+                                handleChange(e)
+                            }}
+                            error={error.confirmPassword.isActive}
+                        />
+                        {error.confirmPassword.isActive ?
+                            <p className="text-center text-red-500 font-medium">{error.confirmPassword.message}</p> : ""}
+                    </div>
+                    <div className="pt-2">
+                        <Button
+                            label="Sign up"
+                            primary={true}
+                            onClick={(e) => handleSubmit(e)}
+                        />
+                    </div>
+                    {error.serverResponse.message ? <p className="text-center text-red-500 font-medium mt-2">
+                        {error.serverResponse.message}
+                    </p> : ""}
+                    <p className="text-center text-gray-500 mt-4">
+                        Already have an account?
+                        <Link to="/signin" className="font-medium text-black"> Sign in</Link>
+                    </p>
+                </form>
+                <Spacer/>
+            </div>
+        </div>
+    </div>)
 }
 
 const ProfileType = (props) => {
-    return (
-        <SelectRoot
-            collection={props.options}
-            onValueChange={(select) => props.onChange(select.value[0])}
-            size="sm">
-            <SelectLabel className="text-[16px] font-normal">{props.label}</SelectLabel>
-            <SelectTrigger
-                className={`border ${props.error ? 'border-red-500' : 'border-lime-green'} border-opacity-50 rounded-full px-4 py-1`}>
-                <SelectValueText placeholder={props.title}/>
-            </SelectTrigger>
-            <SelectContent>
-                {props.options.items.map((option) => (
-                    <SelectItem item={option} key={option.value}>
-                        {option.label}
-                    </SelectItem>
-                ))}
-            </SelectContent>
-        </SelectRoot>
-    );
+    return (<SelectRoot
+        collection={props.options}
+        onValueChange={(select) => props.onChange(select.value[0])}
+        size="sm">
+        <SelectLabel className="text-[16px] font-normal">{props.label}</SelectLabel>
+        <SelectTrigger
+            className={`border ${props.error ? 'border-red-500' : 'border-lime-green'} border-opacity-50 rounded-full px-4 py-1`}>
+            <SelectValueText placeholder={props.title}/>
+        </SelectTrigger>
+        <SelectContent>
+            {props.options.items.map((option) => (<SelectItem item={option} key={option.value}>
+                {option.label}
+            </SelectItem>))}
+        </SelectContent>
+    </SelectRoot>);
 }
 
 const profileTypes = createListCollection({
-    items: [
-        {label: "Farmer", value: "farmer"},
-        {label: "Transport", value: "transport"},
-        {label: "Storage", value: "storage"},
-        {label: "Seller", value: "seller"},
-    ],
+    items: [{label: "Farmer", value: "farmer"}, {label: "Transport", value: "transport"}, {
+        label: "Storage", value: "storage"
+    }, {label: "Seller", value: "seller"},],
 });
 
 export default SignUp;

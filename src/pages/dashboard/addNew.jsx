@@ -15,10 +15,13 @@ import axios from "axios";
 
 const AddListing = () => {
 
+    // This state is to keep track of listing type
     const [listingType, setListingType] = useState("crop");
 
+    // This state object is the store user uploaded files
     const [files, setFiles] = useState([]);
 
+    // This state object holds all the possible errors to show error messages in input validations
     const [errors, setErrors] = useState({
         title: "",
         description: "",
@@ -52,31 +55,70 @@ const AddListing = () => {
         pest_control_availability: "",
     });
 
+    // This state object holds main listing information
     const [listingInfo, setListingInfo] = useState({
         title: "",
         description: "",
         district: "",
         city: "",
+        listing_type: ""
     });
 
+    // This state object is to hold all the other listing information of (storage, transport, and crop)
     const [additionalInfo, setAdditionalInfo] = useState({});
 
-    const [data, setData] = useState({});
-
+    // This function handles the user inputs onChange
     const handleInputChange = (name, value) => {
+        // Change the value relevant object key using its name
         setAdditionalInfo({...additionalInfo, [name]: value});
+        // Clear error message when user input data
         setErrors({...errors, [name]: ""});
     };
 
+    // This function is to handle the form submit
     const handleSubmit = async (e) => {
         e.preventDefault();
+        // Check whether all the inputs are validated
         if (!validateForm()) {
             return;
         }
 
-        const formData = new FormData();
-        formData.append('data', JSON.stringify({...listingInfo, ...additionalInfo, listing_type: listingType}));
+        // This is a helper function to append data to the formData according to the listing type
+        const appendInfo = (listingType, formData) => {
+            // Temporary object to hold information to append
+            const info = {};
+            // Iterate through the prepared listing types and information object
+            listingTypes[listingType].forEach(item => {
+                // If it is temperature range it handles separately
+                if (item.type === "range") {
+                    info[`${item.name}_min`] = additionalInfo[`${item.name}_min`];
+                    info[`${item.name}_max`] = additionalInfo[`${item.name}_max`];
+                } else {
+                    info[item.name] = additionalInfo[item.name];
+                }
+            });
+            formData.append(`${listingType}Info`, JSON.stringify({...info}));
+        };
 
+        // Create new formData object include all the information
+        const formData = new FormData();
+        // Append main listing information to the formDate object
+        formData.append('listingInfo', JSON.stringify({...listingInfo, listing_type: listingType}));
+        // Append other listing information according to the listing type
+        switch (listingType) {
+            case "storage":
+                appendInfo("storage", formData);
+                break;
+            case "transport":
+                appendInfo("transport", formData);
+                break;
+            // Since listingType is initialized to crop we are adding it in default
+            default:
+                appendInfo("crop", formData);
+                break;
+        }
+
+        // Add images to the formData object
         files.forEach((file, index) => {
             formData.append(`images`, file);
         });
@@ -95,7 +137,9 @@ const AddListing = () => {
             })
     };
 
+    // This is to keep track of form validation
     let isValid = true;
+    // This is temporary object to keep track of errors and change the state in validateForm function
     const errorState = {...errors};
 
     const validateForm = () => {
@@ -134,26 +178,26 @@ const AddListing = () => {
             }
         }
 
-        validateFields(errorMessages.requiredFields);
+        validateFields(errorMessages.requiredFields, listingInfo);
 
         switch (listingType) {
             case "storage":
-                validateFields(errorMessages.storageErrors);
+                validateFields(errorMessages.storageErrors, additionalInfo);
                 break;
             case "transport":
-                validateFields(errorMessages.transportErrors);
+                validateFields(errorMessages.transportErrors, additionalInfo);
                 break;
             default:
-                validateFields(errorMessages.cropErrors);
+                validateFields(errorMessages.cropErrors, additionalInfo);
                 break;
         }
 
-        if ((listingType === "crop") && (data.harvested_date && new Date(data.harvested_date) > new Date())) {
+        if ((listingType === "crop") && (additionalInfo.harvested_date && new Date(additionalInfo.harvested_date) > new Date())) {
             isValid = false;
             errorState.harvested_date = "Please enter a valid harvested date";
         }
 
-        if ((listingType === "transport" || listingType === "storage") && data.temperature_control && ((data.temperature_control_min > data.temperature_control_max))) {
+        if ((listingType === "transport" || listingType === "storage") && additionalInfo.temperature_control && ((additionalInfo.temperature_control_min > additionalInfo.temperature_control_max))) {
             isValid = false;
             errorState.temperature_control = "Please enter a valid temperature range";
         }
@@ -162,9 +206,9 @@ const AddListing = () => {
         return isValid;
     };
 
-    const validateFields = (errorMessages) => {
+    const validateFields = (errorMessages, inputData) => {
         Object.keys(errorMessages).forEach(field => {
-            if (!data[field]) {
+            if (!inputData[field]) {
                 isValid = false;
                 errorState[field] = errorMessages[field];
             } else {
@@ -173,7 +217,9 @@ const AddListing = () => {
         })
     };
 
+    // This determine which listing should provide based on the user type
     useEffect(() => {
+        // Decode the stored jwtToken to access user information
         const decoded = jwtDecode(localStorage.getItem("jwtToken"));
         switch (decoded.user.profile_type) {
             case "transport":
@@ -190,22 +236,6 @@ const AddListing = () => {
                 break;
         }
     }, []);
-
-    useEffect(() => {
-        setData(data => ({...data, ...listingInfo}));
-    }, [listingInfo]);
-
-    useEffect(() => {
-        setData(data => ({...data, ...additionalInfo}));
-    }, [additionalInfo]);
-
-    useEffect(() => {
-        setData(data => ({...data, listing_type: listingType}));
-    }, [listingType]);
-
-    useEffect(() => {
-        setData(data => ({...data, images: files}));
-    }, [files]);
 
     return (
         <div className="mb-20 pb-8">
@@ -378,9 +408,7 @@ const AddListing = () => {
                     <button
                         type="submit"
                         className="px-4 py-2 rounded bg-primary-green text-white text-lg w-full shadow-lg active:shadow-md active:translate-y-0.5 translate-y-0 duration-300 transition-all"
-                        onClick={(e) => {
-                            handleSubmit(e);
-                        }}>
+                        onClick={handleSubmit}>
                         Submit
                     </button>
                 </div>
