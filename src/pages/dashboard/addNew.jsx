@@ -126,6 +126,9 @@ const AddListing = () => {
             formData.append(`images`, file);
         });
 
+        // attach jwt token to the request headers
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
+
         // TODO axios post request
         await axios.post(`${process.env.REACT_APP_SERVER_URL}/add-new`, formData, {
             headers: {
