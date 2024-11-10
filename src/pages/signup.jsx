@@ -129,7 +129,7 @@ const SignUp = () => {
             return;
         }
         validateForm();
-    });
+    }, [data]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -140,7 +140,6 @@ const SignUp = () => {
             .then(response => {
                 const token = response.data.token;
                 localStorage.setItem('jwtToken', token);
-                console.log(token);
                 navigate('/');
             })
             .catch(err => {
