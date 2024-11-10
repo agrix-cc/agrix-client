@@ -12,8 +12,12 @@ import {useEffect, useState} from "react";
 import {jwtDecode} from "jwt-decode";
 import {citiesByDistrict, districts} from "../../assets/citiesByDistrict";
 import axios from "axios";
+import {Toaster, toaster} from "../../components/ui/toaster";
+import {useNavigate} from "react-router-dom";
 
 const AddListing = () => {
+
+    const navigate = useNavigate();
 
     // This state is to keep track of listing type
     const [listingType, setListingType] = useState("crop");
@@ -38,7 +42,7 @@ const AddListing = () => {
         delivery_options: "",
         organic: "",
         vehicle_type: "",
-        vehicle_model: "",
+        fuel_type: "",
         service_radius: "",
         price_per_km: "",
         max_weight: "",
@@ -93,9 +97,8 @@ const AddListing = () => {
                 if (item.type === "range") {
                     info[`${item.name}_min`] = additionalInfo[`${item.name}_min`];
                     info[`${item.name}_max`] = additionalInfo[`${item.name}_max`];
-                } else {
-                    info[item.name] = additionalInfo[item.name];
                 }
+                info[item.name] = additionalInfo[item.name];
             });
             formData.append(`${listingType}Info`, JSON.stringify({...info}));
         };
@@ -130,10 +133,29 @@ const AddListing = () => {
             }
         })
             .then((res) => {
-                console.log(res);
+                toaster.create({
+                    title: res.data.message,
+                    type: "success",
+                    duration: 1000,
+                    onStatusChange({status}) {
+                        if (status === "unmounted") {
+                            navigate('/');
+                        }
+                    }
+                });
             })
             .catch((error) => {
-                console.log(error);
+                if (error.response) {
+                    toaster.create({
+                        title: error.response.data.message,
+                        type: "error"
+                    });
+                    return;
+                }
+                toaster.create({
+                    title: error.message,
+                    type: "error"
+                });
             })
     };
 
@@ -163,7 +185,7 @@ const AddListing = () => {
             },
             transportErrors: {
                 vehicle_type: "Please select vehicle type",
-                vehicle_model: "Please select vehicle model",
+                fuel_type: "Please select vehicle fuel type",
                 service_radius: "Please enter maximum service radius",
                 price_per_km: "Please enter price per km",
                 max_weight: "Please enter maximum weight can transport",
@@ -197,9 +219,22 @@ const AddListing = () => {
             errorState.harvested_date = "Please enter a valid harvested date";
         }
 
-        if ((listingType === "transport" || listingType === "storage") && additionalInfo.temperature_control && ((additionalInfo.temperature_control_min > additionalInfo.temperature_control_max))) {
-            isValid = false;
-            errorState.temperature_control = "Please enter a valid temperature range";
+        if ((listingType === "transport" || listingType === "storage") && additionalInfo.temperature_control) {
+
+            if (isNaN(additionalInfo.temperature_control_min)) {
+                isValid = false;
+                errorState.temperature_control = "Please enter minimum temperature";
+            }
+
+            if (isNaN(additionalInfo.temperature_control_max)) {
+                isValid = false;
+                errorState.temperature_control = "Please enter maximum temperature";
+            }
+
+            if (additionalInfo.temperature_control_min > additionalInfo.temperature_control_max) {
+                isValid = false;
+                errorState.temperature_control = "Minimum temperature can not be larger than minimum";
+            }
         }
 
         setErrors(errorState);
@@ -240,6 +275,7 @@ const AddListing = () => {
     return (
         <div className="mb-20 pb-8">
             <MobileNav/>
+            <Toaster/>
             <form>
                 <p className="mt-16 p-4 font-medium text-2xl">Create new listing</p>
                 <div className="mb-2 pb-4 border-b border-gray-400 mx-4">
@@ -353,11 +389,11 @@ const AddListing = () => {
                                                     minLabel={listingInput.minLabel}
                                                     maxLabel={listingInput.maxLabel}
                                                     onUpperChange={(e) => {
-                                                        handleInputChange(`${listingInput.name}_max`, e);
+                                                        handleInputChange(`${listingInput.name}_max`, parseFloat(e));
                                                         setErrors({...errors, temperature_control: ""});
                                                     }}
                                                     onLowerChange={(e) => {
-                                                        handleInputChange(`${listingInput.name}_min`, e);
+                                                        handleInputChange(`${listingInput.name}_min`, parseFloat(e));
                                                         setErrors({...errors, temperature_control: ""});
                                                     }}
                                                     option={{

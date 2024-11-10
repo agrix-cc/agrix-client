@@ -1,5 +1,5 @@
 "use client"
-import {Toaster, toaster} from "../../../ui/toaster";
+import {toaster} from "../../../ui/toaster";
 import {Button} from "../../../ui/button";
 import {
     FileUploadList,
@@ -28,7 +28,6 @@ const UploadImages = (props) => {
     return (
         <div>
             <p className="mb-2">Listing images</p>
-            <Toaster/>
             <ImagePreview files={files}/>
             <FileUploadRoot
                 maxFiles={5}

@@ -94,23 +94,27 @@ const listingTypes = {
             type: "select",
             label: "Vehicle type",
             items: [
+                {label: "Trailer", value: "trailer"},
                 {label: "Truck", value: "truck"},
+                {label: "Min Truck", value: "mini_truck"},
+                {label: "Pickup Truck", value: "pickup_truck"},
                 {label: "Van", value: "van"},
-                {label: "Tuk", value: "tuk"},
+                {label: "Mini Van", value: "mini_van"},
+                {label: "Three-Wheeler", value: "three_wheeler"},
             ],
             placeholder: "Select your vehicle type",
             required: true
         },
         {
-            name: "vehicle_model",
+            name: "fuel_type",
             type: "select",
-            label: "Vehicle model",
+            label: "Fuel type",
             items: [
-                {label: "Honda", value: "honda"},
-                {label: "Bajaj", value: "bajaj"},
-                {label: "Mazda", value: "mazda"},
+                {label: "Petrol", value: "petrol"},
+                {label: "Diesel", value: "diesel"},
+                {label: "Electric", value: "electric"},
             ],
-            placeholder: "Select your vehicle make model",
+            placeholder: "Select your vehicle fuel",
             required: true
         },
         {
