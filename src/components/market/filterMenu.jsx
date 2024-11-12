@@ -47,10 +47,25 @@ const FilterMenu = (props) => {
                 <DrawerFooter>
                     <DrawerActionTrigger asChild>
                         <Button
-                            className="px-4 py-2 border-gray-400 border mt-4">
+                            className="px-4 py-2 border-gray-400 border mt-4 font-medium">
                             Close
                         </Button>
                     </DrawerActionTrigger>
+                    <DrawerActionTrigger asChild>
+                        <Button
+                            onClick={() => {
+                                setParams({
+                                    city: [],
+                                    district: [],
+                                    sort: [],
+                                    type: [],
+                                })
+                            }}
+                            className="px-4 py-2 border-gray-400 border mt-4 font-medium text-white bg-primary-green">
+                            Reset
+                        </Button>
+                    </DrawerActionTrigger>
+
                 </DrawerFooter>
                 <DrawerCloseTrigger/>
             </DrawerContent>

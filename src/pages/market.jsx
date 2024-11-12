@@ -22,15 +22,20 @@ const Market = () => {
 
     // This state object is to manage filters
     const [params, setParams] = useState({
-        type: "all",
-        sort: "default",
-        city: "all",
-        district: "all"
+        city: [],
+        district: [],
+        sort: [],
+        type: [],
     });
 
     // this will fetch the data from the server
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_SERVER_URL}/listings/${offset}/${params.type}/${params.sort}/${params.city}/${params.district}`)
+        const type = params.type.length ? params.type : 'all';
+        const sort = params.sort.length ? params.sort : 'default';
+        const city = params.city.length ? params.city : 'all';
+        const district = params.district.length ? params.district : 'all';
+
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/listings/${offset}/${type}/${sort}/${city}/${district}`)
             .then(res => {
                 setIsLoading(false);
                 if (offset === 0) {

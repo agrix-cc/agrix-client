@@ -1,6 +1,5 @@
-"use client"
-import React from "react";
-import {createListCollection} from "@chakra-ui/react"
+import React, {useState} from "react";
+import {createListCollection} from "@chakra-ui/react";
 import {
     SelectContent,
     SelectItem,
@@ -14,50 +13,57 @@ const Filters = (props) => {
     const {params, setParams} = props;
 
     const districtOptions = createListCollection({
-        items: districts.map(district => ({label: district, value: district}))
+        items: [{label: "All", value: "all"}, ...districts.map(district => ({label: district, value: district}))]
     });
 
     return (
         <React.Fragment>
             <FilterDropDown
-                onChange={(e) => setParams(params => ({...params, type: e.value}))}
-                filterOptions={listingTypes} title="Type" value={params.type}/>
+                onChange={value => setParams(params => ({...params, type: value}))}
+                value={params.type}
+                filterOptions={listingTypes} title="Type"/>
             <FilterDropDown
-                onChange={(e) => setParams(params => ({...params, sort: e.value}))}
-                filterOptions={listingSort} title="Sort by" value={params.sort}/>
+                onChange={value => setParams(params => ({...params, sort: value}))}
+                value={params.sort}
+                filterOptions={listingSort} title="Sort by"/>
             <FilterDropDown
-                onChange={e => setParams({...params, district: e.value})}
-                filterOptions={districtOptions} title="Disctrict" value={params.district}/>
-            {
-                params.district && citiesByDistrict[params.district] ?
-                    <FilterDropDown
-                        onChange={e => setParams({...params, city: e.value})}
-                        filterOptions={createListCollection({
-                            items: citiesByDistrict[params.district].cities.map(city => ({
-                                value: city,
-                                label: city
-                            }))
-                        })}
-                        value={params.city}
-                        title="City"/>
-                    : <></>
-            }
+                onChange={value => setParams(params => ({...params, district: value, city: ["all"]}))}
+                value={params.district}
+                filterOptions={districtOptions} title="District"/>
+            <FilterDropDown
+                onChange={value => setParams(params => ({...params, city: value}))}
+                value={params.city}
+                filterOptions={citiesByDistrict[params.district] ? createListCollection({
+                    items: [{label: "All", value: "all"}, ...citiesByDistrict[params.district].cities.map(city => ({
+                        value: city,
+                        label: city
+                    }))]
+                }) : createListCollection({
+                    items: [{label: "All", value: "all"}]
+                })}
+                title="City"/>
         </React.Fragment>
     )
 };
 
 const FilterDropDown = (props) => {
+    const {value, onChange, title, filterOptions} = props;
+    const [selectValue, setSelectValue] = useState(value);
+
     return (
         <SelectRoot
-            value={props.value}
-            onValueChange={props.onChange}
-            collection={props.filterOptions}
-            size="sm" className="border border-gray-300 rounded px-2 max-w-xs">
+            collection={filterOptions}
+            size="sm" className="border border-gray-300 rounded px-2 max-w-xs"
+            value={selectValue}
+            onValueChange={(e) => {
+                setSelectValue(e.value);
+                onChange(e.value);
+            }}>
             <SelectTrigger>
-                <SelectValueText placeholder={props.title}/>
+                <SelectValueText placeholder={title}/>
             </SelectTrigger>
             <SelectContent className="z-[1500]">
-                {props.filterOptions.items.map((option) => (
+                {filterOptions.items.map((option) => (
                     <SelectItem item={option} key={option.value}>
                         {option.label}
                     </SelectItem>
