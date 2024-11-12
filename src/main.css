@@ -95,3 +95,7 @@
 .chakra-file-upload__itemContent {
     @apply max-w-[240px] sm:max-w-none;
 }
+
+.chakra-select__positioner {
+    @apply !min-w-48;
+}
