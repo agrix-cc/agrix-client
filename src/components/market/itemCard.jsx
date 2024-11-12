@@ -36,6 +36,9 @@ const ItemCard = (props) => {
                     <img src={data.imageUrl || "assets/placeholder.webp"} alt="" className="w-full h-full object-cover"/>
                 </div>
                 <div className="p-2">
+                    <p className="text-gray-500 text-sm capitalize">
+                        {listingType}
+                    </p>
                     <Text lineClamp="1" className="text-lg font-medium">
                         {data.title}
                     </Text>
@@ -43,7 +46,7 @@ const ItemCard = (props) => {
                         {cardDetails.quantity}
                     </p>
                     <p className="text-2xl font-medium">Rs. {cardDetails.price}</p>
-                    <p className="text-gray-500">
+                    <p className="text-gray-500 text-sm">
                         {cardDetails.priceDescription}
                     </p>
                 </div>
