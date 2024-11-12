@@ -40,6 +40,7 @@ const Market = () => {
                 setIsLoading(false);
                 if (offset === 0) {
                     setListings(res.data.listings);
+                    console.log(res.data)
                 } else {
                     setListings(prevListing => [...prevListing, ...res.data.listings]);
                 }
