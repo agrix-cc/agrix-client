@@ -53,7 +53,7 @@ const Market = () => {
     }, [params, search]);
 
     return (
-        <div>
+        <div className="md:pe-[4vw] md:ps-[4vw] md:pt-2">
             <MobileNav/>
             <MarketHeader setParams={setParams} params={params} search={search} setSearch={setSearch}/>
             {
@@ -62,7 +62,7 @@ const Market = () => {
                         <LoadingCards/>
                     </div>
                     :
-                    <div className="p-4 grid grid-cols-2 gap-4">
+                    <div className="p-4 grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-4 lg:grid-cols-4 lg:gap-8">
                         {
                             listings.map((listing, i) =>
                                 <ItemCard data={listing} key={i}/>

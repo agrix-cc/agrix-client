@@ -1,7 +1,7 @@
 import Slider from "react-slick";
 
 const ListingImagesSlider = (props) => {
-    const {images = []} = props;
+    const {images = [], className} = props;
 
     const settings = {
         dots: true,
@@ -10,10 +10,10 @@ const ListingImagesSlider = (props) => {
         slidesToShow: 1,
         slidesToScroll: 1,
         speed: 300,
-        cssEase: "linear"
+        cssEase: "linear",
     };
     return (
-        <div className="mb-4 listing-image-slider max-w-md">
+        <div className="mb-4 listing-image-slider max-w-md md:max-w-none">
             <Slider {...settings}>
                 {
                     images.length ?

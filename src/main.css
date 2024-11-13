@@ -4,7 +4,7 @@
 
 .listing-image-slider .slick-slider .slick-track {
     display: flex !important;
-    @apply h-72;
+    @apply h-72 md:h-96;
 }
 
 .listing-image-slider .slick-slider .slick-slide {
@@ -12,11 +12,19 @@
 }
 
 .listing-image-slider .slick-slider .slick-slide div {
-    height: 100%;
+    @apply h-full;
 }
 
 .item-view-slider .slick-list {
     @apply rounded-xl overflow-hidden;
+}
+
+.item-view-slider .listing-image-slider .slick-dots {
+    @apply md:!bg-white;
+}
+
+.listing-image-slider .slick-dots {
+    @apply md:!bg-mint-green;
 }
 
 .welcome-slider .slick-dots li.slick-active button:before {

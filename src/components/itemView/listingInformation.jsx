@@ -38,7 +38,7 @@ const ListingInformation = (props) => {
     }, [listing]);
 
     return (
-        <div className="mt-6 mb-[120px] px-4">
+        <div className="mt-6 mb-[120px] md:mb-4 px-4 md:mt-20">
             <div className="mb-2">
                 <p className="text-2xl font-medium">{listing.title}</p>
                 <p className="text-gray-500 capitalize">{listing.listing_type}</p>
@@ -56,24 +56,26 @@ const ListingInformation = (props) => {
                 <p className="text-lg font-medium mb-2">Description</p>
                 <p>{listing.description}</p>
             </div>
-            <div className="mt-2">
-                <ul className="">
-                    {
-                        listing.CropListing ?
-                            <CropInformation {...listing.CropListing}/>
-                            : (listing.TransportListing ?
-                                <TransportInformation {...listing.TransportListing}/>
-                                : (listing.StorageListing ? <StorageInformation {...listing.StorageListing}/>
-                                    : null))
-                    }
-                </ul>
-            </div>
-            <div className="my-2">
-                <p className="font-medium text-lg">Location</p>
-                <ul className="ml-4">
-                    <li>District: {listing.district}</li>
-                    <li>City: {listing.city}</li>
-                </ul>
+            <div className="md:flex md:justify-around">
+                <div className="mt-2">
+                    <ul>
+                        {
+                            listing.CropListing ?
+                                <CropInformation {...listing.CropListing}/>
+                                : (listing.TransportListing ?
+                                    <TransportInformation {...listing.TransportListing}/>
+                                    : (listing.StorageListing ? <StorageInformation {...listing.StorageListing}/>
+                                        : null))
+                        }
+                    </ul>
+                </div>
+                <div className="my-2">
+                    <p className="font-medium text-lg">Location</p>
+                    <ul className="ml-4">
+                        <li>District: {listing.district}</li>
+                        <li>City: {listing.city}</li>
+                    </ul>
+                </div>
             </div>
         </div>
     );

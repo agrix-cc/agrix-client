@@ -7,7 +7,7 @@ import {
 
 const ListingProgressBar = () => {
     return(
-        <ProgressRoot defaultValue={60} maxW="sm">
+        <ProgressRoot defaultValue={60}>
             <div className="flex flex-col gap-2">
                 <ProgressBar className="rounded-full" colorPalette="green"/>
                 <div className="self-end">

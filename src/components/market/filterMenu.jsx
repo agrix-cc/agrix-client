@@ -59,6 +59,7 @@ const FilterMenu = (props) => {
                                     district: [],
                                     sort: [],
                                     type: [],
+                                    offset: 0
                                 })
                             }}
                             className="px-4 py-2 border-gray-400 border mt-4 font-medium text-white bg-primary-green">

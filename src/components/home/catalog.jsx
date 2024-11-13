@@ -5,6 +5,7 @@ import {IconContext} from "react-icons";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
+import {useMediaQuery} from "@mui/material";
 
 const CatalogItem = (props) => {
 
@@ -16,7 +17,7 @@ const CatalogItem = (props) => {
 
     return (
         <div
-            className="border border-primary-green border-opacity-20 p-4 h-28 w-28 flex flex-col gap-2 rounded-xl items-center justify-center">
+            className="cursor-pointer border border-primary-green border-opacity-20 p-4 h-28 w-28 flex flex-col gap-2 rounded-xl items-center justify-center">
             <IconContext.Provider value={{color: "#02542D", size: "3em"}}>
                 {iconMap[props.name]}
             </IconContext.Provider>
@@ -26,6 +27,8 @@ const CatalogItem = (props) => {
 }
 
 const Catalog = () => {
+    const media = useMediaQuery('(min-width:768px)');
+
 
     const sliderSettings = {
         infinite: true,
@@ -36,15 +39,34 @@ const Catalog = () => {
 
     return (
         <div className="overflow-hidden p-4">
-            <div className="mb-2 flex justify-between">
-                <p className="font-medium">Catalog</p>
-                <p className="font-medium text-gray-500">See all ></p>
-            </div>
-            <Slider {...sliderSettings}>
-                <CatalogItem name="Transport"/>
-                <CatalogItem name="Crops"/>
-                <CatalogItem name="Storage"/>
-            </Slider>
+            {
+                media ?
+                    <div className="w-full ps-[10vw] pe-[10vw]">
+                        <div className="mb-2 flex justify-between">
+                            <p className="text-xl">Catalog</p>
+                            <p className="text-lg text-gray-500">See all ></p>
+                        </div>
+                        <div className="grid items-center place-content-center w-full">
+                            <div className="grid grid-cols-3 gap-8">
+                                <CatalogItem name="Transport"/>
+                                <CatalogItem name="Crops"/>
+                                <CatalogItem name="Storage"/>
+                            </div>
+                        </div>
+                    </div>
+                    :
+                    <div className="md:hidden">
+                        <div className="mb-2 flex justify-between">
+                            <p className="font-medium">Catalog</p>
+                            <p className="font-medium text-gray-500">See all ></p>
+                        </div>
+                        <Slider {...sliderSettings}>
+                            <CatalogItem name="Transport"/>
+                            <CatalogItem name="Crops"/>
+                            <CatalogItem name="Storage"/>
+                        </Slider>
+                    </div>
+            }
         </div>
 
     )

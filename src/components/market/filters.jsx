@@ -53,7 +53,7 @@ const FilterDropDown = (props) => {
     return (
         <SelectRoot
             collection={filterOptions}
-            size="sm" className="border border-gray-300 rounded px-2 max-w-xs"
+            size="sm" className="border border-gray-300 rounded px-2 max-w-xs md:min-w-44"
             value={selectValue}
             onValueChange={(e) => {
                 setSelectValue(e.value);

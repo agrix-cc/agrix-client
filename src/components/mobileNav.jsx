@@ -11,6 +11,7 @@ import {HiMiniUserGroup} from "react-icons/hi2";
 import {HiOutlineUserGroup} from "react-icons/hi2";
 import {HiOutlineUser} from "react-icons/hi2";
 import {HiUser} from "react-icons/hi2";
+import DesktopNav from "./desktopNav";
 
 
 const MobileNavItem = (props) => {
@@ -95,11 +96,12 @@ const MobileNav = () => {
 
     return (
         <div>
-            <div className={`p-4 z-50 fixed top-0 left-0 w-full ${colorTopBar ? "bg-white shadow-lg" : ""} duration-150 transition-all`}>
-                <p className={`text-2xl font-medium ${colorTopBar ? "text-primary-green" : "text-white"} duration-200 transition-all`}>Agri<span className="text-primary-green">X</span></p>
+            <div className={`p-4 md:py-2 z-50 fixed top-0 left-0 w-full ${colorTopBar ? "bg-white shadow-lg" : ""} duration-150 transition-all`}>
+                <p className={`md:hidden text-2xl font-medium ${colorTopBar ? "text-primary-green" : "text-white"} duration-200 transition-all`}>Agri<span className="text-primary-green">X</span></p>
+                <DesktopNav colorTopBar={colorTopBar} location={location.pathname}/>
             </div>
             <div
-                className="fixed bottom-0 z-50 bg-white grid grid-cols-5 items-center w-full py-2 shadow-[0_35px_60px_15px_rgba(0,0,0,0.3)]">
+                className="md:hidden fixed bottom-0 z-50 bg-white grid grid-cols-5 items-center w-full py-2 shadow-[0_35px_60px_15px_rgba(0,0,0,0.3)]">
                 <MobileNavItem
                     name="Home"
                 />

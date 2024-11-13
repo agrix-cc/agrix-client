@@ -5,7 +5,7 @@ import {StepperInput} from "../ui/stepper-input"
 
 const FloatingIsland = () => {
     return (
-        <div className="fixed bottom-16 left-0 w-full">
+        <div className="fixed bottom-16 md:bottom-0 left-0 w-full md:max-w-md md:left-1/2 md:-translate-x-1/2">
             <div className="bg-lime-green rounded-xl shadow-lg flex justify-between items-center p-4 m-4">
                 <div>
                     <StepperInput
