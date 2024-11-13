@@ -56,7 +56,7 @@ const ListingInformation = (props) => {
                 <p className="text-lg font-medium mb-2">Description</p>
                 <p>{listing.description}</p>
             </div>
-            <div className="md:flex md:justify-around">
+            <div className="lg:flex lg:justify-around">
                 <div className="mt-2">
                     <ul>
                         {

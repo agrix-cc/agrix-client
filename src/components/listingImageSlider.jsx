@@ -1,7 +1,7 @@
 import Slider from "react-slick";
 
 const ListingImagesSlider = (props) => {
-    const {images = [], className} = props;
+    const {images = []} = props;
 
     const settings = {
         dots: true,

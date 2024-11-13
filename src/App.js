@@ -12,6 +12,7 @@ import ItemView from "./pages/itemView";
 import {useEffect} from "react";
 import Onboarding from "./pages/onboarding";
 import ProtectedRoutes from "./components/protectedRoutes";
+import Checkout from "./pages/checkout";
 
 function App() {
 
@@ -34,6 +35,8 @@ function App() {
                 <Route path="/market" element={<Market/>}/>
 
                 <Route path="/product/:id" element={<ItemView/>}/>
+
+                <Route path="/checkout" element={<Checkout/>}/>
 
                 {/*Protected routes*/}
                 <Route element={<ProtectedRoutes/>}>

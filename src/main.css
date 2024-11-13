@@ -89,6 +89,7 @@
 .chakra-select__item {
     @apply text-[16px] py-2 px-4;
 }
+
 .chakra-select__trigger {
     @apply outline-none;
 }
@@ -107,4 +108,8 @@
 
 .chakra-select__positioner {
     @apply !min-w-48;
+}
+
+.chakra-radio-group__item span:not(.chakra-radio-group__itemText) {
+    @apply border border-gray-200;
 }
