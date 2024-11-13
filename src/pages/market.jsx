@@ -19,6 +19,8 @@ const Market = () => {
 
     const [isEnd, setIsEnd] = useState(false);
 
+    const [search, setSearch] = useState("");
+
     // This state object is to manage filters
     const [params, setParams] = useState({
         city: [],
@@ -35,7 +37,7 @@ const Market = () => {
         const city = params.city.length ? params.city : 'all';
         const district = params.district.length ? params.district : 'all';
 
-        axios.get(`${process.env.REACT_APP_SERVER_URL}/listings/${params.offset}/${type}/${sort}/${city}/${district}`)
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/listings/${params.offset}/${type}/${sort}/${city}/${district}/${search}`)
             .then(res => {
                 setIsLoading(false);
                 if (params.offset > 0) {
@@ -44,18 +46,16 @@ const Market = () => {
                     setListings(res.data.listings);
                 }
                 setIsEnd(res.data.end)
-                console.log(res);
             })
             .catch(error => {
                 console.log(error);
             });
-        console.log(params);
-    }, [params]);
+    }, [params, search]);
 
     return (
         <div>
             <MobileNav/>
-            <MarketHeader setParams={setParams} params={params}/>
+            <MarketHeader setParams={setParams} params={params} search={search} setSearch={setSearch}/>
             {
                 isLoading ?
                     <div className="p-4">

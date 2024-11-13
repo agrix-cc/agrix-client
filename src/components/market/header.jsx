@@ -4,7 +4,7 @@ import FilterMenu from "./filterMenu";
 import Filters from "./filters";
 
 const MarketHeader = (props) => {
-    const {params, setParams} = props;
+    const {params, setParams, search, setSearch} = props;
     const isDesktop = useMediaQuery('(min-width: 960px)');
 
 
@@ -13,7 +13,7 @@ const MarketHeader = (props) => {
         <div className="mt-16 sticky top-4 bg-white pb-4">
             <p className="text-2xl font-medium mb-2 pt-4 px-4">Market</p>
             <div className="px-4">
-                <Search/>
+                <Search search={search} setSearch={setSearch} setParams={setParams}/>
             </div>
             {
                 isDesktop ?
