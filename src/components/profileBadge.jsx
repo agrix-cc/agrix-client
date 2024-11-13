@@ -1,15 +1,15 @@
-const ProfileBadge = (props) => {
+import {Avatar} from "./ui/avatar";
 
+const ProfileBadge = (props) => {
+    const {name = "Anonymous User", image, type} = props;
     return (
         <div className="flex justify-start items-center gap-2">
-            <div className="w-11 h-11 rounded-full overflow-hidden">
-                <img src="assets/profile-pic.webp" alt="" className="w-full h-full object-cover"/>
+            <div>
+                <Avatar name={name} src={image}/>
             </div>
             <div>
-                <p>Tom Davis</p>
-                {
-                    props.profileType ? <p className="text-gray-500">Farmer</p> : ""
-                }
+                <p>{name}</p>
+                <p className="text-gray-500 capitalize">{type}</p>
             </div>
         </div>
     )

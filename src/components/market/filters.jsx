@@ -19,19 +19,19 @@ const Filters = (props) => {
     return (
         <React.Fragment>
             <FilterDropDown
-                onChange={value => setParams(params => ({...params, type: value}))}
+                onChange={value => setParams(params => ({...params, type: value, offset: 0}))}
                 value={params.type}
                 filterOptions={listingTypes} title="Type"/>
             <FilterDropDown
-                onChange={value => setParams(params => ({...params, sort: value}))}
+                onChange={value => setParams(params => ({...params, sort: value, offset: 0}))}
                 value={params.sort}
                 filterOptions={listingSort} title="Sort by"/>
             <FilterDropDown
-                onChange={value => setParams(params => ({...params, district: value, city: ["all"]}))}
+                onChange={value => setParams(params => ({...params, district: value, city: ["all"], offset: 0}))}
                 value={params.district}
                 filterOptions={districtOptions} title="District"/>
             <FilterDropDown
-                onChange={value => setParams(params => ({...params, city: value}))}
+                onChange={value => setParams(params => ({...params, city: value, offset: 0}))}
                 value={params.city}
                 filterOptions={citiesByDistrict[params.district] ? createListCollection({
                     items: [{label: "All", value: "all"}, ...citiesByDistrict[params.district].cities.map(city => ({

@@ -1,6 +1,8 @@
 import Slider from "react-slick";
 
-const ListingImagesSlider = () => {
+const ListingImagesSlider = (props) => {
+    const {images = []} = props;
+
     const settings = {
         dots: true,
         infinite: false,
@@ -11,13 +13,14 @@ const ListingImagesSlider = () => {
         cssEase: "linear"
     };
     return (
-        <div className="mb-4 listing-image-slider">
+        <div className="mb-4 listing-image-slider max-w-md">
             <Slider {...settings}>
-                <img src="assets/tomatoes.webp" alt="" className="w-full h-full object-cover"/>
-                <img src="assets/tomatoes.webp" alt="" className="w-full h-full object-cover"/>
-                <img src="assets/hero.webp" alt="" className="w-full h-full object-cover"/>
-                <img src="assets/tomatoes.webp" alt="" className="w-full h-full object-cover"/>
-                <img src="assets/tomatoes.webp" alt="" className="w-full h-full object-cover"/>
+                {
+                    images.length ?
+                    images.map((image, id) => (
+                        <img src={image} alt="" className="w-full h-full object-cover" key={id}/>
+                    )) : <img src="/assets/placeholder.webp" alt="" className="w-full h-full object-cover"/>
+                }
             </Slider>
         </div>
     );

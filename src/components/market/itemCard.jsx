@@ -30,7 +30,7 @@ const ItemCard = (props) => {
     }
 
     return (
-        <Link to="/product">
+        <Link to={`/product/${data.id}`}>
             <div className="rounded-lg overflow-hidden shadow-lg">
                 <div className="w-full h-32">
                     <img src={data.imageUrl || "assets/placeholder.webp"} alt="" className="w-full h-full object-cover"/>

@@ -4,6 +4,7 @@
 
 .listing-image-slider .slick-slider .slick-track {
     display: flex !important;
+    @apply h-72;
 }
 
 .listing-image-slider .slick-slider .slick-slide {

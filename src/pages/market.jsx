@@ -14,11 +14,10 @@ const Market = () => {
     // This state object holds all the listings fetching from the server
     const [listings, setListings] = useState([]);
 
-    // This state is to maintain the pagination to keep track of the current offset
-    const [offset, setOffset] = useState(0);
-
     // This state is to check whether the page is loading with the request
     const [isLoading, setIsLoading] = useState(true);
+
+    const [isEnd, setIsEnd] = useState(false);
 
     // This state object is to manage filters
     const [params, setParams] = useState({
@@ -26,6 +25,7 @@ const Market = () => {
         district: [],
         sort: [],
         type: [],
+        offset: 0
     });
 
     // this will fetch the data from the server
@@ -35,19 +35,22 @@ const Market = () => {
         const city = params.city.length ? params.city : 'all';
         const district = params.district.length ? params.district : 'all';
 
-        axios.get(`${process.env.REACT_APP_SERVER_URL}/listings/${offset}/${type}/${sort}/${city}/${district}`)
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/listings/${params.offset}/${type}/${sort}/${city}/${district}`)
             .then(res => {
                 setIsLoading(false);
-                if (offset === 0) {
-                    setListings(res.data.listings);
-                } else {
+                if (params.offset > 0) {
                     setListings(prevListing => [...prevListing, ...res.data.listings]);
+                } else {
+                    setListings(res.data.listings);
                 }
+                setIsEnd(res.data.end)
+                console.log(res);
             })
             .catch(error => {
                 console.log(error);
             });
-    }, [params, offset]);
+        console.log(params);
+    }, [params]);
 
     return (
         <div>
@@ -68,11 +71,13 @@ const Market = () => {
                     </div>
             }
             {
-                listings.length > 8 ?
+                listings.length >= 8 && !isEnd ?
                     <div className="flex justify-center items-center py-4">
                         <Button
                             label="Load more"
-                            onClick={() => setOffset(prevState => prevState + 16)}
+                            onClick={() => {
+                                setParams({...params, offset: params.offset + 1})
+                            }}
                             className="max-w-xs"
                         />
                     </div>
