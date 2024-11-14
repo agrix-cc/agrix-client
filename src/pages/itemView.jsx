@@ -6,7 +6,8 @@ import Spacer from "../components/spacer";
 import ProfileBadge from "../components/profileBadge";
 import ListingImagesSlider from "../components/listingImageSlider";
 import ListingInformation from "../components/itemView/listingInformation";
-import FloatingIsland from "../components/itemView/floatingIsland";
+import FloatingIslandCrop from "../components/itemView/floatingIslandCrop";
+import {Toaster} from "../components/ui/toaster";
 
 const ItemView = () => {
     const {id} = useParams();
@@ -36,7 +37,7 @@ const ItemView = () => {
         isLoading ? <></> :
             <div className="relative pb-20">
                 <MobileNav/>
-
+                <Toaster/>
                 <div className="md:grid md:grid-cols-2 md:pe-[5vw] md:ps-[5vw]">
 
                     <div>
@@ -56,16 +57,17 @@ const ItemView = () => {
 
                     <ListingInformation listing={data.listing}/>
                 </div>
-
-                <FloatingIsland
-                    value={value}
-                    orderData={{...data.listing, image: data.images[0]}}
-                    unit={data.listing.CropListing ? 'kg' : null}
-                    setValue={(e) => setValue(e.valueAsNumber)}
-                    price={data.listing.CropListing?.price_per_kg || data.listing.StorageListing?.price_per_unit || 0}
-                    max={data.listing.CropListing?.available_quantity || data.listing.StorageListing?.total_units || 0}
-                />
-
+                {
+                    data.listing.CropListing &&
+                    <FloatingIslandCrop
+                        value={value}
+                        orderData={{...data.listing, image: data.images[0]}}
+                        unit={data.listing.CropListing ? 'kg' : null}
+                        setValue={(e) => setValue(e.valueAsNumber)}
+                        price={data.listing.CropListing?.price_per_kg || data.listing.StorageListing?.price_per_unit || 0}
+                        max={data.listing.CropListing?.available_quantity || data.listing.StorageListing?.total_units || 0}
+                    />
+                }
                 <Spacer/>
             </div>
     );

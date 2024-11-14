@@ -6,7 +6,8 @@ import {
 } from "../ui/progress";
 
 const ListingProgressBar = () => {
-    return(
+    const dev = true;
+    return(dev ? <div className="pt-2"></div> :
         <ProgressRoot defaultValue={60}>
             <div className="flex flex-col gap-2">
                 <ProgressBar className="rounded-full" colorPalette="green"/>

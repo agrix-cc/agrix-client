@@ -3,9 +3,9 @@ import {Field} from "../../../ui/field";
 
 const NumberInput = (props) => {
 
-    const {error, label, value, onChange, min, max} = props;
+    const {error, label, value, onChange, min, max, hidden} = props;
 
-    return (
+    return (!hidden &&
         <div>
             <p className="mb-2">{label}</p>
             <Field invalid={error} errorText={error}>

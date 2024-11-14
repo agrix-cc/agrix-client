@@ -1,7 +1,11 @@
 import Search from "../search";
+import {useState} from "react";
 
 
 const HeroComponent = () => {
+
+    const [keyword, setKeyword] = useState(null);
+
     return (
         <div
             className="h-80 md:h-dvh w-full bg-cover p-4 relative"

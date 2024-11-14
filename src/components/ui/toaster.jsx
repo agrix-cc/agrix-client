@@ -24,7 +24,7 @@ function _optionalChain(ops) {
         }
     }
     return value
-};
+}
 
 export const toaster = createToaster({
     placement: 'bottom-end', pauseOnPageIdle: true,

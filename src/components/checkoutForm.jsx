@@ -54,7 +54,7 @@ const CheckoutForm = () => {
             toaster.create({
                 title: response.message,
                 type: response.status === 'error' ? 'error' : 'success',
-                onStatusChange({ status }) {
+                onStatusChange({status}) {
                     if (response.status !== 'error' && status === 'unmounted') {
                         navigate('/');
                     }
@@ -70,7 +70,7 @@ const CheckoutForm = () => {
             <PaymentElement id="payment-element"/>
             <button
                 type="submit"
-                disabled={isProcessing}
+                disabled={isProcessing && !stripe && !elements}
                 className="px-4 py-2 rounded bg-primary-green text-white font-medium mt-4 w-full disabled:opacity-25">
                 Pay now
             </button>

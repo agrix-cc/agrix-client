@@ -4,8 +4,8 @@ import {loadStripe} from "@stripe/stripe-js";
 import {Elements} from "@stripe/react-stripe-js";
 import CheckoutForm from "./checkoutForm";
 
-const Payment = () => {
-
+const Payment = (props) => {
+    const {data} = props;
     const [stripePromise, setStripePromise] = useState(null);
     const [clientSecret, setClientSecret] = useState('');
 

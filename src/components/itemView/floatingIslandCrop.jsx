@@ -1,9 +1,10 @@
 import React from 'react';
 import {useNavigate} from "react-router-dom";
 import {StepperInput} from "../ui/stepper-input"
+import {toaster} from "../ui/toaster";
 
 
-const FloatingIsland = (props) => {
+const FloatingIslandCrop = (props) => {
 
     const navigate = useNavigate();
 
@@ -27,7 +28,17 @@ const FloatingIsland = (props) => {
                     <p className="text-2xl font-medium text-white">Rs. {(price * value) || 0}</p>
                 </div>
                 <button
-                    onClick={() => navigate('/checkout', {state: {...orderData, qty: value}})}
+                    onClick={() => {
+                        if (value) {
+                            navigate('/checkout', {state: {...orderData, qty: value}})
+                        } else {
+                            toaster.create({
+                                title: "Please select the amount!",
+                                type: "error",
+                                duration: 1000
+                            })
+                        }
+                    }}
                     className="bg-white rounded-lg px-4 py-2 text-lime-green shadow-lg">
                     Buy now
                 </button>
@@ -36,4 +47,4 @@ const FloatingIsland = (props) => {
     );
 };
 
-export default FloatingIsland;
+export default FloatingIslandCrop;

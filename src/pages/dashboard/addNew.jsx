@@ -36,13 +36,13 @@ const AddListing = () => {
         city: "",
         crop_name: "",
         crop_type: "",
-        verity: "",
         harvested_date: "",
         available_quantity: "",
         price_per_kg: "",
         quality_condition: "",
         quality_grade: "",
         delivery_options: "",
+        delivery_fare_per_kg: "",
         organic: "",
         vehicle_type: "",
         fuel_type: "",
@@ -90,7 +90,7 @@ const AddListing = () => {
             return;
         }
 
-        setIsSubmitting(true);
+        setIsSubmitting(false);
 
         // This is a helper function to append data to the formData according to the listing type
         const appendInfo = (listingType, formData) => {
@@ -228,6 +228,13 @@ const AddListing = () => {
             errorState.harvested_date = "Please enter a valid harvested date";
         }
 
+        if ((listingType === "crop") && (additionalInfo.delivery_options !== "pickup")) {
+            if (!additionalInfo.delivery_fare_per_kg || additionalInfo.delivery_fare_per_kg <= 0) {
+                isValid = false;
+                errorState.delivery_fare_per_kg = "Please enter the delivery fare per kg";
+            }
+        }
+
         if ((listingType === "transport" || listingType === "storage") && additionalInfo.temperature_control) {
 
             if (isNaN(additionalInfo.temperature_control_min)) {
@@ -291,7 +298,7 @@ const AddListing = () => {
         }
     }, [isSubmitting])
 
-    return (
+    return (listingTypes &&
         <div className="mb-20 pb-8">
             <MobileNav/>
             <Toaster/>
@@ -382,6 +389,7 @@ const AddListing = () => {
                                     /> :
                                     (listingInput.type === "number" ?
                                         <NumberInput
+                                            hidden={listingInput.name === "delivery_fare_per_kg" && (additionalInfo.delivery_options === 'pickup' || !additionalInfo.delivery_options)}
                                             key={listingInput.name}
                                             label={listingInput.label}
                                             min={listingInput.min}
@@ -463,7 +471,7 @@ const AddListing = () => {
                     <button
                         disabled={isSubmitting}
                         type="submit"
-                        className="px-4 py-2 rounded bg-primary-green text-white text-lg w-full shadow-lg active:shadow-md active:translate-y-0.5 translate-y-0 duration-300 transition-all"
+                        className="px-4 py-2 rounded bg-primary-green text-white text-lg w-full shadow-lg active:shadow-md active:translate-y-0.5 translate-y-0 duration-300 transition-all disabled:opacity-25"
                         onClick={handleSubmit}>
                         Submit
                     </button>

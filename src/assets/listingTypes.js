@@ -20,13 +20,6 @@ const listingTypes = {
             required: true
         },
         {
-            name: "verity",
-            type: "text",
-            label: "Verity",
-            placeholder: "Enter specific verity of crop",
-            required: true
-        },
-        {
             name: "harvested_date",
             type: "date",
             label: "Harvested Date",
@@ -80,6 +73,13 @@ const listingTypes = {
                 {label: "Both", value: "both"},
             ],
             placeholder: "Select available delivery options",
+            required: true
+        },
+        {
+            name: "delivery_fare_per_kg",
+            type: "number",
+            label: "Delivery fare per kg (Rs.)",
+            min: 0,
             required: true
         },
         {

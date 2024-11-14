@@ -18,7 +18,7 @@ const ListingImagesSlider = (props) => {
                 {
                     images.length ?
                     images.map((image, id) => (
-                        <img src={image} alt="" className="w-full h-full object-cover" key={id}/>
+                        <img src={image || "/assets/placeholder.webp"} alt="" className="w-full h-full object-cover" key={id}/>
                     )) : <img src="/assets/placeholder.webp" alt="" className="w-full h-full object-cover"/>
                 }
             </Slider>
