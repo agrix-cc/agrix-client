@@ -4,7 +4,7 @@ import {useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
 import CropOrder from "../components/checkout/cropOrder";
 import {jwtDecode} from "jwt-decode";
-import {toaster} from "../components/ui/toaster";
+import {Toaster, toaster} from "../components/ui/toaster";
 
 const Checkout = () => {
 
@@ -18,7 +18,8 @@ const Checkout = () => {
         if (!data) {
             toaster.create({
                 type: 'error',
-                title: 'Order is not initialized!'
+                title: 'Order is not initialized!',
+                duration: 2000
             });
             setIsProcessing(true);
             return
@@ -26,7 +27,8 @@ const Checkout = () => {
         if (data && data.name === "") {
             toaster.create({
                 type: 'error',
-                title: 'Please provide your name!'
+                title: 'Please provide your name!',
+                duration: 2000
             });
             setIsProcessing(true);
             return
@@ -34,7 +36,8 @@ const Checkout = () => {
         if (data && data.address === "") {
             toaster.create({
                 type: 'error',
-                title: 'Please provide your address!'
+                title: 'Please provide your address!',
+                duration: 2000
             });
             setIsProcessing(true);
             return;
@@ -73,6 +76,7 @@ const Checkout = () => {
 
     return (listing && user && data &&
         <div>
+            <Toaster/>
             <MobileNav/>
             <div className="h-dvh w-full">
                 <div className="flex justify-center items-center p-4 w-full h-full">
