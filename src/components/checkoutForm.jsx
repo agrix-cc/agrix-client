@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {PaymentElement, useElements, useStripe} from "@stripe/react-stripe-js";
 import {toaster, Toaster} from "./ui/toaster";
 import {useNavigate} from "react-router-dom";
@@ -8,10 +8,6 @@ const CheckoutForm = () => {
     const stripe = useStripe();
     const elements = useElements();
 
-    const [response, setResponse] = useState({
-        message: null,
-        status: null
-    });
     const [isProcessing, setIsProcessing] = useState(false);
 
     const handleSubmit = async (e) => {
@@ -21,47 +17,39 @@ const CheckoutForm = () => {
             return;
         }
 
-        const {error, paymentIntent} = await stripe.confirmPayment({
+        await stripe.confirmPayment({
             elements,
             confirmParams: {
                 return_url: `${window.location.origin}/market`,
             },
             redirect: "if_required"
         })
-
-        if (error) {
-            setResponse({
-                message: error.message,
-                status: 'error'
+            .then(res => {
+                if (res.error) {
+                    toaster.create({
+                        title: res.error.message,
+                        type: 'error',
+                    })
+                } else if (res.paymentIntent && res.paymentIntent.status === "succeeded") {
+                    toaster.create({
+                        title: "Payment successful",
+                        type: 'success',
+                        onStatusChange({status}) {
+                            if (status === 'unmounted') {
+                                navigate('/');
+                            }
+                        },
+                    })
+                } else {
+                    toaster.create({
+                        title: "Unidentified status!",
+                        type: 'error',
+                    })
+                }
             })
-        } else if (paymentIntent && paymentIntent.status === "succeeded") {
-            setResponse({
-                message: "Payment successful",
-                status: 'success'
-            })
-        } else {
-            setResponse({
-                message: "Unidentified status",
-                status: 'error',
-            })
-        }
 
         setIsProcessing(false);
     }
-
-    useEffect(() => {
-        if (response.message) {
-            toaster.create({
-                title: response.message,
-                type: response.status === 'error' ? 'error' : 'success',
-                onStatusChange({status}) {
-                    if (response.status !== 'error' && status === 'unmounted') {
-                        navigate('/');
-                    }
-                },
-            })
-        }
-    }, [response, navigate])
 
     return (
         <form

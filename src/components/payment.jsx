@@ -29,7 +29,7 @@ const Payment = (props) => {
                     setClientSecret(res.data.client_secret);
                 })
                 .catch(err => {
-                    console.error(err.message);
+                    console.error(err);
                 })
         };
         fetchClientSecret();
