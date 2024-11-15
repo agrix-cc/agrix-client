@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import ListingProgressBar from "./listingProgressBar";
-import formatNumber from "../numberFormater";
 
 const ListingInformation = (props) => {
 
@@ -46,7 +45,7 @@ const ListingInformation = (props) => {
             </div>
             <div className="mb-2 flex justify-between items-center">
                 <div>
-                    <p className="text-2xl font-medium">Rs. {formatNumber(pricing.price)}</p>
+                    <p className="text-2xl font-medium">Rs. {pricing.price.toFixed(2)}</p>
                     <p className="text-gray-500">{pricing.priceDescription}</p>
                 </div>
                 <p className="text-sage-green font-medium">{pricing.qty}</p>
@@ -110,11 +109,11 @@ const CropInformation = (props) => {
                 <li className="text-gray-500">Delivery: <span className="capitalize text-black">{delivery_options === "both" ? 'Pickup and Deliver both' : delivery_options}</span></li>
                 {delivery_fare_per_kg &&
                     <li className="text-gray-500">Delivery fare per kg: <span
-                        className="capitalize text-black">Rs. {formatNumber(delivery_fare_per_kg)}</span></li>
+                        className="capitalize text-black">Rs. {delivery_fare_per_kg.toFixed(2)}</span></li>
                 }
                 <li className="text-gray-500">Available Quantity: <span
                     className="text-black">{available_quantity} Kg</span></li>
-                <li className="text-gray-500">Price per Kg: <span className="text-black">Rs. {formatNumber(price_per_kg)}</span></li>
+                <li className="text-gray-500">Price per Kg: <span className="text-black">Rs. {price_per_kg.toFixed(2)}</span></li>
                 <li className="text-gray-500">Created At: <span className="text-black">{new Date(createdAt).toDateString()}</span></li>
                 <li className="text-gray-500">Updated At: <span className="text-black">{new Date(updatedAt).toDateString()}</span></li>
             </ul>
@@ -147,7 +146,7 @@ const TransportInformation = (props) => {
                 <li className="text-gray-500">Service Radius: <span className="text-black">{service_radius} km</span></li>
                 <li className="text-gray-500">Max Volume: <span className="text-black">{max_volume} m³</span></li>
                 <li className="text-gray-500">Max Weight: <span className="text-black">{max_weight} kg</span></li>
-                <li className="text-gray-500">Price per Km: <span className="text-black">Rs. {formatNumber(price_per_km)}</span></li>
+                <li className="text-gray-500">Price per Km: <span className="text-black">Rs. {price_per_km.toFixed(2)}</span></li>
                 <li className="text-gray-500">Refrigerated: <span className="text-black">{refrigerated ? "Yes" : "No"}</span></li>
                 <li className="text-gray-500">Temperature Control: <span className="text-black">{temperature_control ? "Yes" : "No"}</span></li>
                 {temperature_control && (
@@ -188,7 +187,7 @@ const StorageInformation = (props) => {
                 <li className="text-gray-500">Max Capacity per Unit: <span className="text-black">{max_capacity_per_unit} kg</span></li>
                 <li className="text-gray-500">Volume per Unit: <span className="text-black">{volume_per_unit} m³</span></li>
                 <li className="text-gray-500">Total Units: <span className="text-black">{total_units}</span></li>
-                <li className="text-gray-500">Price per Unit: <span className="text-black">Rs. {formatNumber(price_per_unit)}</span></li>
+                <li className="text-gray-500">Price per Unit: <span className="text-black">Rs. {price_per_unit.toFixed(2)}</span></li>
                 <li className="text-gray-500">Humidity Control: <span className="text-black">{humidity_control_availability ? "Yes" : "No"}</span></li>
                 <li className="text-gray-500">Pest Control: <span className="text-black">{pest_control_availability ? "Yes" : "No"}</span></li>
                 <li className="text-gray-500">Ventilation: <span className="text-black">{ventilation_availability ? "Yes" : "No"}</span></li>

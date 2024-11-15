@@ -1,6 +1,5 @@
 import {Text} from "@chakra-ui/react";
 import {Link} from "react-router-dom";
-import formatNumber from "../numberFormater";
 
 const ItemCard = (props) => {
     const {data} = props;
@@ -46,7 +45,7 @@ const ItemCard = (props) => {
                     <p className="text-sage-green font-medium mb-2">
                         {cardDetails.quantity}
                     </p>
-                    <p className="text-2xl font-medium">Rs. {formatNumber(cardDetails.price)}</p>
+                    <p className="text-2xl font-medium">Rs. {cardDetails.price.toFixed(2)}</p>
                     <p className="text-gray-500 text-sm">
                         {cardDetails.priceDescription}
                     </p>

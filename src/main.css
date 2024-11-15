@@ -113,3 +113,15 @@
 .chakra-radio-group__item span:not(.chakra-radio-group__itemText) {
     @apply border border-gray-200;
 }
+
+.pac-container {
+    @apply shadow-none rounded-lg border border-gray-300 px-2 pb-2 mt-2;
+}
+.pac-item {
+    font-family: 'Poppins', sans-serif;
+    @apply px-2 py-1
+}
+
+.chakra-timeline__separator {
+    @apply border border-zinc-200;
+}

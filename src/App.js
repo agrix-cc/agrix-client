@@ -13,6 +13,7 @@ import {useEffect} from "react";
 import Onboarding from "./pages/onboarding";
 import ProtectedRoutes from "./components/protectedRoutes";
 import Checkout from "./pages/checkout";
+import RentTransport from "./pages/rentTransport";
 
 function App() {
 
@@ -37,6 +38,8 @@ function App() {
                 <Route path="/product/:id" element={<ItemView/>}/>
 
                 <Route path="/checkout" element={<Checkout/>}/>
+
+                <Route path="/rent-transport" element={<RentTransport/>}/>
 
                 {/*Protected routes*/}
                 <Route element={<ProtectedRoutes/>}>

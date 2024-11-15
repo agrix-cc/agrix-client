@@ -5,7 +5,6 @@ import BackToHome from "../components/onboarding/backtohome";
 import InputField from "../components/onboarding/inputField";
 import {useState} from "react";
 import axios from "axios";
-// import {jwtDecode} from "jwt-decode";
 
 const SignIn = () => {
 
@@ -30,7 +29,6 @@ const SignIn = () => {
                 localStorage.setItem('jwtToken', token);
                 setError('');
                 navigate('/');
-                // const decoded = jwtDecode(token);
             })
             .catch(error => {
                 if (error.response) {

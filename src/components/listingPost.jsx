@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import ProfileBadge from "./profileBadge";
 import ListingImagesSlider from "./listingImageSlider";
 import {Link} from "react-router-dom";
-import formatNumber from "./numberFormater";
 
 const Post = (props) => {
     const {listing = null} = props;
@@ -28,25 +27,26 @@ const Card = (props) => {
         switch (listing.listing_type) {
             case "storage":
                 setData({
-                    price: `Rs. ${formatNumber(listing.storage.price_per_unit)}`,
+                    price: `Rs. ${listing.storage.price_per_unit.toFixed(2)}`,
                     availableAmount: `${listing.storage.total_units} Units available`
                 });
                 break;
             case "transport":
                 setData({
-                    price: `Rs. ${formatNumber(listing.transport.price_per_km)}`,
+                    price: `Rs. ${listing.transport.price_per_km.toFixed(2)}`,
                     availableAmount: `${listing.transport.service_radius} Units available`
                 });
                 break;
             default:
                 setData({
-                    price: `Rs. ${formatNumber(listing.crop.price_per_kg)}`,
+                    price: `Rs. ${listing.crop.price_per_kg.toFixed(2)}`,
                     availableAmount: `${listing.crop.available_quantity} Units available`
                 });
                 break
         }
     }, [listing]);
 
+    // TODO create feed post
     return ((listing && data) &&
         <Link to={`/product/${listing.id}`}>
             <div className="bg-white my-2 overflow-hidden rounded-xl md:grid md:grid-cols-2">

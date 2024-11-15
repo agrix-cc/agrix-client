@@ -4,6 +4,7 @@ import {useState} from "react";
 
 const HeroComponent = () => {
 
+    // TODO create search home
     const [keyword, setKeyword] = useState(null);
 
     return (

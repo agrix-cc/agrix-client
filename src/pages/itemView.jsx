@@ -8,6 +8,7 @@ import ListingImagesSlider from "../components/listingImageSlider";
 import ListingInformation from "../components/itemView/listingInformation";
 import FloatingIslandCrop from "../components/itemView/floatingIslandCrop";
 import {Toaster} from "../components/ui/toaster";
+import FloatingIsland from "../components/itemView/floatingIsland";
 
 const ItemView = () => {
     const {id} = useParams();
@@ -57,16 +58,27 @@ const ItemView = () => {
 
                     <ListingInformation listing={data.listing}/>
                 </div>
-                {
-                    data.listing.CropListing &&
+                {data.listing.CropListing &&
                     <FloatingIslandCrop
                         value={value}
                         orderData={{...data.listing, image: data.images[0]}}
-                        unit={data.listing.CropListing ? 'kg' : null}
+                        unit={'kg'}
                         setValue={(e) => setValue(e.valueAsNumber)}
-                        price={data.listing.CropListing?.price_per_kg || data.listing.StorageListing?.price_per_unit || 0}
-                        max={data.listing.CropListing?.available_quantity || data.listing.StorageListing?.total_units || 0}
+                        price={data.listing.CropListing?.price_per_kg || 0}
+                        max={data.listing.CropListing?.available_quantity || 0}
                     />
+                }
+                {data.listing.TransportListing &&
+                    <FloatingIsland
+                        listingInfo={{
+                            id: data.listing.TransportListing.id,
+                            price_per_km: data.listing.TransportListing.price_per_km,
+                        }}
+                        label="Rent Transport"
+                        location="/rent-transport"/>
+                }
+                {data.listing.StorageListing &&
+                    <FloatingIsland label="Rent Storage"/>
                 }
                 <Spacer/>
             </div>

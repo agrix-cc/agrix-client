@@ -1,7 +1,6 @@
 import {Field} from "../ui/field";
 import {HStack, Input} from "@chakra-ui/react";
 import {Radio, RadioGroup} from "../ui/radio";
-import formatNumber from "../numberFormater";
 import {useEffect, useState} from "react";
 
 const CropOrder = (props) => {
@@ -47,7 +46,7 @@ const CropOrder = (props) => {
                 <div className="border-b border-gray-300 pb-2 mb-2">
                     <div className="flex justify-between items-center">
                         <p className="text-gray-500">Price per kg:</p>
-                        <p className="text-black">Rs. {formatNumber(listing.CropListing.price_per_kg)}</p>
+                        <p className="text-black">Rs. {listing.CropListing.price_per_kg.toFixed(2)}</p>
                     </div>
                     <div className="flex justify-between items-center">
                         <p className="text-gray-500">Quantity:</p>
@@ -55,12 +54,12 @@ const CropOrder = (props) => {
                     </div>
                     <div className="flex justify-between items-center">
                         <p className="text-gray-500">Delivery fee:</p>
-                        <p className="text-black">Rs. {formatNumber(data.deliveryFee)}</p>
+                        <p className="text-black">Rs. {data.deliveryFee.toFixed(2)}</p>
                     </div>
                 </div>
                 <div className="flex justify-between items-center">
                     <p className="text-gray-500 text-2xl">Total:</p>
-                    <p className="text-black text-2xl">Rs. {formatNumber(total)}</p>
+                    <p className="text-black text-2xl">Rs. {total.toFixed(2)}</p>
                 </div>
             </div>
             <div className="mb-4 mt-4 md:mt-0">
