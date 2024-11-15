@@ -35,7 +35,7 @@ const Market = () => {
 
         const getListings = async () => {
             const type = params.type.length ? params.type : 'all';
-            const sort = params.sort.length ? params.sort : 'default';
+            const sort = params.sort.length ? params.sort : 'latest';
             const city = params.city.length ? params.city : 'all';
             const district = params.district.length ? params.district : 'all';
 

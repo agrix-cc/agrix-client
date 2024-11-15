@@ -85,8 +85,7 @@ const listingSort = createListCollection({
     items: [
         {label: "Latest", value: "latest"},
         {label: "Oldest", value: "oldest"},
-        {label: "Price low to high", value: "price-low"},
-        {label: "Price high to low", value: "price-high"},
+    //     TODO removed price sorting
     ],
 });
 
