@@ -67,7 +67,6 @@ const CropOrder = (props) => {
                 <h1 className="text-xl">Shipping and billing information</h1>
                 <div className="py-2 mb-4">
                     <Field label="Name" required className="mb-2">
-                        {/*TODO ---------------------------------------------------------------------------------------------*/}
                         <Input
                             value={data.name}
                             onChange={(e) => setData({...data, name: e.target.value})}
@@ -75,7 +74,6 @@ const CropOrder = (props) => {
                             className="px-2 outline-none border border-gray-200"/>
                     </Field>
                     <Field label="Address" required className="mb-2">
-                        {/*TODO ---------------------------------------------------------------------------------------------*/}
                         <Input
                             value={data.address}
                             onChange={(e) => setData({...data, address: e.target.value})}

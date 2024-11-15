@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {PaymentElement, useElements, useStripe} from "@stripe/react-stripe-js";
-import {toaster, Toaster} from "./ui/toaster";
+import {toaster} from "./ui/toaster";
 import {useNavigate} from "react-router-dom";
 
 const CheckoutForm = () => {
@@ -39,7 +39,7 @@ const CheckoutForm = () => {
                                 navigate('/');
                             }
                         },
-                    })
+                    });
                 } else {
                     toaster.create({
                         title: "Unidentified status!",
@@ -54,7 +54,6 @@ const CheckoutForm = () => {
     return (
         <form
             onSubmit={handleSubmit}>
-            <Toaster/>
             <PaymentElement id="payment-element"/>
             <button
                 type="submit"

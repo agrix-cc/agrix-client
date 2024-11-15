@@ -94,7 +94,7 @@ const Checkout = () => {
                             </> :
                             <>
                                 <h1 className="text-xl mb-8">Payment options</h1>
-                                <Payment data={{data, user}}/>
+                                <Payment order={data} user={user} listing={listing}/>
                             </>
                         }
                     </div>
