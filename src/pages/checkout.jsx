@@ -68,7 +68,7 @@ const Checkout = () => {
                 name: user.first_name + ' ' + user.last_name,
                 address: user.address || "",
                 subTotal: listing.qty * listing.CropListing.price_per_kg,
-                deliveryFee: listing.CropListing.delivery_fare_per_kg || 0,
+                deliveryFee: (listing.CropListing.delivery_fare_per_kg * listing.qty) || 0,
                 deliveryOption: deliveryOption,
             });
         }
