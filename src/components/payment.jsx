@@ -71,7 +71,7 @@ const Payment = (props) => {
             <Toaster/>
             {stripePromise && clientSecret && (
                 <Elements stripe={stripePromise} options={{clientSecret}}>
-                    <CheckoutForm/>
+                    <CheckoutForm order={order} listing={listing}/>
                 </Elements>
             )}
         </>

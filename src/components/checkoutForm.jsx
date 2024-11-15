@@ -2,8 +2,10 @@ import {useState} from "react";
 import {PaymentElement, useElements, useStripe} from "@stripe/react-stripe-js";
 import {toaster} from "./ui/toaster";
 import {useNavigate} from "react-router-dom";
+import axios from "axios";
 
-const CheckoutForm = () => {
+const CheckoutForm = (props) => {
+    const {order, listing} = props;
     const navigate = useNavigate();
     const stripe = useStripe();
     const elements = useElements();
@@ -31,15 +33,7 @@ const CheckoutForm = () => {
                         type: 'error',
                     })
                 } else if (res.paymentIntent && res.paymentIntent.status === "succeeded") {
-                    toaster.create({
-                        title: "Payment successful",
-                        type: 'success',
-                        onStatusChange({status}) {
-                            if (status === 'unmounted') {
-                                navigate('/');
-                            }
-                        },
-                    });
+                    placeOrder(res.paymentIntent.id);
                 } else {
                     toaster.create({
                         title: "Unidentified status!",
@@ -49,6 +43,42 @@ const CheckoutForm = () => {
             })
 
         setIsProcessing(false);
+    }
+
+    const placeOrder = async (id) => {
+
+        const processedOrder = {
+            stripeId: id,
+            order: {
+                cropId: listing.CropListing.id,
+                amount: order.subTotal + order.deliveryFee,
+                qty: listing.qty,
+                deliveryMethod: order.deliveryOption || listing.CropListing.delivery_options,
+                address: order.address
+            }
+        }
+
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
+
+        await axios.post(`${process.env.REACT_APP_SERVER_URL}/order/crop`, processedOrder)
+            .then(_ => {
+                toaster.create({
+                    title: "Order placed successfully!",
+                    type: 'success',
+                    duration: 2000,
+                    onStatusChange({status}) {
+                        if (status === 'unmounted') {
+                            navigate('/');
+                        }
+                    },
+                })
+            })
+            .catch((error) => {
+                toaster.create({
+                    title: error.response ? error.response.data.message : error.message,
+                    type: 'error',
+                });
+            })
     }
 
     return (
