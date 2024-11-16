@@ -9,14 +9,12 @@ import ListingInformation from "../components/itemView/listingInformation";
 import FloatingIslandCrop from "../components/itemView/floatingIslandCrop";
 import {Toaster} from "../components/ui/toaster";
 import FloatingIsland from "../components/itemView/floatingIsland";
+import Calendar from "react-calendar";
 
 const ItemView = () => {
     const {id} = useParams();
 
-    const [data, setData] = useState({
-        listing: {},
-        images: [],
-    })
+    const [data, setData] = useState(null)
 
     const [isLoading, setIsLoading] = useState(true);
 
@@ -26,7 +24,7 @@ const ItemView = () => {
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_SERVER_URL}/view/${id}`)
             .then(res => {
-                setData(data => ({...data, listing: res.data.listing, images: res.data.images}));
+                setData({listing: res.data.listing, images: res.data.images});
                 setIsLoading(false);
             })
             .catch(error => {
@@ -34,14 +32,13 @@ const ItemView = () => {
             });
     }, [id]);
 
-    return (
-        isLoading ? <></> :
-            <div className="relative pb-20">
+    return (!isLoading && data &&
+            <div className="relative pb-20 md:h-dvh">
                 <MobileNav/>
                 <Toaster/>
-                <div className="md:grid md:grid-cols-2 md:pe-[5vw] md:ps-[5vw]">
+                <div className="md:grid md:grid-cols-2 md:pe-[5vw] md:ps-[5vw] md:h-dvh">
 
-                    <div>
+                    <div className="md:sticky md:top-0">
                         <div className="mt-20 px-4">
                             <ProfileBadge
                                 name={`${data.listing.User.first_name} ${data.listing.User.last_name}`}
@@ -56,7 +53,32 @@ const ItemView = () => {
                         </div>
                     </div>
 
-                    <ListingInformation listing={data.listing}/>
+                    <div className="md:overflow-y-auto md:pb-20 hide-scrollbar">
+                        <ListingInformation listing={data.listing}/>
+                        {data.listing.TransportListing &&
+                            <div className="p-4">
+                                <p className="text-lg font-medium mb-2">Availability</p>
+                                <div className="grid items-center justify-center">
+                                    <Calendar
+                                        onChange={(value, event) => {
+                                            setData((data) => ({...data, selectedDate: value}));
+                                        }}
+                                        showNeighboringMonth={false}
+                                        minDetail="month"
+                                        maxDate={new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)}
+                                        minDate={new Date()}
+                                        tileClassName={({date, view}) => {
+                                            if (view === "month" && date.getDate() === 20) {
+                                                return 'unavailable-date';
+                                            }
+                                            return null;
+                                        }}
+                                        tileDisabled={({date, view}) => view === "month" && date.getDate() === 20}
+                                    />
+                                </div>
+                            </div>
+                        }
+                    </div>
                 </div>
                 {data.listing.CropListing &&
                     <FloatingIslandCrop
@@ -73,6 +95,7 @@ const ItemView = () => {
                         listingInfo={{
                             id: data.listing.TransportListing.id,
                             price_per_km: data.listing.TransportListing.price_per_km,
+                            listing: data,
                         }}
                         label="Rent Transport"
                         location="/rent-transport"/>

@@ -1,12 +1,10 @@
 import {useState} from "react";
 import {PaymentElement, useElements, useStripe} from "@stripe/react-stripe-js";
 import {toaster} from "./ui/toaster";
-import {useNavigate} from "react-router-dom";
 import axios from "axios";
 
 const CheckoutForm = (props) => {
     const {order, listing} = props;
-    const navigate = useNavigate();
     const stripe = useStripe();
     const elements = useElements();
 
@@ -46,29 +44,46 @@ const CheckoutForm = (props) => {
     }
 
     const placeOrder = async (id) => {
+        let orderType = null;
+        let processedOrder = null;
 
-        const processedOrder = {
-            stripeId: id,
-            order: {
-                cropId: listing.CropListing.id,
-                amount: order.subTotal + order.deliveryFee,
-                qty: listing.qty,
-                deliveryMethod: order.deliveryOption || listing.CropListing.delivery_options,
-                address: order.address
+        if (listing.CropListing) {
+            orderType = "crop";
+            processedOrder = {
+                stripeId: id,
+                order: {
+                    cropId: listing.CropListing.id,
+                    amount: order.subTotal + order.deliveryFee,
+                    qty: listing.qty,
+                    deliveryMethod: order.deliveryOption || listing.CropListing.delivery_options,
+                    address: order.address
+                }
+            };
+        } else if (listing.TransportListing) {
+            orderType = "transport"
+            processedOrder = {
+                stripeId: id,
+                order: {
+                    transportId: listing.TransportListing.id,
+                    transportInfo: order
+                }
             }
         }
 
+        if (!orderType || !processedOrder) return;
+
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
 
-        await axios.post(`${process.env.REACT_APP_SERVER_URL}/order/crop`, processedOrder)
-            .then(_ => {
+        await axios.post(`${process.env.REACT_APP_SERVER_URL}/order/${orderType}`, processedOrder)
+            .then(res => {
                 toaster.create({
                     title: "Order placed successfully!",
                     type: 'success',
                     duration: 2000,
                     onStatusChange({status}) {
                         if (status === 'unmounted') {
-                            navigate('/');
+                            // navigate('/');
+                            console.log(res);
                         }
                     },
                 })

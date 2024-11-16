@@ -18,7 +18,7 @@ const ItemCard = (props) => {
             cardDetails.priceDescription = "Price per unit";
             break;
         case "transport":
-            cardDetails.quantity = `${data.transport.service_radius}Km - max radius`;
+            cardDetails.quantity = null;
             cardDetails.price = data.transport.price_per_km;
             cardDetails.priceDescription = "Price per Km";
             break;
@@ -31,7 +31,7 @@ const ItemCard = (props) => {
 
     return (
         <Link to={`/product/${data.id}`}>
-            <div className="rounded-lg overflow-hidden shadow-lg">
+            <div className="rounded-lg overflow-hidden shadow-lg h-full">
                 <div className="w-full h-32">
                     <img src={data.imageUrl || "assets/placeholder.webp"} alt="" className="w-full h-full object-cover"/>
                 </div>
@@ -42,8 +42,8 @@ const ItemCard = (props) => {
                     <Text lineClamp="1" className="text-lg font-medium">
                         {data.title}
                     </Text>
-                    <p className="text-sage-green font-medium mb-2">
-                        {cardDetails.quantity}
+                    <p className="text-sage-green font-medium mb-2 capitalize">
+                        {cardDetails.quantity || data.transport.vehicle_type}
                     </p>
                     <p className="text-2xl font-medium">Rs. {cardDetails.price.toFixed(2)}</p>
                     <p className="text-gray-500 text-sm">

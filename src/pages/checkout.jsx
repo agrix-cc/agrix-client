@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import CropOrder from "../components/checkout/cropOrder";
 import {jwtDecode} from "jwt-decode";
 import {Toaster, toaster} from "../components/ui/toaster";
+import TransportOrder from "../components/checkout/transportOrder";
 
 const Checkout = () => {
 
@@ -24,7 +25,7 @@ const Checkout = () => {
             setIsProcessing(true);
             return
         }
-        if (data && data.name === "") {
+        if (data.name === "") {
             toaster.create({
                 type: 'error',
                 title: 'Please provide your name!',
@@ -33,7 +34,7 @@ const Checkout = () => {
             setIsProcessing(true);
             return
         }
-        if (data && data.address === "") {
+        if (data.address === "") {
             toaster.create({
                 type: 'error',
                 title: 'Please provide your address!',
@@ -62,14 +63,27 @@ const Checkout = () => {
     }, [location.state]);
 
     useEffect(() => {
-        if (user && listing && listing.CropListing) {
+        if (!user || !listing) return;
+        if (listing.CropListing) {
             const deliveryOption = listing.CropListing.delivery_options === "both" ? 'deliver' : listing.CropListing.delivery_options
+            // This is where we process data to send to backend
             setData({
                 name: user.first_name + ' ' + user.last_name,
                 address: user.address || "",
                 subTotal: listing.qty * listing.CropListing.price_per_kg,
                 deliveryFee: (listing.CropListing.delivery_fare_per_kg * listing.qty) || 0,
                 deliveryOption: deliveryOption,
+            });
+        }
+        if (listing.TransportListing) {
+            // This is where we process data to send to backend - Transport data
+            setData({
+                name: user.first_name + ' ' + user.last_name,
+                address: user.address || "",
+                subTotal: listing.total,
+                distance: listing.distance,
+                selectedDate: listing.selectedDate,
+                locations: listing.locations,
             });
         }
     }, [user, listing]);
@@ -83,7 +97,12 @@ const Checkout = () => {
                     <div className="w-full sm:max-w-sm md:max-w-lg">
                         {isProcessing ?
                             <>
-                                <CropOrder listing={listing} data={data} setData={setData}/>
+                                {listing.CropListing &&
+                                    <CropOrder listing={listing} data={data} setData={setData}/>
+                                }
+                                {listing.TransportListing &&
+                                    <TransportOrder listing={listing} data={data} setData={setData}/>
+                                }
                                 <button
                                     onClick={handleClick}
                                     type="submit"

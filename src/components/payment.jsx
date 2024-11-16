@@ -27,9 +27,10 @@ const Payment = (props) => {
     }, [])
 
     useEffect(() => {
+        if (!order || !user || !listing) return;
         const fetchClientSecret = async () => {
             const createOrder = {
-                total: order.subTotal + order.deliveryFee,
+                total: order.subTotal + (order.deliveryFee || 0),
                 name: user.name,
                 description: `payment for Listing id: ${listing.id}, customer: ${user.first_name+' '+user.last_name}`,
             }
