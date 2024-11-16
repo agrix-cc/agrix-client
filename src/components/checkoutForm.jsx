@@ -77,7 +77,7 @@ const CheckoutForm = (props) => {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
 
         await axios.post(`${process.env.REACT_APP_SERVER_URL}/order/${orderType}`, processedOrder)
-            .then(_ => {
+            .then(res => {
                 toaster.create({
                     title: "Order placed successfully!",
                     type: 'success',

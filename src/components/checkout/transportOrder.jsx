@@ -28,7 +28,7 @@ const TransportOrder = (props) => {
                 <div className="border-b border-gray-300 pb-2 mb-2">
                     <div className="flex justify-between items-center">
                         <p className="text-gray-500">Selected Date:</p>
-                        <p className="text-black">{listing.selectedDate.toLocaleDateString()}</p>
+                        <p className="text-black">{data.selectedDate.toLocaleDateString()}</p>
                     </div>
                     <div className="flex justify-between items-center">
                         <p className="text-gray-500">Total distance:</p>
