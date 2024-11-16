@@ -26,12 +26,13 @@ const ItemView = () => {
 
     const disableDatesClass = ({date, view}) => {
         if (!orders) return null;
-        return orders.some(order => view === "month" && date.getDate() === order.getDate()) ? 'unavailable-date' : null;
+        return orders.some(order => view === "month" && date.getFullYear() === order.getFullYear() && date.getMonth() === order.getMonth() && date.getDate() === order.getDate()) ? 'unavailable-date' : null;
     }
 
     const disableDatesInput = ({date, view}) => {
         if (!orders) return null;
-        return orders.some(order => view === "month" && date.getDate() === order.getDate())
+        const currentMonth = new Date().getMonth();
+        return orders.some(order => view === "month" && date.getFullYear() === order.getFullYear() && date.getMonth() === order.getMonth() && date.getDate() === order.getDate());
     }
 
     // this will fetch the data from the server
@@ -90,12 +91,12 @@ const ItemView = () => {
                                         onChange={(value, event) => {
                                             setData((data) => ({...data, selectedDate: value}));
                                         }}
-                                        showNeighboringMonth={false}
-                                        minDetail="month"
-                                        maxDate={new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)}
+                                        showNeighboringMonth={true}
                                         minDate={new Date()}
+                                        maxDate={new Date(`${new Date().getFullYear()+1}/12/31`)}
                                         tileClassName={disableDatesClass}
                                         tileDisabled={disableDatesInput}
+                                        minDetail="year"
                                     />
                                 </div>
                                 <div className="flex justify-start items-center gap-2 py-2">
