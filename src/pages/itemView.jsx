@@ -92,6 +92,8 @@ const ItemView = () => {
                 }
                 {data.listing.TransportListing &&
                     <FloatingIsland
+                        disabled={!data.selectedDate}
+                        disableMessage="Please select the date!"
                         listingInfo={{
                             id: data.listing.TransportListing.id,
                             price_per_km: data.listing.TransportListing.price_per_km,

@@ -2,8 +2,10 @@ import {useState} from "react";
 import {PaymentElement, useElements, useStripe} from "@stripe/react-stripe-js";
 import {toaster} from "./ui/toaster";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
 const CheckoutForm = (props) => {
+    const navigate = useNavigate();
     const {order, listing} = props;
     const stripe = useStripe();
     const elements = useElements();
@@ -75,15 +77,14 @@ const CheckoutForm = (props) => {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
 
         await axios.post(`${process.env.REACT_APP_SERVER_URL}/order/${orderType}`, processedOrder)
-            .then(res => {
+            .then(_ => {
                 toaster.create({
                     title: "Order placed successfully!",
                     type: 'success',
                     duration: 2000,
                     onStatusChange({status}) {
                         if (status === 'unmounted') {
-                            // navigate('/');
-                            console.log(res);
+                            navigate('/');
                         }
                     },
                 })
