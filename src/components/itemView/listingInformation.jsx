@@ -16,7 +16,7 @@ const ListingInformation = (props) => {
                 setPricing({
                     price: listing.StorageListing.price_per_unit,
                     priceDescription: "Price per unit",
-                    qty: `${listing.StorageListing.total_units} Units available`
+                    qty: null
                 })
                 break;
             case "transport":
@@ -30,7 +30,8 @@ const ListingInformation = (props) => {
                 setPricing({
                     price: listing.CropListing.price_per_kg,
                     priceDescription: "Price per kg",
-                    qty: `${listing.CropListing.available_quantity} Kg available`
+                    qty: listing.CropListing.available_quantity > 0 ?
+                        `${listing.CropListing.available_quantity} Kg available` : 'Sold out'
                 })
                 break;
         }
@@ -47,7 +48,9 @@ const ListingInformation = (props) => {
                     <p className="text-2xl font-medium">Rs. {pricing.price.toFixed(2)}</p>
                     <p className="text-gray-500">{pricing.priceDescription}</p>
                 </div>
-                <p className="text-sage-green font-medium">{pricing.qty}</p>
+                {listing.CropListing &&
+                    <p className={`font-medium ${listing.CropListing.available_quantity ? 'text-sage-green' : 'text-red-500'}`}>{pricing.qty}</p>
+                }
             </div>
             <div className="mt-2">
                 <p className="text-lg font-medium mb-2">Description</p>

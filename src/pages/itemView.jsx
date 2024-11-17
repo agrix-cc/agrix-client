@@ -94,7 +94,7 @@ const ItemView = () => {
                         </div>
                     </div>
 
-                    <div className="md:overflow-y-auto md:pb-20 hide-scrollbar">
+                    <div className="md:overflow-y-auto pb-10 md:pb-20 hide-scrollbar">
                         <ListingInformation listing={data.listing}/>
                         {data.listing.TransportListing &&
                             <div className="p-4">
@@ -125,7 +125,7 @@ const ItemView = () => {
                     </div>
                 </div>
             }
-            {data.listing && data.listing.CropListing && (user && user.id !== data.listing.UserId) &&
+            {data.listing && data.listing.CropListing && data.listing.CropListing.available_quantity > 0 && (user && user.id !== data.listing.UserId) &&
                 <FloatingIslandCrop
                     value={value}
                     orderData={{...data.listing, image: data.images[0]}}
