@@ -118,13 +118,6 @@ const listingTypes = {
             required: true
         },
         {
-            name: "service_radius",
-            type: "number",
-            label: "Enter maximum service radius (km)",
-            min: 0,
-            required: true
-        },
-        {
             name: "price_per_km",
             type: "number",
             label: "Enter price per km (Rs.)",
@@ -223,34 +216,24 @@ const listingTypes = {
             label: "This storage has pest control facility.",
         },
         {
-            name: "pricing_plan",
-            type: "select",
-            label: "Pricing plan",
-            items: [
-                {label: "Daily rental", value: "daily"},
-                {label: "Monthly rental", value: "monthly"},
-                {label: "Both", value: "both"},
-            ],
-            placeholder: "Select available pricing plans",
-            required: true
-        },
-        {
             name: "daily_rate",
             type: "number",
             label: "Enter the daily rental (Rs.)",
             min: 0,
         },
         {
-            name: "monthly_rate",
-            type: "number",
-            label: "Enter the monthly rental (Rs.)",
-            min: 0,
-        },
-        {
             name: "minimum_days",
             type: "number",
-            label: "Enter minimum duration to rent",
+            label: "Enter minimum duration to rent (days)",
             min: 0,
+            required: true
+        },
+        {
+            name: "maximum_days",
+            type: "number",
+            label: "Enter maximum duration to rent (days)",
+            min: 0,
+            required: true
         }
     ]
 }

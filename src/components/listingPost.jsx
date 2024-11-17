@@ -34,13 +34,13 @@ const Card = (props) => {
             case "transport":
                 setData({
                     price: `Rs. ${listing.transport.price_per_km.toFixed(2)}`,
-                    availableAmount: `${listing.transport.service_radius} Units available`
+                    availableAmount: null
                 });
                 break;
             default:
                 setData({
                     price: `Rs. ${listing.crop.price_per_kg.toFixed(2)}`,
-                    availableAmount: `${listing.crop.available_quantity} Units available`
+                    availableAmount: null
                 });
                 break
         }

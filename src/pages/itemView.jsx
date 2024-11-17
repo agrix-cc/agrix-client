@@ -13,6 +13,7 @@ import Calendar from "react-calendar";
 import {EmptyState} from "../components/ui/empty-state";
 import {PiEmpty} from "react-icons/pi";
 import {jwtDecode} from "jwt-decode";
+import RentStorage from "./rentStorage";
 
 const ItemView = () => {
     const {id} = useParams();
@@ -122,6 +123,9 @@ const ItemView = () => {
                                 </div>
                             </div>
                         }
+                        {data.listing.StorageListing &&
+                            <RentStorage listingInfo={data}/>
+                        }
                     </div>
                 </div>
             }
@@ -145,13 +149,6 @@ const ItemView = () => {
                     }}
                     label="Rent Transport"
                     location="/rent-transport"/>
-            }
-            {data.listing && data.listing.StorageListing && (user && user.id !== data.listing.UserId) &&
-                <FloatingIsland
-                    disabled={!user || user.id === data.listing.UserId}
-                    listingInfo={data}
-                    location="/rent-storage"
-                    label="Rent Storage"/>
             }
             {(!user || user.id === data.listing.UserId) &&
                 <div className="fixed bottom-16 md:bottom-0 left-0 w-full md:max-w-md md:left-1/2 md:-translate-x-1/2">

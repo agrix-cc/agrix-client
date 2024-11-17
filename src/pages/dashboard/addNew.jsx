@@ -29,38 +29,7 @@ const AddListing = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // This state object holds all the possible errors to show error messages in input validations
-    const [errors, setErrors] = useState({
-        title: "",
-        description: "",
-        district: "",
-        city: "",
-        crop_name: "",
-        crop_type: "",
-        harvested_date: "",
-        available_quantity: "",
-        price_per_kg: "",
-        quality_condition: "",
-        quality_grade: "",
-        delivery_options: "",
-        delivery_fare_per_kg: "",
-        organic: "",
-        vehicle_type: "",
-        fuel_type: "",
-        service_radius: "",
-        price_per_km: "",
-        max_weight: "",
-        max_volume: "",
-        temperature_control: "",
-        refrigerated: "",
-        storage_type: "",
-        total_units: "",
-        price_per_unit: "",
-        volume_per_unit: "",
-        max_capacity_per_unit: "",
-        humidity_control_availability: "",
-        ventilation_availability: "",
-        pest_control_availability: "",
-    });
+    const [errors, setErrors] = useState({});
 
     // This state object holds main listing information
     const [listingInfo, setListingInfo] = useState({
@@ -79,13 +48,6 @@ const AddListing = () => {
         // Change the value relevant object key using its name
         setAdditionalInfo(prevState => {
             const newState = {...prevState, [name]: value};
-
-            // Reset daily_rate, monthly_rate, and minimum_days when pricing_plan changes
-            if (name === "pricing_plan") {
-                newState.daily_rate = 0;
-                newState.monthly_rate = 0;
-                newState.minimum_days = 0;
-            }
 
             // Reset temperature_control_min and temperature_control_max when temperature_control changes
             if (name === "temperature_control" && !value) {
@@ -213,7 +175,6 @@ const AddListing = () => {
             transportErrors: {
                 vehicle_type: "Please select vehicle type",
                 fuel_type: "Please select vehicle fuel type",
-                service_radius: "Please enter maximum service radius",
                 price_per_km: "Please enter price per km",
                 max_weight: "Please enter maximum weight can transport",
                 max_volume: "Please enter maximum volume can transport",
@@ -224,7 +185,9 @@ const AddListing = () => {
                 width: "Please enter the width of storage unit",
                 height: "Please enter the height of storage unit",
                 length: "Please enter the length of storage unit",
-                pricing_plan: "Please select a pricing plan",
+                minimum_days: "Please enter minimum duration to rent",
+                maximum_days: "Please enter maximum duration to rent",
+                daily_rate: "Please enter daily rental fee",
             }
         }
 
@@ -269,25 +232,6 @@ const AddListing = () => {
             if (additionalInfo.temperature_control_min > additionalInfo.temperature_control_max) {
                 isValid = false;
                 errorState.temperature_control = "Minimum temperature can not be larger than minimum";
-            }
-        }
-
-        if (listingType === "storage" && additionalInfo.pricing_plan) {
-            if (additionalInfo.pricing_plan === "daily" || additionalInfo.pricing_plan === "both") {
-                if (!additionalInfo.daily_rate || additionalInfo.daily_rate <= 0) {
-                    isValid = false;
-                    errorState.daily_rate = "Please enter daily rental fee";
-                }
-                if (!additionalInfo.minimum_days || additionalInfo.minimum_days <= 0) {
-                    isValid = false;
-                    errorState.minimum_days = "Please enter minimum duration to rent";
-                }
-            }
-            if (additionalInfo.pricing_plan === "monthly" || additionalInfo.pricing_plan === "both") {
-                if (!additionalInfo.monthly_rate || additionalInfo.monthly_rate <= 0) {
-                    isValid = false;
-                    errorState.monthly_rate = "Please enter monthly rental fee";
-                }
             }
         }
 
@@ -430,16 +374,7 @@ const AddListing = () => {
                                         }
                                         {listingInput.type === "number" &&
                                             <NumberInput
-                                                hidden={
-                                                    (listingInput.name === "delivery_fare_per_kg"
-                                                        && (additionalInfo.delivery_options === 'pickup' || !additionalInfo.delivery_options)) ||
-                                                    (listingInput.name === "daily_rate"
-                                                        && (additionalInfo.pricing_plan === 'monthly' || !additionalInfo.pricing_plan)) ||
-                                                    (listingInput.name === "monthly_rate"
-                                                        && (additionalInfo.pricing_plan === 'daily' || !additionalInfo.pricing_plan)) ||
-                                                    (listingInput.name === "minimum_days"
-                                                        && (additionalInfo.pricing_plan === 'monthly' || !additionalInfo.pricing_plan))
-                                                }
+                                                hidden={listingInput.name === "delivery_fare_per_kg" && (additionalInfo.delivery_options === 'pickup' || !additionalInfo.delivery_options)}
                                                 label={listingInput.label}
                                                 min={listingInput.min}
                                                 required={listingInput.required}
@@ -496,17 +431,6 @@ const AddListing = () => {
                                             <DateInput
                                                 label={listingInput.label}
                                                 name={listingInput.name}
-                                                onChange={(e) => {
-                                                    handleInputChange(listingInput.name, e);
-                                                }}
-                                                required={listingInput.required}
-                                                error={errors[listingInput.name]}
-                                            />
-                                        }
-                                        {listingInput.type === "text" &&
-                                            <TextArea
-                                                label={listingInput.label}
-                                                placeholder={listingInput.placeholder}
                                                 onChange={(e) => {
                                                     handleInputChange(listingInput.name, e);
                                                 }}

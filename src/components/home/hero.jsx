@@ -19,10 +19,6 @@ const HeroComponent = () => {
             })
     }, [keyword]);
 
-    useEffect(() => {
-        console.log(results);
-    }, [results]);
-
     return (
         <div
             className="h-80 md:h-dvh w-full bg-cover p-4 relative"

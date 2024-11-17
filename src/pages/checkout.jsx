@@ -6,6 +6,7 @@ import CropOrder from "../components/checkout/cropOrder";
 import {jwtDecode} from "jwt-decode";
 import {Toaster, toaster} from "../components/ui/toaster";
 import TransportOrder from "../components/checkout/transportOrder";
+import StorageOrder from "../components/checkout/storageOrder";
 
 const Checkout = () => {
 
@@ -86,6 +87,17 @@ const Checkout = () => {
                 locations: listing.locations,
             });
         }
+        if (listing.StorageListing) {
+            // This is where we process data to send to backend - Storage data
+            setData({
+                name: user.first_name + ' ' + user.last_name,
+                address: user.address || "",
+                subTotal: listing.total,
+                startDate: listing.startDate,
+                endDate: listing.endDate,
+                duration: listing.duration,
+            });
+        }
     }, [user, listing]);
 
     return (listing && user && data &&
@@ -102,6 +114,9 @@ const Checkout = () => {
                                 }
                                 {listing.TransportListing &&
                                     <TransportOrder listing={listing} data={data} setData={setData}/>
+                                }
+                                {listing.StorageListing &&
+                                    <StorageOrder listing={listing} data={data} setData={setData}/>
                                 }
                                 <button
                                     onClick={handleClick}

@@ -14,13 +14,8 @@ const ItemCard = (props) => {
     switch (listingType) {
         case "storage":
             cardDetails.quantity = null;
-            if (data.storage.pricing_plan !== "daily") {
-                cardDetails.price = data.storage.monthly_rate;
-                cardDetails.priceDescription = "Monthly rental";
-            } else {
-                cardDetails.price = data.storage.daily_rate;
-                cardDetails.priceDescription = "Daily rental";
-            }
+            cardDetails.price = data.storage.daily_rate;
+            cardDetails.priceDescription = "Daily rental";
             break;
         case "transport":
             cardDetails.quantity = null;

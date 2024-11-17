@@ -70,6 +70,15 @@ const CheckoutForm = (props) => {
                     transportInfo: order
                 }
             }
+        } else if (listing.StorageListing) {
+            orderType = "storage"
+            processedOrder = {
+                stripeId: id,
+                order: {
+                    storageId: listing.StorageListing.id,
+                    orderInfo: order
+                }
+            }
         }
 
         if (!orderType || !processedOrder) return;
@@ -77,7 +86,7 @@ const CheckoutForm = (props) => {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
 
         await axios.post(`${process.env.REACT_APP_SERVER_URL}/order/${orderType}`, processedOrder)
-            .then(res => {
+            .then(_ => {
                 toaster.create({
                     title: "Order placed successfully!",
                     type: 'success',
