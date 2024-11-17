@@ -44,12 +44,12 @@ const SignIn = () => {
             <BackToHome/>
             <div
                 className="signin-header">
-                <div className="relative">
+                <div className="relative sm:max-w-sm">
                     <WelcomeSlider/>
                 </div>
             </div>
             <div className="px-4 flex justify-center items-center w-full mt-11">
-                <div className="w-full">
+                <div className="w-full sm:max-w-sm">
                     <form onSubmit={e => handleSubmit(e)}>
                         <InputField
                             label="Email Address"

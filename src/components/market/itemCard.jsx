@@ -13,9 +13,14 @@ const ItemCard = (props) => {
 
     switch (listingType) {
         case "storage":
-            cardDetails.quantity = `${data.storage.total_units} Units available`;
-            cardDetails.price = data.storage.price_per_unit;
-            cardDetails.priceDescription = "Price per unit";
+            cardDetails.quantity = null;
+            if (data.storage.pricing_plan !== "daily") {
+                cardDetails.price = data.storage.monthly_rate;
+                cardDetails.priceDescription = "Monthly rental";
+            } else {
+                cardDetails.price = data.storage.daily_rate;
+                cardDetails.priceDescription = "Daily rental";
+            }
             break;
         case "transport":
             cardDetails.quantity = null;
@@ -43,7 +48,9 @@ const ItemCard = (props) => {
                         {data.title}
                     </Text>
                     <p className="text-sage-green font-medium mb-2 capitalize">
-                        {cardDetails.quantity || data.transport.vehicle_type.replace("_", " ")}
+                        {cardDetails.quantity &&
+                            (cardDetails.quantity || data.transport.vehicle_type.replace("_", " "))
+                        }
                     </p>
                     <p className="text-2xl font-medium">Rs. {cardDetails.price.toFixed(2)}</p>
                     <p className="text-gray-500 text-sm">

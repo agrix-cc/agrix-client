@@ -13,11 +13,19 @@ const ListingInformation = (props) => {
     useEffect(() => {
         switch (listing.listing_type) {
             case "storage":
-                setPricing({
-                    price: listing.StorageListing.price_per_unit,
-                    priceDescription: "Price per unit",
-                    qty: null
-                })
+                if (listing.StorageListing.pricing_plan !== "daily") {
+                    setPricing({
+                        price: listing.StorageListing.monthly_rate,
+                        priceDescription: "Monthly rental",
+                        qty: null
+                    })
+                } else {
+                    setPricing({
+                        price: listing.StorageListing.daily_rate,
+                        priceDescription: "Daily rental",
+                        qty: null
+                    })
+                }
                 break;
             case "transport":
                 setPricing({
@@ -178,16 +186,20 @@ const TransportInformation = (props) => {
 const StorageInformation = (props) => {
     const {
         humidity_control_availability,
-        max_capacity_per_unit,
+        max_capacity,
+        width,
+        length,
+        height,
         pest_control_availability,
-        price_per_unit,
+        pricing_plan,
+        daily_rate,
+        monthly_rate,
+        minimum_days,
         storage_type,
         temperature_control,
         temperature_control_max,
         temperature_control_min,
-        total_units,
         ventilation_availability,
-        volume_per_unit,
         createdAt,
         updatedAt,
     } = props;
@@ -198,13 +210,22 @@ const StorageInformation = (props) => {
             <ul className="list-disc mx-6">
                 <li className="text-gray-500">Storage Type: <span
                     className="text-black">{storage_type === "cold_room" ? "Cold Room" : "Dry Room"}</span></li>
-                <li className="text-gray-500">Max Capacity per Unit: <span
-                    className="text-black">{max_capacity_per_unit} kg</span></li>
-                <li className="text-gray-500">Volume per Unit: <span className="text-black">{volume_per_unit} m³</span>
-                </li>
-                <li className="text-gray-500">Total Units: <span className="text-black">{total_units}</span></li>
-                <li className="text-gray-500">Price per Unit: <span
-                    className="text-black">Rs. {price_per_unit.toFixed(2)}</span></li>
+                <li className="text-gray-500">Maximum Capacity: <span
+                    className="text-black">{max_capacity} kg</span></li>
+                <li className="text-gray-500">Size: <span className="text-black">{width} x {length} x {height} m³</span></li>
+                <li className="text-gray-500">Pricing: <span className="text-black capitalize">{pricing_plan === "both" ? "Monthly / Daily rental" : `${pricing_plan} rental`}</span></li>
+                {(pricing_plan === "monthly" || pricing_plan === "both") &&
+                    <li className="text-gray-500">Monthly rental: <span
+                    className="text-black">Rs. {monthly_rate.toFixed(2)}</span></li>
+                }
+                {pricing_plan !== "monthly" &&
+                    <>
+                        <li className="text-gray-500">Daily rental: <span
+                            className="text-black">Rs. {daily_rate.toFixed(2)}</span></li>
+                        <li className="text-gray-500">Minimum rental days: <span
+                            className="text-black">{minimum_days} Days</span></li>
+                    </>
+                }
                 <li className="text-gray-500">Humidity Control: <span
                     className="text-black">{humidity_control_availability ? "Yes" : "No"}</span></li>
                 <li className="text-gray-500">Pest Control: <span

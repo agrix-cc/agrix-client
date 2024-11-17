@@ -172,31 +172,30 @@ const listingTypes = {
             required: true
         },
         {
-            name: "total_units",
+            name: "max_capacity",
             type: "number",
-            label: "Enter available storage units",
+            label: "Enter the maximum capacity can store (kg)",
             min: 0,
             required: true
         },
         {
-            name: "price_per_unit",
+            name: "width",
             type: "number",
-            label: "Enter price per storage unit (Rs.)",
-            min: 0,
-            required: true
-
-        },
-        {
-            name: "volume_per_unit",
-            type: "number",
-            label: "Enter maximum volume can store per unit (m³)",
+            label: "Enter width of storage facility (m)",
             min: 0,
             required: true
         },
         {
-            name: "max_capacity_per_unit",
+            name: "height",
             type: "number",
-            label: "Enter maximum capacity can store per unit (kg)",
+            label: "Enter height of storage facility (m)",
+            min: 0,
+            required: true
+        },
+        {
+            name: "length",
+            type: "number",
+            label: "Enter length of storage facility (m)",
             min: 0,
             required: true
         },
@@ -223,6 +222,36 @@ const listingTypes = {
             type: "checkbox",
             label: "This storage has pest control facility.",
         },
+        {
+            name: "pricing_plan",
+            type: "select",
+            label: "Pricing plan",
+            items: [
+                {label: "Daily rental", value: "daily"},
+                {label: "Monthly rental", value: "monthly"},
+                {label: "Both", value: "both"},
+            ],
+            placeholder: "Select available pricing plans",
+            required: true
+        },
+        {
+            name: "daily_rate",
+            type: "number",
+            label: "Enter the daily rental (Rs.)",
+            min: 0,
+        },
+        {
+            name: "monthly_rate",
+            type: "number",
+            label: "Enter the monthly rental (Rs.)",
+            min: 0,
+        },
+        {
+            name: "minimum_days",
+            type: "number",
+            label: "Enter minimum duration to rent",
+            min: 0,
+        }
     ]
 }
 

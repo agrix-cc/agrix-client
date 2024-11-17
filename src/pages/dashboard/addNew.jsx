@@ -77,9 +77,27 @@ const AddListing = () => {
     // This function handles the user inputs onChange
     const handleInputChange = (name, value) => {
         // Change the value relevant object key using its name
-        setAdditionalInfo({...additionalInfo, [name]: value});
+        setAdditionalInfo(prevState => {
+            const newState = {...prevState, [name]: value};
+
+            // Reset daily_rate, monthly_rate, and minimum_days when pricing_plan changes
+            if (name === "pricing_plan") {
+                newState.daily_rate = 0;
+                newState.monthly_rate = 0;
+                newState.minimum_days = 0;
+            }
+
+            // Reset temperature_control_min and temperature_control_max when temperature_control changes
+            if (name === "temperature_control" && !value) {
+                newState.temperature_control_min = 0;
+                newState.temperature_control_max = 0;
+            }
+
+            return newState;
+        });
+
         // Clear error message when user input data
-        setErrors({...errors, [name]: ""});
+        setErrors(prevErrors => ({...prevErrors, [name]: ""}));
     };
 
     // This function is to handle the form submit
@@ -202,10 +220,11 @@ const AddListing = () => {
             },
             storageErrors: {
                 storage_type: "Please select a storage type",
-                total_units: "Please enter amount of units",
-                price_per_unit: "Please enter price per unit",
-                volume_per_unit: "Please enter volume per unit",
-                max_capacity_per_unit: "Please enter maximum capacity per unit",
+                max_capacity: "Please enter the maximum capacity",
+                width: "Please enter the width of storage unit",
+                height: "Please enter the height of storage unit",
+                length: "Please enter the length of storage unit",
+                pricing_plan: "Please select a pricing plan",
             }
         }
 
@@ -250,6 +269,25 @@ const AddListing = () => {
             if (additionalInfo.temperature_control_min > additionalInfo.temperature_control_max) {
                 isValid = false;
                 errorState.temperature_control = "Minimum temperature can not be larger than minimum";
+            }
+        }
+
+        if (listingType === "storage" && additionalInfo.pricing_plan) {
+            if (additionalInfo.pricing_plan === "daily" || additionalInfo.pricing_plan === "both") {
+                if (!additionalInfo.daily_rate || additionalInfo.daily_rate <= 0) {
+                    isValid = false;
+                    errorState.daily_rate = "Please enter daily rental fee";
+                }
+                if (!additionalInfo.minimum_days || additionalInfo.minimum_days <= 0) {
+                    isValid = false;
+                    errorState.minimum_days = "Please enter minimum duration to rent";
+                }
+            }
+            if (additionalInfo.pricing_plan === "monthly" || additionalInfo.pricing_plan === "both") {
+                if (!additionalInfo.monthly_rate || additionalInfo.monthly_rate <= 0) {
+                    isValid = false;
+                    errorState.monthly_rate = "Please enter monthly rental fee";
+                }
             }
         }
 
@@ -302,181 +340,196 @@ const AddListing = () => {
         <div className="mb-20 pb-8">
             <MobileNav/>
             <Toaster/>
-            <form>
-                <p className="mt-16 p-4 font-medium text-2xl">Create new listing</p>
-                <div className="mb-2 pb-4 border-b border-gray-400 mx-4">
-                    <p className="text-lg font-medium text-gray-500 text-center py-2">Listing Information</p>
-                    <div className="grid gap-4">
+            <p className="mt-16 p-4 font-medium text-2xl">Create new listing</p>
+            <div className="md:grid md:items-center md:place-content-center">
+                <form className="md:max-w-md">
+                    <div className="mb-2 pb-4 border-b border-gray-400 mx-4">
+                        <p className="text-lg font-medium text-gray-500 text-center py-2">Listing Information</p>
+                        <div className="grid gap-4">
 
-                        <UploadImages files={files} setFiles={setFiles}/>
+                            <UploadImages files={files} setFiles={setFiles}/>
 
-                        <p>Listing type: <span className="font-medium text-gray-500 capitalize">{listingType}</span></p>
+                            <p>Listing type: <span className="font-medium text-gray-500 capitalize">{listingType}</span>
+                            </p>
 
-                        <TextInput
-                            label="Title"
-                            placeholder="Enter title of the listing to be"
-                            error={errors.title}
-                            value={listingInfo.title}
-                            onChange={(value) => {
-                                setListingInfo({...listingInfo, title: value});
-                                setErrors({...errors, title: ""});
-                            }}
-                            required
-                        />
+                            <TextInput
+                                label="Title"
+                                placeholder="Enter title of the listing to be"
+                                error={errors.title}
+                                value={listingInfo.title}
+                                onChange={(value) => {
+                                    setListingInfo({...listingInfo, title: value});
+                                    setErrors({...errors, title: ""});
+                                }}
+                                required
+                            />
 
-                        <TextArea
-                            label="Description"
-                            placeholder="Enter description of the listing"
-                            error={errors.description}
-                            onChange={(value) => {
-                                setListingInfo({...listingInfo, description: value});
-                                setErrors({...errors, description: ""});
-                            }}
-                            required
-                        />
+                            <TextArea
+                                label="Description"
+                                placeholder="Enter description of the listing"
+                                error={errors.description}
+                                onChange={(value) => {
+                                    setListingInfo({...listingInfo, description: value});
+                                    setErrors({...errors, description: ""});
+                                }}
+                                required
+                            />
 
-                        <div>
-                            <p className="text-gray-500 mb-4">Location</p>
-                            <div className="grid gap-2">
-                                <SelectInput
-                                    items={districts.map(district => ({label: district, value: district}))}
-                                    onChange={(e) => {
-                                        setListingInfo({...listingInfo, district: e, city: ""});
-                                        setErrors({...errors, district: ""});
-                                    }}
-                                    placeholder="Select district"
-                                    label="District"
-                                    required
-                                    error={errors.district}
-                                />
-                                {
-                                    listingInfo.district ? <SelectInput
-                                        required
-                                        items={citiesByDistrict[listingInfo.district].cities.map(city => ({
-                                            label: city,
-                                            value: city
-                                        }))}
+                            <div>
+                                <p className="text-gray-500 mb-4">Location</p>
+                                <div className="grid gap-2">
+                                    <SelectInput
+                                        items={districts.map(district => ({label: district, value: district}))}
                                         onChange={(e) => {
-                                            setListingInfo({...listingInfo, city: e});
-                                            setErrors({...errors, city: ""});
+                                            setListingInfo({...listingInfo, district: e, city: ""});
+                                            setErrors({...errors, district: ""});
                                         }}
                                         placeholder="Select district"
-                                        label="City"
-                                        error={errors.city}
-                                    /> : <></>
-                                }
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div className="mb-2 pb-4 border-b border-gray-400 mx-4">
-                    <p className="text-lg font-medium text-gray-500 text-center py-2">Additional Information</p>
-                    <div className="grid gap-4">
-                        {
-                            listingTypes[listingType].map(listingInput => (
-                                listingInput.type === "select" ?
-                                    <SelectInput
-                                        key={listingInput.name}
-                                        items={listingInput.items}
-                                        placeholder={listingInput.placeholder}
-                                        label={listingInput.label}
-                                        onChange={(e) => {
-                                            handleInputChange(listingInput.name, e);
-                                        }}
-                                        error={errors[listingInput.name]}
-                                        required={listingInput.required}
-                                    /> :
-                                    (listingInput.type === "number" ?
-                                        <NumberInput
-                                            hidden={listingInput.name === "delivery_fare_per_kg" && (additionalInfo.delivery_options === 'pickup' || !additionalInfo.delivery_options)}
-                                            key={listingInput.name}
-                                            label={listingInput.label}
-                                            min={listingInput.min}
-                                            required={listingInput.required}
+                                        label="District"
+                                        required
+                                        error={errors.district}
+                                    />
+                                    {
+                                        listingInfo.district ? <SelectInput
+                                            required
+                                            items={citiesByDistrict[listingInfo.district].cities.map(city => ({
+                                                label: city,
+                                                value: city
+                                            }))}
                                             onChange={(e) => {
-                                                handleInputChange(listingInput.name, e);
+                                                setListingInfo({...listingInfo, city: e});
+                                                setErrors({...errors, city: ""});
                                             }}
-                                            error={errors[listingInput.name]}
-                                        /> :
-                                        (listingInput.type === "checkbox" ?
+                                            placeholder="Select district"
+                                            label="City"
+                                            error={errors.city}
+                                        /> : <></>
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div className="mb-2 pb-4 border-b border-gray-400 mx-4">
+                        <p className="text-lg font-medium text-gray-500 text-center py-2">Additional Information</p>
+                        <div>
+                            {listingType &&
+                                listingTypes[listingType].map((listingInput, key) =>
+                                    <div key={listingInput.name} className="mb-4">
+                                        {listingInput.type === "select" &&
+                                            <SelectInput
+                                                items={listingInput.items}
+                                                placeholder={listingInput.placeholder}
+                                                label={listingInput.label}
+                                                onChange={(e) => {
+                                                    handleInputChange(listingInput.name, e);
+                                                }}
+                                                error={errors[listingInput.name]}
+                                                required={listingInput.required}
+                                            />
+                                        }
+                                        {listingInput.type === "number" &&
+                                            <NumberInput
+                                                hidden={
+                                                    (listingInput.name === "delivery_fare_per_kg"
+                                                        && (additionalInfo.delivery_options === 'pickup' || !additionalInfo.delivery_options)) ||
+                                                    (listingInput.name === "daily_rate"
+                                                        && (additionalInfo.pricing_plan === 'monthly' || !additionalInfo.pricing_plan)) ||
+                                                    (listingInput.name === "monthly_rate"
+                                                        && (additionalInfo.pricing_plan === 'daily' || !additionalInfo.pricing_plan)) ||
+                                                    (listingInput.name === "minimum_days"
+                                                        && (additionalInfo.pricing_plan === 'monthly' || !additionalInfo.pricing_plan))
+                                                }
+                                                label={listingInput.label}
+                                                min={listingInput.min}
+                                                required={listingInput.required}
+                                                onChange={(e) => {
+                                                    handleInputChange(listingInput.name, e);
+                                                }}
+                                                error={errors[listingInput.name]}
+                                            />
+                                        }
+                                        {listingInput.type === "checkbox" &&
                                             <CheckBox
-                                                key={listingInput.name}
                                                 option={{
                                                     name: listingInput.label,
                                                     onCheck: (e) => {
                                                         handleInputChange(listingInput.name, e);
                                                     }
                                                 }}
-                                            /> :
-                                            (listingInput.type === "range" ?
-                                                <RangeInput
-                                                    key={listingInput.name}
-                                                    unit={listingInput.unit}
-                                                    minLabel={listingInput.minLabel}
-                                                    maxLabel={listingInput.maxLabel}
-                                                    onUpperChange={(e) => {
-                                                        handleInputChange(`${listingInput.name}_max`, parseFloat(e));
-                                                        setErrors({...errors, temperature_control: ""});
-                                                    }}
-                                                    onLowerChange={(e) => {
-                                                        handleInputChange(`${listingInput.name}_min`, parseFloat(e));
-                                                        setErrors({...errors, temperature_control: ""});
-                                                    }}
-                                                    option={{
-                                                        name: listingInput.label,
-                                                        onCheck: (e) => {
-                                                            handleInputChange(listingInput.name, e);
-                                                        }
-                                                    }}
-                                                    error={errors.temperature_control}
-                                                /> :
-                                                (listingInput.type === "text" ?
-                                                    <TextInput
-                                                        key={listingInput.name}
-                                                        label={listingInput.label}
-                                                        placeholder={listingInput.placeholder}
-                                                        onChange={(e) => {
-                                                            handleInputChange(listingInput.name, e);
-                                                        }}
-                                                        required={listingInput.required}
-                                                        error={errors[listingInput.name]}
-                                                    /> :
-                                                    (listingInput.type === "date" ?
-                                                        <DateInput
-                                                            key={listingInput.name}
-                                                            label={listingInput.label}
-                                                            name={listingInput.name}
-                                                            onChange={(e) => {
-                                                                handleInputChange(listingInput.name, e);
-                                                            }}
-                                                            required={listingInput.required}
-                                                            error={errors[listingInput.name]}
-                                                        /> :
-                                                        <TextArea
-                                                            key={listingInput.name}
-                                                            label={listingInput.label}
-                                                            placeholder={listingInput.placeholder}
-                                                            onChange={(e) => {
-                                                                handleInputChange(listingInput.name, e);
-                                                            }}
-                                                            required={listingInput.required}
-                                                            error={errors[listingInput.name]}
-                                                        />)))))
-                            ))
-                        }
+                                            />
+                                        }
+                                        {listingInput.type === "range" &&
+                                            <RangeInput
+                                                unit={listingInput.unit}
+                                                minLabel={listingInput.minLabel}
+                                                maxLabel={listingInput.maxLabel}
+                                                onUpperChange={(e) => {
+                                                    handleInputChange(`${listingInput.name}_max`, parseFloat(e));
+                                                    setErrors({...errors, temperature_control: ""});
+                                                }}
+                                                onLowerChange={(e) => {
+                                                    handleInputChange(`${listingInput.name}_min`, parseFloat(e));
+                                                    setErrors({...errors, temperature_control: ""});
+                                                }}
+                                                option={{
+                                                    name: listingInput.label,
+                                                    onCheck: (e) => {
+                                                        handleInputChange(listingInput.name, e);
+                                                    }
+                                                }}
+                                                error={errors.temperature_control}
+                                            />
+                                        }
+                                        {listingInput.type === "text" &&
+                                            <TextInput
+                                                label={listingInput.label}
+                                                placeholder={listingInput.placeholder}
+                                                onChange={(e) => {
+                                                    handleInputChange(listingInput.name, e);
+                                                }}
+                                                required={listingInput.required}
+                                                error={errors[listingInput.name]}
+                                            />
+                                        }
+                                        {listingInput.type === "date" &&
+                                            <DateInput
+                                                label={listingInput.label}
+                                                name={listingInput.name}
+                                                onChange={(e) => {
+                                                    handleInputChange(listingInput.name, e);
+                                                }}
+                                                required={listingInput.required}
+                                                error={errors[listingInput.name]}
+                                            />
+                                        }
+                                        {listingInput.type === "text" &&
+                                            <TextArea
+                                                label={listingInput.label}
+                                                placeholder={listingInput.placeholder}
+                                                onChange={(e) => {
+                                                    handleInputChange(listingInput.name, e);
+                                                }}
+                                                required={listingInput.required}
+                                                error={errors[listingInput.name]}
+                                            />
+                                        }
+                                    </div>
+                                )
+                            }
+                        </div>
                     </div>
-                </div>
-                <div className="px-4 mt-4">
-                    <button
-                        disabled={isSubmitting}
-                        type="submit"
-                        className="px-4 py-2 rounded bg-primary-green text-white text-lg w-full shadow-lg active:shadow-md active:translate-y-0.5 translate-y-0 duration-300 transition-all disabled:opacity-25"
-                        onClick={handleSubmit}>
-                        Submit
-                    </button>
-                </div>
-            </form>
+                    <div className="px-4 mt-4">
+                        <button
+                            disabled={isSubmitting}
+                            type="submit"
+                            className="px-4 py-2 rounded bg-primary-green text-white text-lg w-full shadow-lg active:shadow-md active:translate-y-0.5 translate-y-0 duration-300 transition-all disabled:opacity-25"
+                            onClick={handleSubmit}>
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     )
 };

@@ -18,13 +18,13 @@ const Onboarding = () => {
     return (
         <div>
             <BackToHome/>
-            <div className="welcomeHero">
-                <div className="relative top-1/2">
+            <div className="welcomeHero sm:grid sm:place-content-center">
+                <div className="relative top-1/2 sm:max-w-md">
                     <WelcomeSlider/>
                 </div>
             </div>
             <div className="p-4 flex justify-center items-center w-full">
-                <div className="w-full">
+                <div className="w-full sm:max-w-sm">
                     <div className="mb-4">
                         <Button
                             primary={false}

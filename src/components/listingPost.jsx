@@ -27,8 +27,8 @@ const Card = (props) => {
         switch (listing.listing_type) {
             case "storage":
                 setData({
-                    price: `Rs. ${listing.storage.price_per_unit.toFixed(2)}`,
-                    availableAmount: `${listing.storage.total_units} Units available`
+                    price: null,
+                    availableAmount: null
                 });
                 break;
             case "transport":
