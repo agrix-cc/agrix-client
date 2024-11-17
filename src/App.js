@@ -37,15 +37,13 @@ function App() {
 
                 <Route path="/product/:id" element={<ItemView/>}/>
 
-                <Route path="/checkout" element={<Checkout/>}/>
-
-                <Route path="/rent-transport" element={<RentTransport/>}/>
-
                 {/*Protected routes*/}
                 <Route element={<ProtectedRoutes/>}>
                     <Route path="/profile" element={<Profile/>}/>
                     <Route path="/add" element={<AddListing/>}/>
                     <Route path="/connections" element={<Connections/>}/>
+                    <Route path="/checkout" element={<Checkout/>}/>
+                    <Route path="/rent-transport" element={<RentTransport/>}/>
                 </Route>
 
                 {/* Default route for 404 page */}

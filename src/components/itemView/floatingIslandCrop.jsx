@@ -7,8 +7,8 @@ import {toaster} from "../ui/toaster";
 const FloatingIslandCrop = (props) => {
 
     const navigate = useNavigate();
+    const {value, setValue, max, price, orderData} = props;
 
-    const {value, setValue, max, price, unit, orderData} = props;
     return (
         <div className="fixed bottom-16 md:bottom-0 left-0 w-full md:max-w-md md:left-1/2 md:-translate-x-1/2">
             <div className="bg-lime-green rounded-xl shadow-lg flex justify-between items-center p-4 m-4">
@@ -18,10 +18,10 @@ const FloatingIslandCrop = (props) => {
                         onValueChange={setValue}
                         className="text-white mb-2"
                         variant="filled"
-                        formatOptions={unit ? {
+                        formatOptions={{
                             style: "unit",
                             unit: "kilogram",
-                        } : {}}
+                        }}
                         min="1"
                         max={max}
                         defaultValue="0"/>

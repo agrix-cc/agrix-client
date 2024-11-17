@@ -33,7 +33,7 @@ const ItemCard = (props) => {
         <Link to={`/product/${data.id}`}>
             <div className="rounded-lg overflow-hidden shadow-lg h-full">
                 <div className="w-full h-32">
-                    <img src={data.imageUrl || "assets/placeholder.webp"} alt="" className="w-full h-full object-cover"/>
+                    <img src={data.imageUrl || "/assets/placeholder.webp"} alt="" className="w-full h-full object-cover"/>
                 </div>
                 <div className="p-2">
                     <p className="text-gray-500 text-sm capitalize">
@@ -43,7 +43,7 @@ const ItemCard = (props) => {
                         {data.title}
                     </Text>
                     <p className="text-sage-green font-medium mb-2 capitalize">
-                        {cardDetails.quantity || data.transport.vehicle_type}
+                        {cardDetails.quantity || data.transport.vehicle_type.replace("_", " ")}
                     </p>
                     <p className="text-2xl font-medium">Rs. {cardDetails.price.toFixed(2)}</p>
                     <p className="text-gray-500 text-sm">

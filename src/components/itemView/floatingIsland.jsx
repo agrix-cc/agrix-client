@@ -18,7 +18,8 @@ const FloatingIsland = (props) => {
                             toaster.create({
                                 title: disableMessage,
                                 type: 'error',
-                            })
+                                duration: 1000
+                            });
                             return;
                         }
                         navigate(location, {state: listingInfo})

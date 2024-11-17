@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import MobileNav from "../components/mobileNav";
 import Spacer from "../components/spacer";
 import ProfileBadge from "../components/profileBadge";
@@ -12,6 +12,7 @@ import FloatingIsland from "../components/itemView/floatingIsland";
 import Calendar from "react-calendar";
 import {EmptyState} from "../components/ui/empty-state";
 import {PiEmpty} from "react-icons/pi";
+import {jwtDecode} from "jwt-decode";
 
 const ItemView = () => {
     const {id} = useParams();
@@ -24,6 +25,8 @@ const ItemView = () => {
 
     const [orders, setOrders] = useState(null);
 
+    const [user, setUser] = useState(null);
+
     const disableDatesClass = ({date, view}) => {
         if (!orders) return null;
         return orders.some(order => view === "month" && date.getFullYear() === order.getFullYear() && date.getMonth() === order.getMonth() && date.getDate() === order.getDate()) ? 'unavailable-date' : null;
@@ -31,7 +34,6 @@ const ItemView = () => {
 
     const disableDatesInput = ({date, view}) => {
         if (!orders) return null;
-        const currentMonth = new Date().getMonth();
         return orders.some(order => view === "month" && date.getFullYear() === order.getFullYear() && date.getMonth() === order.getMonth() && date.getDate() === order.getDate());
     }
 
@@ -51,7 +53,18 @@ const ItemView = () => {
             });
     }, [id]);
 
-    return (!isLoading && data && orders &&
+    useEffect(() => {
+        const getUser = async () => {
+            const token = localStorage.getItem('jwtToken');
+            if (token) {
+                const decoded = await jwtDecode(token);
+                setUser(decoded.user);
+            }
+        }
+        getUser();
+    }, []);
+
+    return (!isLoading && data &&
         <div className="relative pb-20 md:h-dvh">
             <MobileNav/>
             <Toaster/>
@@ -87,17 +100,19 @@ const ItemView = () => {
                             <div className="p-4">
                                 <p className="text-lg font-medium mb-2">Select a date</p>
                                 <div className="grid items-center justify-center">
-                                    <Calendar
-                                        onChange={(value, event) => {
-                                            setData((data) => ({...data, selectedDate: value}));
-                                        }}
-                                        showNeighboringMonth={true}
-                                        minDate={new Date()}
-                                        maxDate={new Date(`${new Date().getFullYear()+1}/12/31`)}
-                                        tileClassName={disableDatesClass}
-                                        tileDisabled={disableDatesInput}
-                                        minDetail="year"
-                                    />
+                                    {orders &&
+                                        <Calendar
+                                            onChange={(value, event) => {
+                                                setData((data) => ({...data, selectedDate: value}));
+                                            }}
+                                            showNeighboringMonth={true}
+                                            minDate={new Date()}
+                                            maxDate={new Date(`${new Date().getFullYear() + 1}/12/31`)}
+                                            tileClassName={disableDatesClass}
+                                            tileDisabled={disableDatesInput}
+                                            minDetail="year"
+                                        />
+                                    }
                                 </div>
                                 <div className="flex justify-start items-center gap-2 py-2">
                                     <p className="flex justify-between gap-1 items-center"><span
@@ -110,17 +125,16 @@ const ItemView = () => {
                     </div>
                 </div>
             }
-            {data.listing && data.listing.CropListing &&
+            {data.listing && data.listing.CropListing && (user && user.id !== data.listing.UserId) &&
                 <FloatingIslandCrop
                     value={value}
                     orderData={{...data.listing, image: data.images[0]}}
-                    unit={'kg'}
                     setValue={(e) => setValue(e.valueAsNumber)}
                     price={data.listing.CropListing?.price_per_kg || 0}
                     max={data.listing.CropListing?.available_quantity || 0}
                 />
             }
-            {data.listing && data.listing.TransportListing &&
+            {data.listing && data.listing.TransportListing && (user && user.id !== data.listing.UserId) &&
                 <FloatingIsland
                     disabled={!data.selectedDate}
                     disableMessage="Please select the date!"
@@ -132,8 +146,20 @@ const ItemView = () => {
                     label="Rent Transport"
                     location="/rent-transport"/>
             }
-            {data.listing && data.listing.StorageListing &&
-                <FloatingIsland label="Rent Storage"/>
+            {data.listing && data.listing.StorageListing && (user && user.id !== data.listing.UserId) &&
+                <FloatingIsland
+                    disabled={!user || user.id === data.listing.UserId}
+                    label="Rent Storage"/>
+            }
+            {(!user || user.id === data.listing.UserId) &&
+                <div className="fixed bottom-16 md:bottom-0 left-0 w-full md:max-w-md md:left-1/2 md:-translate-x-1/2">
+                    <div className="bg-lime-green rounded-xl shadow-lg flex justify-center items-center p-4 m-4">
+                        {!user ?
+                            <Link to="/signin" className="text-white">Sign in to buy this product or service</Link>
+                            : <p className="text-white">You are viewing your own listing</p>
+                        }
+                    </div>
+                </div>
             }
             <Spacer/>
         </div>
