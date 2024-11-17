@@ -149,6 +149,8 @@ const ItemView = () => {
             {data.listing && data.listing.StorageListing && (user && user.id !== data.listing.UserId) &&
                 <FloatingIsland
                     disabled={!user || user.id === data.listing.UserId}
+                    listingInfo={data}
+                    location="/rent-storage"
                     label="Rent Storage"/>
             }
             {(!user || user.id === data.listing.UserId) &&

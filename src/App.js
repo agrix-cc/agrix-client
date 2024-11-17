@@ -14,6 +14,7 @@ import Onboarding from "./pages/onboarding";
 import ProtectedRoutes from "./components/protectedRoutes";
 import Checkout from "./pages/checkout";
 import RentTransport from "./pages/rentTransport";
+import RentStorage from "./pages/rentStorage";
 
 function App() {
 
@@ -33,7 +34,7 @@ function App() {
                 <Route path="/signup" element={<SignUp/>}/>
                 <Route path="/onboarding" element={<Onboarding/>}/>
 
-                <Route path="/market" element={<Market/>}/>
+                <Route path="/market/:category?" element={<Market/>}/>
 
                 <Route path="/product/:id" element={<ItemView/>}/>
 
@@ -44,6 +45,7 @@ function App() {
                     <Route path="/connections" element={<Connections/>}/>
                     <Route path="/checkout" element={<Checkout/>}/>
                     <Route path="/rent-transport" element={<RentTransport/>}/>
+                    <Route path="/rent-storage" element={<RentStorage/>}/>
                 </Route>
 
                 {/* Default route for 404 page */}

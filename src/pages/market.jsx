@@ -8,8 +8,13 @@ import axios from "axios";
 import LoadingCards from "../components/loadingCards";
 import {EmptyState} from "../components/ui/empty-state";
 import {FaBoxOpen} from "react-icons/fa6";
+import {useNavigate, useParams} from "react-router-dom";
 
 const Market = () => {
+
+    const {category} = useParams();
+
+    const navigate = useNavigate();
 
     // This state object holds all the listings fetching from the server
     const [listings, setListings] = useState(null);
@@ -30,30 +35,33 @@ const Market = () => {
         offset: 0
     });
 
+    useEffect(() => {
+        if (category) {
+            setParams(prevState => ({...prevState, type: category}))
+        }
+        navigate('/market');
+    }, [category, navigate])
+
     // this will fetch the data from the server
     useEffect(() => {
+        let type = params.type.length ? params.type : 'all';
+        const sort = params.sort.length ? params.sort : 'latest';
+        const city = params.city.length ? params.city : 'all';
+        const district = params.district.length ? params.district : 'all';
 
-        const getListings = async () => {
-            const type = params.type.length ? params.type : 'all';
-            const sort = params.sort.length ? params.sort : 'latest';
-            const city = params.city.length ? params.city : 'all';
-            const district = params.district.length ? params.district : 'all';
-
-            await axios.get(`${process.env.REACT_APP_SERVER_URL}/listings/${params.offset}/${type}/${sort}/${city}/${district}/${search}`)
-                .then(res => {
-                    if (params.offset > 0) {
-                        setListings(prevListing => [...prevListing, ...res.data.listings]);
-                    } else {
-                        setListings(res.data.listings);
-                    }
-                    setIsEnd(res.data.end);
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-            setIsLoading(false);
-        };
-        getListings();
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/listings/${params.offset}/${type}/${sort}/${city}/${district}/${search}`)
+            .then(res => {
+                if (params.offset > 0) {
+                    setListings(prevListing => [...prevListing, ...res.data.listings]);
+                } else {
+                    setListings(res.data.listings);
+                }
+                setIsEnd(res.data.end);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        setIsLoading(false);
     }, [params, search]);
 
     return (

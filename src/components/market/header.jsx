@@ -14,7 +14,12 @@ const MarketHeader = (props) => {
         <div className="mt-16 sticky top-4 bg-white pb-4">
             <p className="text-2xl font-medium mb-2 pt-4 px-4">Market</p>
             <div className="px-4">
-                <Search search={search} setSearch={setSearch} setParams={setParams}/>
+                <Search
+                    value={search}
+                    onChange={(e) => {
+                        setParams(params => ({...params, offset: 0}));
+                        setSearch(e.target.value)
+                    }}/>
             </div>
             {
                 isDesktop ?

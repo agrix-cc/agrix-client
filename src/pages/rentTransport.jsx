@@ -184,7 +184,6 @@ const FloatingContainer = (props) => {
                     <p className="text-white font-light">Average Distance: <span
                         className="font-medium">{(distance / 1000).toFixed(2)} km</span></p>
                 </div>
-                {/* TODO handle transport order processing */}
                 <button
                     onClick={() => {
                         navigate('/checkout', {

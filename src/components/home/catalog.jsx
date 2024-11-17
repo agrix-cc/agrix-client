@@ -6,6 +6,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import {useMediaQuery} from "@mui/material";
+import {Link} from "react-router-dom";
 
 const CatalogItem = (props) => {
 
@@ -48,9 +49,15 @@ const Catalog = () => {
                         </div>
                         <div className="grid items-center place-content-center w-full">
                             <div className="grid grid-cols-3 gap-8">
-                                <CatalogItem name="Transport"/>
-                                <CatalogItem name="Crops"/>
-                                <CatalogItem name="Storage"/>
+                                <Link to="market/transport">
+                                    <CatalogItem name="Transport"/>
+                                </Link>
+                                <Link to="market/crop">
+                                    <CatalogItem name="Crops"/>
+                                </Link>
+                                <Link to="market/storage">
+                                    <CatalogItem name="Storage"/>
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -61,9 +68,15 @@ const Catalog = () => {
                             <p className="font-medium text-gray-500">See all ></p>
                         </div>
                         <Slider {...sliderSettings}>
-                            <CatalogItem name="Transport"/>
-                            <CatalogItem name="Crops"/>
-                            <CatalogItem name="Storage"/>
+                            <Link to="market/transport">
+                                <CatalogItem name="Transport"/>
+                            </Link>
+                            <Link to="market/crop">
+                                <CatalogItem name="Crops"/>
+                            </Link>
+                            <Link to="market/storage">
+                                <CatalogItem name="Storage"/>
+                            </Link>
                         </Slider>
                     </div>
             }
