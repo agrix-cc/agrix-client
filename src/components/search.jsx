@@ -7,6 +7,7 @@ const Search = (props) => {
         <div className="flex items-center gap-2 rounded-full px-5 py-3 bg-white shadow-lg max-w-[594px] w-full">
             <FiSearch/>
             <input
+                autoComplete="off"
                 type="text"
                 placeholder="Search anything..."
                 id="search"

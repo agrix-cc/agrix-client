@@ -667,6 +667,10 @@ video {
   margin-bottom: 1rem;
 }
 
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
 .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -751,6 +755,10 @@ video {
   height: 3.5rem;
 }
 
+.h-16 {
+  height: 4rem;
+}
+
 .h-28 {
   height: 7rem;
 }
@@ -787,6 +795,10 @@ video {
   width: 100% !important;
 }
 
+.w-16 {
+  width: 4rem;
+}
+
 .w-28 {
   width: 7rem;
 }
@@ -797,6 +809,10 @@ video {
 
 .w-4 {
   width: 1rem;
+}
+
+.w-44 {
+  width: 11rem;
 }
 
 .w-8 {
@@ -1088,10 +1104,6 @@ video {
   padding-bottom: 0.25rem;
 }
 
-.pb-10 {
-  padding-bottom: 2.5rem;
-}
-
 .pb-2 {
   padding-bottom: 0.5rem;
 }
@@ -1259,6 +1271,12 @@ video {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
+.shadow-md {
+  --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
 .shadow-xl {
   --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
@@ -1381,6 +1399,13 @@ video {
   padding-right: 1rem;
   padding-top: 6rem;
   padding-bottom: 5rem;
+}
+
+@media (min-width: 640px) {
+  .signin-header {
+    display: grid;
+    place-content: center;
+  }
 }
 
 .signin-header:before {
@@ -1625,12 +1650,20 @@ video {
 }
 
 @media (min-width: 640px) {
-  .sm\:max-w-sm {
-    max-width: 24rem;
+  .sm\:grid {
+    display: grid;
   }
 
   .sm\:max-w-md {
     max-width: 28rem;
+  }
+
+  .sm\:max-w-sm {
+    max-width: 24rem;
+  }
+
+  .sm\:place-content-center {
+    place-content: center;
   }
 }
 
@@ -1658,6 +1691,10 @@ video {
   .md\:mx-4 {
     margin-left: 1rem;
     margin-right: 1rem;
+  }
+
+  .md\:mb-4 {
+    margin-bottom: 1rem;
   }
 
   .md\:mt-0 {
@@ -1744,6 +1781,10 @@ video {
 
   .md\:items-center {
     align-items: center;
+  }
+
+  .md\:justify-center {
+    justify-content: center;
   }
 
   .md\:gap-4 {

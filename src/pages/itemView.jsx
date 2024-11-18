@@ -95,7 +95,7 @@ const ItemView = () => {
                         </div>
                     </div>
 
-                    <div className="md:overflow-y-auto pb-10 md:pb-20 hide-scrollbar">
+                    <div className="md:overflow-y-auto md:pb-20 hide-scrollbar">
                         <ListingInformation listing={data.listing}/>
                         {data.listing.TransportListing &&
                             <div className="p-4">

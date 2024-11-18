@@ -89,6 +89,8 @@ const RentStorage = (props) => {
         return orders.some(order => {
             const startDate = new Date(order.start_date);
             const endDate = new Date(order.end_date);
+            startDate.setHours(0, 0, 0, 0);
+            endDate.setHours(0, 0, 0, 0);
             return view === "month" && date >= startDate && date <= endDate;
         }) ? 'unavailable-date' : null;
     }
@@ -99,12 +101,14 @@ const RentStorage = (props) => {
         return orders.some(order => {
             const startDate = new Date(order.start_date);
             const endDate = new Date(order.end_date);
+            startDate.setHours(0, 0, 0, 0);
+            endDate.setHours(0, 0, 0, 0);
             return view === "month" && date >= startDate && date <= endDate;
         });
     }
 
     return (listingInfo.listing &&
-        <div className="px-4 mt-4">
+        <div className="px-4 mt-4 md:mb-4">
             <div>
                 <p className="mb-1 text-lg font-medium">Select the rental duration</p>
                 <p className="text-gray-500 mb-1">Maximum duration can select: <span

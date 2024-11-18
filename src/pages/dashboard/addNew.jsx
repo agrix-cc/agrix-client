@@ -285,8 +285,8 @@ const AddListing = () => {
             <MobileNav/>
             <Toaster/>
             <p className="mt-16 p-4 font-medium text-2xl">Create new listing</p>
-            <div className="md:grid md:items-center md:place-content-center">
-                <form className="md:max-w-md">
+            <div className="md:flex md:justify-center md:items-center">
+                <form className="md:max-w-md w-full">
                     <div className="mb-2 pb-4 border-b border-gray-400 mx-4">
                         <p className="text-lg font-medium text-gray-500 text-center py-2">Listing Information</p>
                         <div className="grid gap-4">
@@ -431,9 +431,7 @@ const AddListing = () => {
                                             <DateInput
                                                 label={listingInput.label}
                                                 name={listingInput.name}
-                                                onChange={(e) => {
-                                                    handleInputChange(listingInput.name, e);
-                                                }}
+                                                onChange={(e) => handleInputChange(listingInput.name, e)}
                                                 required={listingInput.required}
                                                 error={errors[listingInput.name]}
                                             />
