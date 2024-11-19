@@ -3,10 +3,8 @@ import {useEffect, useState} from "react";
 import {jwtDecode} from "jwt-decode";
 import ProfileOverview from "../components/profile/profileOverview";
 import HomeButton from "../components/profile/homeButton";
-import {FaNewspaper, FaUser} from "react-icons/fa6";
-import {AiFillDashboard} from "react-icons/ai";
-import {FaShoppingBag, FaTruck} from "react-icons/fa";
-import {MdWarehouse} from "react-icons/md";
+import {FaBoxesPacking, FaNewspaper, FaUser} from "react-icons/fa6";
+import {FaShoppingBag} from "react-icons/fa";
 import Profile from "./dashboard/profile";
 import {Toaster} from "../components/ui/toaster";
 import {useMediaQuery} from "@mui/material";
@@ -14,6 +12,7 @@ import Listings from "./dashboard/listings";
 import {LuLogOut} from "react-icons/lu";
 import {useNavigate} from "react-router-dom";
 import Orders from "./dashboard/orders";
+import Purchases from "./dashboard/purchases";
 
 const Dashboard = () => {
 
@@ -61,11 +60,6 @@ const Dashboard = () => {
                                 icon={<FaUser/>}
                                 label="My Profile"/>
                             <HomeButton
-                                isActive={activePage === "dashboard"}
-                                onClick={() => setActivePage("dashboard")}
-                                icon={<AiFillDashboard/>}
-                                label="Dashboard"/>
-                            <HomeButton
                                 isActive={activePage === "listings"}
                                 onClick={() => setActivePage("listings")}
                                 icon={<FaNewspaper/>}
@@ -73,18 +67,13 @@ const Dashboard = () => {
                             <HomeButton
                                 isActive={activePage === "orders"}
                                 onClick={() => setActivePage("orders")}
+                                icon={<FaBoxesPacking/>}
+                                label="Incoming Orders"/>
+                            <HomeButton
+                                isActive={activePage === "purchases"}
+                                onClick={() => setActivePage("purchases")}
                                 icon={<FaShoppingBag/>}
-                                label="My Orders"/>
-                            <HomeButton
-                                isActive={activePage === "transport"}
-                                onClick={() => setActivePage("transport")}
-                                icon={<FaTruck/>}
-                                label="Rented Transports"/>
-                            <HomeButton
-                                isActive={activePage === "storage"}
-                                onClick={() => setActivePage("storage")}
-                                icon={<MdWarehouse/>}
-                                label="Rented Storages"/>
+                                label="My Purchases"/>
                             <HomeButton
                                 isLogOut
                                 onClick={handleLogOut}
@@ -100,11 +89,6 @@ const Dashboard = () => {
                                 onBackClick={() => setActivePage(null)}
                                 user={user}/>
                         }
-                        {activePage && activePage === "dashboard" &&
-                            <div className="p-4 w-full">
-                                <p>Dashboard</p>
-                            </div>
-                        }
                         {activePage && activePage === "listings" &&
                             <Listings
                                 onBackClick={() => setActivePage(null)}/>
@@ -113,11 +97,9 @@ const Dashboard = () => {
                             <Orders
                                 onBackClick={() => setActivePage(null)}/>
                         }
-                        {activePage && activePage === "transport" &&
-                            <p>Transport rentals</p>
-                        }
-                        {activePage && activePage === "storage" &&
-                            <p>Storage rentals</p>
+                        {activePage && activePage === "purchases" &&
+                            <Purchases
+                                onBackClick={() => setActivePage(null)}/>
                         }
                     </div>
                 </div>

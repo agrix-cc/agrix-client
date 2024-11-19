@@ -12,8 +12,13 @@ const Orders = (props) => {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
         axios.get(`${process.env.REACT_APP_SERVER_URL}/orders`)
             .then(res => {
-                console.log(res.data)
-                setOrders(res.data.orders);
+                if (res.data.cropOrders) {
+                    setOrders(res.data.cropOrders);
+                } else if (res.data.transportOrders) {
+                    setOrders(res.data.transportOrders)
+                } else if (res.data.storageOrders) {
+                    setOrders(res.data.storageOrders)
+                }
             })
             .catch(err => {
                 if (err.response) {
@@ -24,17 +29,13 @@ const Orders = (props) => {
             })
     }, []);
 
-    useEffect(() => {
-        console.log(orders);
-    }, [orders]);
-
     return (
-        <div className="p-4 w-full">
+        <div className="p-4 w-full mb-20">
             <div className="flex items-center gap-4">
                 <button onClick={onBackClick} className="md:hidden md:invisible">
                     <IoChevronBack className="text-2xl"/>
                 </button>
-                <p className="text-xl font-medium">My Orders</p>
+                <p className="text-xl font-medium">Incoming Orders</p>
             </div>
             <div className="py-4">
                 {orders &&

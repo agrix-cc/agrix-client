@@ -14,7 +14,9 @@ const HomeButton = (props) => {
                 </div>
                 <p>{label}</p>
             </div>
-            <IoIosArrowForward className="text-2xl md:hidden"/>
+            {!isLogOut &&
+                <IoIosArrowForward className="text-2xl md:hidden"/>
+            }
         </button>
     )
 }

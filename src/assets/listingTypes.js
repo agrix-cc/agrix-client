@@ -14,7 +14,7 @@ const listingTypes = {
             items: [
                 {label: "Vegetable", value: "vegetable"},
                 {label: "Fruit", value: "fruit"},
-                {label: "Grains", value: "grain"},
+                {label: "Grains", value: "grains"},
             ],
             placeholder: "Select crop type",
             required: true

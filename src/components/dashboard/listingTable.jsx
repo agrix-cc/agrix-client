@@ -21,7 +21,7 @@ const ListingTable = (props) => {
                 </div>
             }
             {listings &&
-                listings.map(listing => <ListingRow listing={listing}/>)
+                listings.map(listing => <ListingRow listing={listing} key={listing.id}/>)
             }
         </div>
     )
@@ -32,7 +32,7 @@ const ListingRow = (props) => {
     const {listing} = props;
 
     return (
-        <div className="md:grid md:grid-cols-5 bg-white shadow-xl py-4 px-4 md:px-0 rounded-lg md:shadow-none ">
+        <div className="md:grid md:grid-cols-5 bg-white shadow-xl py-4 px-4 md:px-0 rounded-lg md:shadow-none mb-2 md:mb-0">
             <p className="md:grid md:place-content-center flex justify-between">
                 <span className="md:hidden">ID: </span> {listing.id}</p>
             <p className="md:grid md:place-content-center flex justify-between">
@@ -41,7 +41,7 @@ const ListingRow = (props) => {
                 <span className="md:hidden">Description: </span> {listing.description}</p>
             <p className="md:grid md:place-content-center flex justify-between">
                 <span className="md:hidden">Created at: </span> {new Date(listing.createdAt).toLocaleDateString()}</p>
-            <p className="grid place-content-center"><ActionButtons id={listing.id}/></p>
+            <div className="flex justify-end pt-4 md:pt-0 md:grid md:place-content-center"><ActionButtons id={listing.id}/></div>
         </div>
     )
 };
@@ -53,7 +53,7 @@ const ActionButtons = (props) => {
     const navigate = useNavigate();
 
     return (
-        <div className="flex gap-2 items-center md:text-xl text-3xl">
+        <div className="flex gap-4 md:gap-2 items-center md:text-xl text-3xl">
             <button
                 onClick={() => navigate(`/product/${id}`)}>
                 <IoIosEye/>

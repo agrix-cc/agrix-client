@@ -1,32 +1,32 @@
 import {useMediaQuery} from "@mui/material";
 
-const OrderTable = (props) => {
+const PurchasesTable = (props) => {
 
     const isDesktop = useMediaQuery('(min-width: 768px)')
 
-    const {orders} = props;
+    const {orders, activeType} = props;
 
-    return (
+    return (orders &&
         <div>
             {isDesktop &&
                 <div className="grid grid-cols-6 text-gray-500 mb-4">
                     <p className="grid place-content-center">ID</p>
                     <p className="grid place-content-center">
-                        {orders[0].CropListing &&
+                        {activeType === "crops" &&
                             "Qty"
                         }
-                        {orders[0].TransportListing &&
+                        {activeType === "transport" &&
                             "Distance"
                         }
-                        {orders[0].StorageListing &&
+                        {activeType === "storage" &&
                             "Start Date"
                         }
                     </p>
                     <p className="grid place-content-center">
-                        {!orders[0].StorageListing &&
+                        {activeType !== "storage" &&
                             "Placed"
                         }
-                        {orders[0].StorageListing &&
+                        {activeType === "storage" &&
                             "End Date"
                         }
                     </p>
@@ -36,13 +36,13 @@ const OrderTable = (props) => {
                 </div>
             }
             {orders &&
-                orders.map(order => <OrderRow order={order} key={order.id}/>)
+                orders.map((order, id) => <PurchasesRow order={order} key={id}/>)
             }
         </div>
     )
 };
 
-const OrderRow = (props) => {
+const PurchasesRow = (props) => {
 
     const {order} = props;
 
@@ -53,46 +53,46 @@ const OrderRow = (props) => {
                 <span className="md:hidden">Order ID: </span> {order.id}</p>
             <p className="md:grid md:place-content-center flex justify-between">
                 <span className="md:hidden">
-                    {order.CropListing &&
+                    {order.CropListingId &&
                         "Qty"
                     }
-                    {order.TransportListing &&
+                    {order.TransportListingId &&
                         "Distance"
                     }
-                    {order.StorageListing &&
+                    {order.StorageListingId &&
                         "Start Date"
                     }
                     :
                 </span>
-                {order.CropListing &&
+                {order.CropListingId &&
                     `${order.quantity} Kg`
                 }
-                {order.TransportListing &&
+                {order.TransportListingId &&
                     `${order.avg_distance / 1000} Km`
                 }
-                {order.StorageListing &&
+                {order.StorageListingId &&
                     new Date(order.start_date).toLocaleDateString()
                 }
             </p>
             <p className="md:grid md:place-content-center flex justify-between">
                 <span className="md:hidden">
-                    {order.CropListing &&
+                    {order.CropListingId &&
                         "Placed date"
                     }
-                    {order.TransportListing &&
+                    {order.TransportListingId &&
                         "Booked date"
                     }
-                    {order.StorageListing &&
+                    {order.StorageListingId &&
                         "End Date"
                     }:
                 </span>
-                {order.CropListing &&
+                {order.CropListingId &&
                     new Date(order.createdAt).toLocaleDateString()
                 }
-                {order.TransportListing &&
+                {order.TransportListingId &&
                     new Date(order.booked_date).toLocaleDateString()
                 }
-                {order.StorageListing &&
+                {order.StorageListingId &&
                     new Date(order.end_date).toLocaleDateString()
                 }
             </p>
@@ -115,4 +115,4 @@ const OrderRow = (props) => {
     )
 };
 
-export default OrderTable;
+export default PurchasesTable;

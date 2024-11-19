@@ -23,12 +23,8 @@ const Listings = (props) => {
             })
     }, []);
 
-    useEffect(() => {
-        console.log(listings);
-    }, [listings]);
-
     return (
-        <div className="p-4 w-full">
+        <div className="p-4 w-full mb-20">
             <div className="flex items-center gap-4">
                 <button onClick={onBackClick} className="md:hidden md:invisible">
                     <IoChevronBack className="text-2xl"/>
