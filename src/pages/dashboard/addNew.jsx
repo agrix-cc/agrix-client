@@ -324,6 +324,7 @@ const AddListing = () => {
                                 <div className="grid gap-2">
                                     <SelectInput
                                         items={districts.map(district => ({label: district, value: district}))}
+                                        value={listingInfo.district}
                                         onChange={(e) => {
                                             setListingInfo({...listingInfo, district: e, city: ""});
                                             setErrors({...errors, district: ""});
@@ -336,6 +337,7 @@ const AddListing = () => {
                                     {
                                         listingInfo.district ? <SelectInput
                                             required
+                                            value={listingInfo.city}
                                             items={citiesByDistrict[listingInfo.district].cities.map(city => ({
                                                 label: city,
                                                 value: city
@@ -362,6 +364,7 @@ const AddListing = () => {
                                     <div key={listingInput.name} className="mb-4">
                                         {listingInput.type === "select" &&
                                             <SelectInput
+                                                value={additionalInfo[listingInput.name]}
                                                 items={listingInput.items}
                                                 placeholder={listingInput.placeholder}
                                                 label={listingInput.label}

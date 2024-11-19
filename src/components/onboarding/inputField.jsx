@@ -20,9 +20,10 @@ const InputField = ({
                 id={id}
                 type={type}
                 placeholder={placeholder}
-                name={name} required={required}
+                name={name}
+                required={required}
                 value={data}
-                onChange={(e) => onChange(e)}
+                onChange={onChange}
                 autoComplete={autoComplete}
                 className={
                     `appearance-none

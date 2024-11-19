@@ -122,6 +122,10 @@
     @apply px-2 py-1
 }
 
+.chakra-avatar__image {
+    @apply h-full w-full;
+}
+
 .chakra-timeline__separator {
     @apply border border-zinc-200;
 }

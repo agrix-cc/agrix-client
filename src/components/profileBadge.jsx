@@ -5,7 +5,9 @@ const ProfileBadge = (props) => {
     return (
         <div className="flex justify-start items-center gap-2">
             <div>
-                <Avatar name={name} src={image}/>
+                <Avatar
+                    name={name}
+                    src={image}/>
             </div>
             <div>
                 <p>{name}</p>

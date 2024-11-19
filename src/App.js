@@ -5,7 +5,7 @@ import SignIn from "./pages/signin";
 import SignUp from "./pages/signup";
 import Market from "./pages/market";
 import Connections from "./pages/connections";
-import Profile from "./pages/profile";
+import Dashboard from "./pages/dashboard";
 import AddListing from "./pages/dashboard/addNew";
 import {useTheme} from "next-themes";
 import ItemView from "./pages/itemView";
@@ -39,7 +39,7 @@ function App() {
 
                 {/*Protected routes*/}
                 <Route element={<ProtectedRoutes/>}>
-                    <Route path="/profile" element={<Profile/>}/>
+                    <Route path="/dashboard" element={<Dashboard/>}/>
                     <Route path="/add" element={<AddListing/>}/>
                     <Route path="/connections" element={<Connections/>}/>
                     <Route path="/checkout" element={<Checkout/>}/>

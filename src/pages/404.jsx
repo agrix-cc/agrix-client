@@ -4,7 +4,7 @@ import { IoArrowBackOutline } from "react-icons/io5";
 const PageNotFound = () => {
     return (
         <>
-            <p className="absolute top-0 left-0 p-4 text-primary-green text-2xl font-bold">AgriX</p>
+            <Link to='/' className="absolute top-0 left-0 p-4 text-primary-green text-2xl font-bold">AgriX</Link>
             <div className="w-dvw h-dvh bg-mint-green p-4 md:flex md:w-full md:h-dvh overflow-hidden">
                 <div className="md:w-full mt-6">
                     <img src="/assets/404.png" alt="page not found"/>
