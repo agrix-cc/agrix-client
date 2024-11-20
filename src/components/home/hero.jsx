@@ -26,7 +26,7 @@ const HeroComponent = () => {
         >
             <div
                 className="absolute bottom-0 left-0 p-4 md:h-fit md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2">
-                <p className="text-white font-medium text-4xl mb-8 leading-relaxed">Connect, Share, Save Agriculture</p>
+                <p className="text-white font-medium text-4xl mb-8 leading-relaxed">Connect, Share, Save Agriculture Test Azure!</p>
                 <div className="w-full relative">
                     <Search
                         value={keyword}
