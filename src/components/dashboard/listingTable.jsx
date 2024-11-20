@@ -2,6 +2,17 @@ import {MdDeleteForever, MdModeEdit} from "react-icons/md";
 import {IoIosEye} from "react-icons/io";
 import {useNavigate} from "react-router-dom";
 import {useMediaQuery} from "@mui/material";
+import axios from "axios";
+import {toaster} from "../ui/toaster";
+import {
+    DialogActionTrigger,
+    DialogBody, DialogCloseTrigger,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogRoot, DialogTitle,
+    DialogTrigger
+} from "../ui/dialog";
 
 const ListingTable = (props) => {
 
@@ -52,20 +63,85 @@ const ActionButtons = (props) => {
 
     const navigate = useNavigate();
 
+    const handleDelete = async () => {
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
+        await axios.delete(`${process.env.REACT_APP_SERVER_URL}/delete/${id}`)
+            .then(res => {
+                if (res.data.status === "success") {
+                    toaster.create({
+                        title: 'Listing deleted successfully!',
+                        type: 'success',
+                        duration: 1500,
+                        onStatusChange({status}) {
+                            if (status === "unmounted") {
+                                navigate('/dashboard');
+                            }
+                        }
+                    })
+                }
+            })
+            .catch(err => {
+                if (err.response) {
+                    toaster.create({
+                        title: err.response.data.message,
+                        type: 'error',
+                        duration: 1500,
+                    })
+                } else {
+                    toaster.create({
+                        title: err.message,
+                        type: 'error',
+                        duration: 1500,
+                    })
+                }
+            })
+    }
+
     return (
-        <div className="flex gap-4 md:gap-2 items-center md:text-xl text-3xl">
+        <div className="flex gap-4 md:gap-2 items-center text-2xl">
             <button
                 onClick={() => navigate(`/product/${id}`)}>
                 <IoIosEye/>
             </button>
-            <button>
+            <button onClick={() => navigate(`/edit/${id}`)}>
                 <MdModeEdit/>
             </button>
-            <button className="text-red-500">
-                <MdDeleteForever/>
-            </button>
+            <DeleteButton handleDelete={handleDelete}/>
         </div>
     )
 };
+
+const DeleteButton = (props) => {
+    const {handleDelete} = props;
+    return(
+        <DialogRoot>
+            <DialogTrigger asChild>
+                <button className="text-red-500">
+                    <MdDeleteForever/>
+                </button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Confirm Delete</DialogTitle>
+                </DialogHeader>
+                <DialogBody>
+                    <p>Do you really want to delete this listing!</p>
+                </DialogBody>
+                <DialogFooter>
+                    <DialogActionTrigger asChild>
+                        <button
+                            onClick={handleDelete}
+                            className="text-red-500"> Confirm
+                        </button>
+                    </DialogActionTrigger>
+                    <DialogActionTrigger asChild>
+                        <button>Cancel</button>
+                    </DialogActionTrigger>
+                </DialogFooter>
+                <DialogCloseTrigger/>
+            </DialogContent>
+        </DialogRoot>
+    );
+}
 
 export default ListingTable;

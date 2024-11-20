@@ -13,9 +13,11 @@ import {jwtDecode} from "jwt-decode";
 import {citiesByDistrict, districts} from "../../assets/citiesByDistrict";
 import axios from "axios";
 import {Toaster, toaster} from "../../components/ui/toaster";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 const AddListing = () => {
+
+    const {id} = useParams();
 
     const navigate = useNavigate();
 
@@ -53,6 +55,9 @@ const AddListing = () => {
             if (name === "temperature_control" && !value) {
                 newState.temperature_control_min = 0;
                 newState.temperature_control_max = 0;
+            }
+            if (name === "delivery_options" && value === "pickup") {
+                newState.delivery_fare_per_kg = 0;
             }
 
             return newState;
@@ -111,15 +116,18 @@ const AddListing = () => {
             formData.append(`images`, file);
         });
 
+        const route = id ? `edit/${id}` : 'add-new'
+
         // attach jwt token to the request headers
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
 
-        await axios.post(`${process.env.REACT_APP_SERVER_URL}/add-new`, formData, {
+        await axios.post(`${process.env.REACT_APP_SERVER_URL}/${route}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             }
         })
             .then((res) => {
+                console.log(res);
                 setIsSubmitting(false);
                 toaster.create({
                     title: res.data.message,
@@ -236,6 +244,14 @@ const AddListing = () => {
         }
 
         setErrors(errorState);
+        if (!isValid) {
+            toaster.create({
+                title: "Invalid submit!",
+                description: "Please fill all the required fields and enter valid details",
+                type: "error",
+                duration: 1500
+            })
+        }
         return isValid;
     };
 
@@ -249,6 +265,90 @@ const AddListing = () => {
             }
         })
     };
+
+    useEffect(() => {
+        if (!id) return;
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/view/edit/${id}`)
+            .then(res => {
+
+                const listing = res.data.listing;
+                const listingType = listing.listing_type;
+
+                if (listing) {
+                    setListingInfo({
+                        title: listing.title,
+                        description: listing.description,
+                        district: listingType.district,
+                        city: listing.city,
+                        listing_type: listing.listing_type,
+                    });
+                }
+
+                switch (listingType) {
+                    case "transport":
+                        setAdditionalInfo({
+                            vehicle_type: listing.TransportListing.vehicle_type,
+                            fuel_type: listing.TransportListing.fuel_type,
+                            price_per_km: listing.TransportListing.price_per_km,
+                            max_weight: listing.TransportListing.max_weight,
+                            max_volume: listing.TransportListing.max_volume,
+                            temperature_control: listing.TransportListing.temperature_control,
+                            temperature_control_max: listing.TransportListing.temperature_control_max || 0,
+                            temperature_control_min: listing.TransportListing.temperature_control_min || 0,
+                            refrigerated: listing.TransportListing.refrigerated,
+                        })
+                        return;
+                    case "storage":
+                        setAdditionalInfo({
+                            storage_type: listing.StorageListing.storage_type,
+                            max_capacity: listing.StorageListing.max_capacity,
+                            width: listing.StorageListing.width,
+                            length: listing.StorageListing.length,
+                            height: listing.StorageListing.height,
+                            daily_rate: listing.StorageListing.daily_rate,
+                            minimum_days: listing.StorageListing.minimum_days,
+                            maximum_days: listing.StorageListing.maximum_days,
+                            temperature_control: listing.StorageListing.temperature_control,
+                            temperature_control_max: listing.StorageListing.temperature_control_max || 0,
+                            temperature_control_min: -listing.StorageListing.temperature_control_min || 0,
+                            humidity_control_availability: listing.StorageListing.humidity_control_availability,
+                            ventilation_availability: listing.StorageListing.ventilation_availability,
+                            pest_control_availability: listing.StorageListing.pest_control_availability,
+                        })
+                        return;
+                    default:
+                        setAdditionalInfo({
+                            crop_name: listing.CropListing.crop_name,
+                            crop_type: listing.CropListing.crop_type,
+                            harvested_date: listing.CropListing.harvested_date,
+                            available_quantity: listing.CropListing.available_quantity,
+                            price_per_kg: listing.CropListing.price_per_kg,
+                            quality_condition: listing.CropListing.quality_condition,
+                            quality_grade: listing.CropListing.quality_grade,
+                            delivery_options: listing.CropListing.delivery_options,
+                            delivery_fare_per_kg: listing.CropListing.delivery_fare_per_kg,
+                            organic: listing.CropListing.organic,
+                        })
+                        return;
+                }
+
+            })
+            .catch(error => {
+                if (error.response) {
+                    toaster.create({
+                        title: error.response.data.message,
+                        duration: 2000,
+                        type: 'error',
+                        onStatusChange({status}) {
+                            if (status === "unmounted") {
+                                navigate('/dashboard')
+                            }
+                        }
+                    })
+                }
+            })
+    }, [id, navigate])
 
     // This determines which listing should provide based on the user type
     useEffect(() => {
@@ -278,13 +378,17 @@ const AddListing = () => {
                 description: "Please wait until your listing is submitted!"
             })
         }
-    }, [isSubmitting])
+    }, [isSubmitting]);
 
     return (listingTypes &&
         <div className="mb-20 pb-8">
             <MobileNav/>
             <Toaster/>
-            <p className="mt-16 p-4 font-medium text-2xl">Create new listing</p>
+            <p className="mt-16 p-4 font-medium text-2xl">
+                {
+                    id ? `Edit listing Id: #${id}` : "Create new listing"
+                }
+            </p>
             <div className="md:flex md:justify-center md:items-center">
                 <form className="md:max-w-md w-full">
                     <div className="mb-2 pb-4 border-b border-gray-400 mx-4">
@@ -300,7 +404,7 @@ const AddListing = () => {
                                 label="Title"
                                 placeholder="Enter title of the listing to be"
                                 error={errors.title}
-                                value={listingInfo.title}
+                                value={listingInfo.title || ""}
                                 onChange={(value) => {
                                     setListingInfo({...listingInfo, title: value});
                                     setErrors({...errors, title: ""});
@@ -312,6 +416,7 @@ const AddListing = () => {
                                 label="Description"
                                 placeholder="Enter description of the listing"
                                 error={errors.description}
+                                value={listingInfo.description || ""}
                                 onChange={(value) => {
                                     setListingInfo({...listingInfo, description: value});
                                     setErrors({...errors, description: ""});
@@ -377,6 +482,7 @@ const AddListing = () => {
                                         }
                                         {listingInput.type === "number" &&
                                             <NumberInput
+                                                value={additionalInfo[listingInput.name] || 0}
                                                 hidden={listingInput.name === "delivery_fare_per_kg" && (additionalInfo.delivery_options === 'pickup' || !additionalInfo.delivery_options)}
                                                 label={listingInput.label}
                                                 min={listingInput.min}
@@ -389,6 +495,7 @@ const AddListing = () => {
                                         }
                                         {listingInput.type === "checkbox" &&
                                             <CheckBox
+                                                value={additionalInfo[listingInput.name]}
                                                 option={{
                                                     name: listingInput.label,
                                                     onCheck: (e) => {
@@ -402,6 +509,9 @@ const AddListing = () => {
                                                 unit={listingInput.unit}
                                                 minLabel={listingInput.minLabel}
                                                 maxLabel={listingInput.maxLabel}
+                                                isChecked={additionalInfo && additionalInfo[listingInput.name]}
+                                                min_val={additionalInfo && additionalInfo[listingInput.name+"_min"]}
+                                                max_val={additionalInfo && additionalInfo[listingInput.name+"_max"]}
                                                 onUpperChange={(e) => {
                                                     handleInputChange(`${listingInput.name}_max`, parseFloat(e));
                                                     setErrors({...errors, temperature_control: ""});
@@ -423,6 +533,7 @@ const AddListing = () => {
                                             <TextInput
                                                 label={listingInput.label}
                                                 placeholder={listingInput.placeholder}
+                                                value={additionalInfo[listingInput.name] || ""}
                                                 onChange={(e) => {
                                                     handleInputChange(listingInput.name, e);
                                                 }}
@@ -434,6 +545,7 @@ const AddListing = () => {
                                             <DateInput
                                                 label={listingInput.label}
                                                 name={listingInput.name}
+                                                value={additionalInfo[listingInput.name]}
                                                 onChange={(e) => handleInputChange(listingInput.name, e)}
                                                 required={listingInput.required}
                                                 error={errors[listingInput.name]}

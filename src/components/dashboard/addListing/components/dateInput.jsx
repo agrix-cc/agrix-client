@@ -7,7 +7,8 @@ const DateInput = (props) => {
         onChange = (e) => {
         },
         required,
-        error
+        error,
+        value,
     } = props;
 
     return (
@@ -18,6 +19,7 @@ const DateInput = (props) => {
                     type="date"
                     required={required}
                     id={name}
+                    value={value ? new Date(value).toISOString().split('T')[0] : ''}
                     max={`${new Date().toISOString().split('T')[0]}`}
                     className={`${error ? 'border-red-500' : 'border-gray-400'} border px-4 py-2 rounded w-full`}
                     onChange={(e) => onChange(e.target.value)}/>

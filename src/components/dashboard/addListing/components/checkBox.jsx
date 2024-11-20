@@ -4,6 +4,7 @@ const CheckBox = (props) => {
 
     const {
         option = {},
+        value,
     } = props;
 
     return (
@@ -13,6 +14,7 @@ const CheckBox = (props) => {
                     key={option.name}
                     className="chakraCheckBox"
                     colorPalette="green"
+                    checked={value}
                     onCheckedChange={(e) => option.onCheck(e.checked)}
                 >
                     {option.name}

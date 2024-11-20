@@ -41,6 +41,7 @@ function App() {
                 <Route element={<ProtectedRoutes/>}>
                     <Route path="/dashboard" element={<Dashboard/>}/>
                     <Route path="/add" element={<AddListing/>}/>
+                    <Route path="/edit/:id" element={<AddListing/>}/>
                     <Route path="/connections" element={<Connections/>}/>
                     <Route path="/checkout" element={<Checkout/>}/>
                     <Route path="/rent-transport" element={<RentTransport/>}/>

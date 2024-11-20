@@ -1,7 +1,7 @@
 import {NumberInputField, NumberInputRoot} from "../../../ui/number-input";
 import {Field} from "../../../ui/field";
 import {Checkbox} from "../../../ui/checkbox";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 const RangeInput = (props) => {
     const {
@@ -12,6 +12,9 @@ const RangeInput = (props) => {
         maxLower,
         minLabel,
         maxLabel,
+        isChecked,
+        min_val,
+        max_val,
         onUpperChange = (e) => {
         },
         onLowerChange = (e) => {
@@ -26,6 +29,12 @@ const RangeInput = (props) => {
 
     const [checked, setChecked] = useState(false);
 
+    useEffect(() => {
+        if (isChecked) {
+            setChecked(isChecked);
+        }
+    }, [isChecked]);
+
     return (
         <div>
             <Field invalid={error} errorText={error}>
@@ -33,6 +42,7 @@ const RangeInput = (props) => {
                     key={option.name}
                     className="chakraCheckBox"
                     colorPalette="green"
+                    checked={checked}
                     onCheckedChange={(e) => {
                         option.onCheck(e.checked);
                         setChecked(e.checked);
@@ -55,6 +65,7 @@ const RangeInput = (props) => {
                                     style: "unit",
                                     unit: unit,
                                 }}
+                                value={min_val || 0}
                                 onValueChange={(e) => onLowerChange(e.valueAsNumber)}
                             >
                                 <NumberInputField className="outline-none"/>
@@ -72,6 +83,7 @@ const RangeInput = (props) => {
                                     style: "unit",
                                     unit: unit,
                                 }}
+                                value={max_val || 0}
                                 onValueChange={(e) => onUpperChange(e.valueAsNumber)}
                             >
                                 <NumberInputField className="outline-none"/>
