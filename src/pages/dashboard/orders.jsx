@@ -5,7 +5,7 @@ import OrdersTable from "../../components/dashboard/ordersTable";
 
 const Orders = (props) => {
 
-    const {onBackClick} = props;
+    const {onBackClick, userType} = props;
     const [orders, setOrders] = useState();
 
     useEffect(() => {
@@ -39,7 +39,7 @@ const Orders = (props) => {
             </div>
             <div className="py-4">
                 {orders &&
-                    <OrdersTable orders={orders}/>
+                    <OrdersTable orders={orders} userType={userType}/>
                 }
             </div>
         </div>

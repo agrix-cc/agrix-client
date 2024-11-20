@@ -100,6 +100,7 @@ const Dashboard = () => {
                         }
                         {activePage && activePage === "orders" &&
                             <Orders
+                                userType={user.profile_type}
                                 onBackClick={() => setActivePage(null)}/>
                         }
                         {activePage && activePage === "purchases" &&

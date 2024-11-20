@@ -7,7 +7,7 @@ const OrderTable = (props) => {
 
     const isDesktop = useMediaQuery('(min-width: 768px)')
 
-    const {orders} = props;
+    const {orders, userType} = props;
 
     return (
         <div>
@@ -15,21 +15,21 @@ const OrderTable = (props) => {
                 <div className="grid grid-cols-6 text-gray-500 mb-4">
                     <p className="grid place-content-center">ID</p>
                     <p className="grid place-content-center">
-                        {orders[0].CropListing &&
+                        {userType === "crop" &&
                             "Qty"
                         }
-                        {orders[0].TransportListing &&
+                        {userType === "transport" &&
                             "Distance"
                         }
-                        {orders[0].StorageListing &&
+                        {userType === "storage" &&
                             "Start Date"
                         }
                     </p>
                     <p className="grid place-content-center">
-                        {!orders[0].StorageListing &&
+                        {userType !== "storage" &&
                             "Placed"
                         }
-                        {orders[0].StorageListing &&
+                        {userType === "storage" &&
                             "End Date"
                         }
                     </p>
