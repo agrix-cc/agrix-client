@@ -13,6 +13,7 @@ import {LuLogOut} from "react-icons/lu";
 import {useNavigate} from "react-router-dom";
 import Orders from "./dashboard/orders";
 import Purchases from "./dashboard/purchases";
+import {MdCreateNewFolder} from "react-icons/md";
 
 const Dashboard = () => {
 
@@ -74,6 +75,10 @@ const Dashboard = () => {
                                 onClick={() => setActivePage("purchases")}
                                 icon={<FaShoppingBag/>}
                                 label="My Purchases"/>
+                            <HomeButton
+                                onClick={() => navigate('/add')}
+                                icon={<MdCreateNewFolder/>}
+                                label="Create new listing"/>
                             <HomeButton
                                 isLogOut
                                 onClick={handleLogOut}
