@@ -10,7 +10,7 @@ const Post = (props) => {
         <div className="bg-mint-green p-4 my-4 max-w-md md:max-w-none md:rounded-2xl md:mx-4 md:w-full">
             <ProfileBadge
                 name={`${listing.user.first_name} ${listing.user.last_name}`}
-                image={listing.user.profile_pic}
+                image={listing.userImage}
                 type={listing.user.profile_type}
             />
             <Card listing={listing}/>
@@ -50,7 +50,7 @@ const Card = (props) => {
     return ((listing && data) &&
         <Link to={`/product/${listing.id}`}>
             <div className="bg-white my-2 overflow-hidden rounded-xl md:grid md:grid-cols-2">
-                <ListingImagesSlider/>
+                <ListingImagesSlider images={listing.images}/>
                 <div className="p-4 md:grid md:place-content-start">
                     <div>
                         <p className="mb-2 text-lg">{listing.title}</p>
