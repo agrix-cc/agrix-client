@@ -1,4 +1,6 @@
 import {useMediaQuery} from "@mui/material";
+import {Badge} from "@chakra-ui/react";
+import {useEffect, useState} from "react";
 
 const PurchasesTable = (props) => {
 
@@ -9,7 +11,7 @@ const PurchasesTable = (props) => {
     return (orders &&
         <div>
             {isDesktop &&
-                <div className="grid grid-cols-6 text-gray-500 mb-4">
+                <div className="grid grid-cols-5 text-gray-500 mb-4">
                     <p className="grid place-content-center">ID</p>
                     <p className="grid place-content-center">
                         {activeType === "crops" &&
@@ -32,7 +34,6 @@ const PurchasesTable = (props) => {
                     </p>
                     <p className="grid place-content-center">Price</p>
                     <p className="grid place-content-center">Status</p>
-                    <p className="grid place-content-center">Actions</p>
                 </div>
             }
             {orders &&
@@ -46,9 +47,51 @@ const PurchasesRow = (props) => {
 
     const {order} = props;
 
+    const [badgeColor, setBadgeColor] = useState("");
+
+    useEffect(() => {
+        const status = order.status;
+
+        switch (status) {
+            case "pending":
+                setBadgeColor("orange");
+                return;
+            case "accepted":
+                setBadgeColor("blue");
+                return;
+            case "awaiting":
+                setBadgeColor("blue");
+                return;
+            case "intransit":
+                setBadgeColor("blue");
+                return;
+            case "delivered":
+                setBadgeColor("green");
+                return;
+            case "instorage":
+                setBadgeColor("blue");
+                return;
+            case "completed":
+                setBadgeColor("green");
+                return;
+            case "overdue":
+                setBadgeColor("red");
+                return;
+            case "abandoned":
+                setBadgeColor("red");
+                return;
+            case "canceled":
+                setBadgeColor("red");
+                return;
+            default:
+                setBadgeColor("");
+                return;
+        }
+    }, [order]);
+
     return (
         <div
-            className="md:grid md:grid-cols-6 bg-white shadow-xl py-4 px-4 md:px-0 rounded-lg md:shadow-none mb-2 md:mb-0">
+            className="md:grid md:grid-cols-5 bg-white shadow-xl py-4 px-4 md:px-0 rounded-lg md:shadow-none mb-2 md:mb-0">
             <p className="md:grid md:place-content-center flex justify-between">
                 <span className="md:hidden">Order ID: </span> {order.id}</p>
             <p className="md:grid md:place-content-center flex justify-between">
@@ -102,15 +145,13 @@ const PurchasesRow = (props) => {
             </p>
             <p className="md:grid md:place-content-center flex justify-between capitalize">
                 <span className="md:hidden">Status:</span>
-                {
-                    order.status
-                }
+                <Badge
+                    colorPalette={badgeColor}>
+                    {
+                        order.status
+                    }
+                </Badge>
             </p>
-            <div className="grid place-content-center">
-                <button className="text-primary-green border border-primary-green px-4 rounded-full">
-                    View
-                </button>
-            </div>
         </div>
     )
 };

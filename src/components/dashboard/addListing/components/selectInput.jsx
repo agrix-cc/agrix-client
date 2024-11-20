@@ -4,7 +4,7 @@ import {Field} from "../../../ui/field";
 
 const SelectInput = (props) => {
 
-    const {items = [], onChange = () => {}, placeholder, label, error, required, value=""} = props;
+    const {items = [], onChange = () => {}, placeholder, label, error, required, value="", className="", disabled=false} = props;
 
     const options = createListCollection({
         items: items,
@@ -13,6 +13,7 @@ const SelectInput = (props) => {
     return (
         <Field invalid={error} errorText={error}>
             <SelectRoot
+                disabled={disabled}
                 value={[value]}
                 required={required}
                 collection={options}
@@ -23,7 +24,7 @@ const SelectInput = (props) => {
                     className={`border ${error ? 'border-red-500' : 'border-gray-400'} rounded px-4 py-1`}>
                     <SelectValueText placeholder={placeholder}/>
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className={className}>
                     {options.items.map((option) => (
                         <SelectItem item={option} key={option.value}>
                             {option.label}

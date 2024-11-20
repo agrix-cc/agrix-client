@@ -1,4 +1,7 @@
 import {useMediaQuery} from "@mui/material";
+import {Badge} from "@chakra-ui/react";
+import OrderView from "./orderView";
+import {useEffect, useState} from "react";
 
 const OrderTable = (props) => {
 
@@ -45,6 +48,48 @@ const OrderTable = (props) => {
 const OrderRow = (props) => {
 
     const {order} = props;
+
+    const [badgeColor, setBadgeColor] = useState("");
+
+    useEffect(() => {
+        const status = order.status;
+
+        switch (status) {
+            case "pending":
+                setBadgeColor("orange");
+                return;
+            case "accepted":
+                setBadgeColor("blue");
+                return;
+            case "awaiting":
+                setBadgeColor("blue");
+                return;
+            case "intransit":
+                setBadgeColor("blue");
+                return;
+            case "delivered":
+                setBadgeColor("green");
+                return;
+            case "instorage":
+                setBadgeColor("blue");
+                return;
+            case "completed":
+                setBadgeColor("green");
+                return;
+            case "overdue":
+                setBadgeColor("red");
+                return;
+            case "abandoned":
+                setBadgeColor("red");
+                return;
+            case "canceled":
+                setBadgeColor("red");
+                return;
+            default:
+                setBadgeColor("");
+                return;
+        }
+    }, [order]);
 
     return (
         <div
@@ -102,14 +147,14 @@ const OrderRow = (props) => {
             </p>
             <p className="md:grid md:place-content-center flex justify-between capitalize">
                 <span className="md:hidden">Status:</span>
-                {
-                    order.status
-                }
+                <Badge colorPalette={badgeColor}>
+                    {
+                        order.status
+                    }
+                </Badge>
             </p>
             <div className="grid place-content-center">
-                <button className="text-primary-green border border-primary-green px-4 rounded-full">
-                    View
-                </button>
+                <OrderView order={order}/>
             </div>
         </div>
     )
