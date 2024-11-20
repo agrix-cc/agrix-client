@@ -21,6 +21,8 @@ function App() {
     const {setTheme} = useTheme();
 
     useEffect(() => {
+        const serverUrl = process.env.REACT_APP_SERVER_URL;
+        console.log(serverUrl);
         setTheme('light');
     }, [setTheme]);
 
