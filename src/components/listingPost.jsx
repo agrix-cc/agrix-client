@@ -27,20 +27,20 @@ const Card = (props) => {
         switch (listing.listing_type) {
             case "storage":
                 setData({
-                    price: null,
-                    availableAmount: null
+                    price: `Rs. ${listing.storage.daily_rate.toFixed(2)} Daily rental`,
+                    availableAmount: `${listing.storage.max_capacity} Kg Max Capacity`
                 });
                 break;
             case "transport":
                 setData({
-                    price: `Rs. ${listing.transport.price_per_km.toFixed(2)}`,
-                    availableAmount: null
+                    price: `Rs. ${listing.transport.price_per_km.toFixed(2)} Pre km`,
+                    availableAmount: `${listing.transport.max_weight} Kg Max Capacity`
                 });
                 break;
             default:
                 setData({
                     price: `Rs. ${listing.crop.price_per_kg.toFixed(2)}`,
-                    availableAmount: null
+                    availableAmount: `${listing.crop.available_quantity} Kg`
                 });
                 break
         }
