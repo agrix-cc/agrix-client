@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import Spacer from "../spacer";
 
 const ListingInformation = (props) => {
 
@@ -67,8 +68,8 @@ const ListingInformation = (props) => {
                     <StorageInformation {...listing.StorageListing}/>
                 }
             </div>
-            <div className="mt-2">
-                <p className="font-medium text-lg">Location</p>
+            <div className={`mt-2 ${listing.CropListing && "mb-32"}`}>
+                <p className='font-medium text-lg'>Location</p>
                 <ul className="ml-4">
                     <li>District: {listing.district}</li>
                     <li>City: {listing.city}</li>
