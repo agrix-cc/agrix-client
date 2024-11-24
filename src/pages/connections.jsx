@@ -16,13 +16,16 @@ const Connections = () => {
     const fetchUsers = async (page) => {
         try {
             const response = await axios.get(`${baseURL}/connections?page=${page}`);
-            setUsers(response.data.users);
+            const filteredUsers = response.data.users.filter(
+                (user) => user.id !== currentUser.id // Assume currentUser is available in state or context
+            );
+            setUsers(filteredUsers);
             setTotalPages(response.data.totalPages);
         } catch (error) {
             console.error("Error fetching users:", error);
         }
     };
-
+    
     // Fetch users when the "Get Connected" tab is active or when the page changes
     useEffect(() => {
         if (activeTab === "getConnected") {
@@ -44,6 +47,11 @@ const Connections = () => {
         if (currentPage > 1) setCurrentPage(currentPage - 1);
     };
 
+    // Toggle list
+    const toggleList = (listName) => {
+        setExpandedList((prevList) => (prevList === listName ? "" : listName));
+    };
+    
     return (
         <div>
             <MobileNav />
@@ -94,7 +102,7 @@ const Connections = () => {
                             </div>
                             {/* Pagination */}
                             {totalPages > 1 && (
-                                <div className="flex justify-center mt-6">
+                                <div className="flex justify-center mt-6 mb-6">
                                     <button
                                         onClick={handlePreviousPage}
                                         disabled={currentPage === 1}

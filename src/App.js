@@ -14,6 +14,7 @@ import Onboarding from "./pages/onboarding";
 import ProtectedRoutes from "./components/protectedRoutes";
 import Checkout from "./pages/checkout";
 import RentTransport from "./pages/rentTransport";
+import UserProfile from "./pages/userProfile";
 
 function App() {
 
@@ -45,6 +46,7 @@ function App() {
                     <Route path="/connections" element={<Connections/>}/>
                     <Route path="/checkout" element={<Checkout/>}/>
                     <Route path="/rent-transport" element={<RentTransport/>}/>
+                    <Route path="/user/:id" element={<UserProfile />} />
                 </Route>
 
                 {/* Default route for 404 page */}
