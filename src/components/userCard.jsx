@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 
-const UserCard = ({ user }) => {
+const UserCard = (props) => {
+    const {user} = props;
     const navigate = useNavigate();
 
     const handleCardClick = () => {
@@ -21,7 +22,7 @@ const UserCard = ({ user }) => {
             {/* Name */}
             <h2 className="text-xl font-bold text-gray-800">{user.name}</h2>
             {/* Category */}
-            <p className="text-sm text-gray-500 mt-1">{user.category}</p>
+            <p className="text-sm text-gray-500 mt-1">{user.profile_type}</p>
         </div>
     );
 };

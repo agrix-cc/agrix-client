@@ -6,7 +6,7 @@ import UserCard from "../components/userCard";
 const Connections = () => {
     const [activeTab, setActiveTab] = useState("getConnected");
     const [expandedList, setExpandedList] = useState("pendingRequests"); // Default expanded list
-    const [users, setUsers] = useState([]); // To store fetched users
+    const [users, setUsers] = useState(null); // To store fetched users
     const [totalPages, setTotalPages] = useState(1); // Total pages for pagination
     const [currentPage, setCurrentPage] = useState(1); // Current page
 
@@ -15,11 +15,9 @@ const Connections = () => {
     // Fetch users function
     const fetchUsers = async (page) => {
         try {
+            axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("jwtToken")}`; // Set the token in the header
             const response = await axios.get(`${baseURL}/connections?page=${page}`);
-            const filteredUsers = response.data.users.filter(
-                (user) => user.id !== currentUser.id // Assume currentUser is available in state or context
-            );
-            setUsers(filteredUsers);
+            setUsers(response.data.users);
             setTotalPages(response.data.totalPages);
         } catch (error) {
             console.error("Error fetching users:", error);
@@ -96,7 +94,7 @@ const Connections = () => {
                         <div className="w-full max-w-screen-lg mx-auto">
                             <h1 className="text-lg font-bold text-gray-900 mb-4">Get Connected</h1>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                                {users.map((user) => (
+                                {users && users.map((user) => (
                                     <UserCard key={user.id} user={user} />
                                 ))}
                             </div>
