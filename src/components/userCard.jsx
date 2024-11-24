@@ -1,4 +1,5 @@
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
+import {Avatar} from "./ui/avatar";
 
 const UserCard = (props) => {
     const {user} = props;
@@ -14,13 +15,13 @@ const UserCard = (props) => {
             onClick={handleCardClick}
         >
             {/* Profile Picture */}
-            <img
-                src={user.profilePic}
-                alt={`${user.name}'s profile`}
-                className="w-20 h-20 rounded-full object-cover mb-4"
+            <Avatar
+                src={user.image}
+                name={user.first_name + " " + user.last_name}
+                size="2xl"
             />
             {/* Name */}
-            <h2 className="text-xl font-bold text-gray-800">{user.name}</h2>
+            <h2 className="text-xl font-bold text-gray-800">{user.first_name + " " + user.last_name}</h2>
             {/* Category */}
             <p className="text-sm text-gray-500 mt-1">{user.profile_type}</p>
         </div>

@@ -10,22 +10,23 @@ const Connections = () => {
     const [totalPages, setTotalPages] = useState(1); // Total pages for pagination
     const [currentPage, setCurrentPage] = useState(1); // Current page
 
-    const baseURL = process.env.REACT_APP_SERVER_URL; // Load the base URL from the environment variable
 
-    // Fetch users function
-    const fetchUsers = async (page) => {
-        try {
-            axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("jwtToken")}`; // Set the token in the header
-            const response = await axios.get(`${baseURL}/connections?page=${page}`);
-            setUsers(response.data.users);
-            setTotalPages(response.data.totalPages);
-        } catch (error) {
-            console.error("Error fetching users:", error);
-        }
-    };
-    
     // Fetch users when the "Get Connected" tab is active or when the page changes
     useEffect(() => {
+        // Fetch users function
+        const baseURL = process.env.REACT_APP_SERVER_URL; // Load the base URL from the environment variable
+
+        const fetchUsers = async (page) => {
+            try {
+                axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("jwtToken")}`; // Set the token in the header
+                const response = await axios.get(`${baseURL}/connections?page=${page}`);
+                setUsers(response.data.users);
+                setTotalPages(response.data.totalPages);
+            } catch (error) {
+                console.error("Error fetching users:", error);
+            }
+        };
+
         if (activeTab === "getConnected") {
             fetchUsers(currentPage);
         }
