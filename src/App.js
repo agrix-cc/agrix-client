@@ -46,7 +46,7 @@ function App() {
                     <Route path="/connections" element={<Connections/>}/>
                     <Route path="/checkout" element={<Checkout/>}/>
                     <Route path="/rent-transport" element={<RentTransport/>}/>
-                    <Route path="/user/:id" element={<UserProfile />} />
+                    <Route path="/profile/:userId" element={<UserProfile />} />
                 </Route>
 
                 {/* Default route for 404 page */}
