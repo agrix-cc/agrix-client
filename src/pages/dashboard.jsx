@@ -14,6 +14,9 @@ import {useNavigate} from "react-router-dom";
 import Orders from "./dashboard/orders";
 import Purchases from "./dashboard/purchases";
 import {MdCreateNewFolder} from "react-icons/md";
+import Reports from "../components/dashboard/reports";
+import { HiDocumentReport } from "react-icons/hi";
+
 
 const Dashboard = () => {
 
@@ -80,6 +83,11 @@ const Dashboard = () => {
                                 icon={<MdCreateNewFolder/>}
                                 label="Create new listing"/>
                             <HomeButton
+                                isActive={activePage === "reports"}
+                                onClick={() => setActivePage("reports")}
+                                icon={<HiDocumentReport />}
+                                label="Reports"/>
+                            <HomeButton
                                 isLogOut
                                 onClick={handleLogOut}
                                 icon={<LuLogOut/>}
@@ -106,6 +114,9 @@ const Dashboard = () => {
                         {activePage && activePage === "purchases" &&
                             <Purchases
                                 onBackClick={() => setActivePage(null)}/>
+                        }
+                        {activePage && activePage === "reports" && 
+                            <Reports onBackClick={() => setActivePage(null)} />
                         }
                     </div>
                 </div>
