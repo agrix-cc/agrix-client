@@ -1,139 +1,239 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {Pie} from 'react-chartjs-2'; // Import the Pie chart component
+import { Pie, Bar } from "react-chartjs-2";
 import {
-    Chart as ChartJS,
-    ArcElement,
-    Tooltip,
-    Legend,
-} from 'chart.js';
-import randomColor from "randomcolor";
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+} from "chart.js";
 
-// Register the required components
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
 const Reports = () => {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [orderChartData, setOrderChartData] = useState(null);
+  const [listingChartData, setListingChartData] = useState(null);
+  const [totalOrderCount, setTotalOrderCount] = useState(null);
+  const [listingStatsCount, setListingStatsCount] = useState(null);
+  const [salesByMonthData, setSalesByMonthData] = useState(null);
 
-    // TODO handle not enough data to generate reports
-    // const [reportData, setReportData] = useState(null);
-
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    const [orderChartData, setOrderChartData] = useState(null);
-    const [listingChartData, setListingChartData] = useState(null);
-
-    const [totalOrderCount, setTotalOrderCount] = useState(null);
-    const [listingStatsCount, setListingStatsCount] = useState(null);
-
-    useEffect(() => {
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
         const token = localStorage.getItem("jwtToken");
         const serverUri = process.env.REACT_APP_SERVER_URL;
-        // Calling new api
-        axios.get(serverUri + "/reports/stats", {
-            headers: {Authorization: `Bearer ${token}`},
-        })
-            .then(res => {
-                // Set total orders count regardless of status
-                let orderTotal = 0;
-                Object.values(res.data.orderStats).forEach(value => orderTotal += value);
-                setTotalOrderCount(orderTotal);
 
-                // Set listing stats counts
-                setListingStatsCount({
-                    confirmed: res.data.listingStats.confirmed,
-                    pending: res.data.listingStats.pending,
-                    rejected: res.data.listingStats.rejected,
-                });
+        const response = await axios.get(`${serverUri}/reports/stats`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-                // Generate random colors based on the stats keys count getting from the server
-                // Or else can modified to have unique colors based on the profile type using (switch) or (if else)
-                const colors = randomColor({
-                    count: Object.keys(res.data.orderStats).length,
-                    hue: "blue"
-                })
+        const orderStats = response.data.orderStats;
+        const listingStats = response.data.listingStats;
+        const salesData = response.data.salesByMonth;
 
-                // Prepare data set for pie chat orders stats
-                setOrderChartData({
-                    // Get an array of keys in the response orderStats object
-                    labels: Object.keys(res.data.orderStats),
-                    datasets: [
-                        {
-                            label: 'Order stats',
-                            // Get an array of values in the response orderStats object corresponding to the keys
-                            data: Object.values(res.data.orderStats),
-                            backgroundColor: colors,
-                            borderColor: colors,
-                            borderWidth: 1,
-                        },
-                    ],
-                });
+        setTotalOrderCount(
+          Object.values(orderStats).reduce((sum, value) => sum + value, 0)
+        );
 
-                // Prepare data set for pie chat listings stats
-                setListingChartData({
-                    labels: ["Pending", "Confirmed", "Rejected"],
-                    datasets: [
-                        {
-                            label: 'Listing stats',
-                            data: [
-                                res.data.listingStats.pending,
-                                res.data.listingStats.confirmed,
-                                res.data.listingStats.rejected,
-                            ],
-                            backgroundColor: [
-                                "#f37324",
-                                "#72b043",
-                                "#e12729",
-                            ],
-                            borderColor: [
-                                "#f37324",
-                                "#72b043",
-                                "#e12729",
-                            ],
-                            borderWidth: 1,
-                        },
-                    ],
-                });
+        setListingStatsCount({
+          confirmed: listingStats.confirmed,
+          pending: listingStats.pending,
+          rejected: listingStats.rejected,
+        });
 
-                setLoading(false);
-                setError(null);
-            })
-            .catch(error => {
-                setError(error.message);
-                setLoading(false);
-                console.log(error.message);
-            })
-    }, []);
+        const colors = {
+          pending: "#6D9EEB",
+          accepted: "#93C47D",
+          awaiting: "#FFD966",
+          instorage: "#76A5AF",
+          completed: "#F6B26B",
+          overdue: "#E06666",
+          abandoned: "#8E7CC3",
+          rejected: "#CC0000",
+        };
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error fetching reports: {error}</p>;
+        const orderColors = Object.keys(orderStats).map(
+          (label) => colors[label] || "#CCCCCC"
+        );
 
-    // TODO handle not enough data to generate reports
-    // if (!reportData || !reportData.orders?.length) return <p>Not enough data to generate reports.</p>;
+        const listingColors = ["pending", "confirmed", "rejected"].map(
+          (label) => colors[label] || "#CCCCCC"
+        );
 
+        setOrderChartData({
+          labels: Object.keys(orderStats),
+          datasets: [
+            {
+              label: "Order Stats",
+              data: Object.values(orderStats),
+              backgroundColor: orderColors,
+              borderColor: orderColors,
+              borderWidth: 1,
+            },
+          ],
+          options: {
+            plugins: {
+              legend: {
+                display: false,
+              },
+            },
+          },
+        });
+
+        setListingChartData({
+          labels: ["Pending", "Confirmed", "Rejected"],
+          datasets: [
+            {
+              label: "Listing Stats",
+              data: [
+                listingStats.pending,
+                listingStats.confirmed,
+                listingStats.rejected,
+              ],
+              backgroundColor: listingColors,
+              borderColor: listingColors,
+              borderWidth: 1,
+            },
+          ],
+          options: {
+            plugins: {
+              legend: {
+                display: false,
+              },
+            },
+          },
+        });
+
+        const labels = [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
+
+        setSalesByMonthData({
+          labels: labels,
+          datasets: [
+            {
+              label: "Sales by Month",
+              data: salesData,
+              backgroundColor: "rgba(75, 192, 192, 0.2)",
+              borderColor: "rgba(75, 192, 192, 1)",
+              borderWidth: 1,
+            },
+          ],
+        });
+
+        setLoading(false);
+      } catch (err) {
+        setError("Failed to load reports. Please try again later.");
+        setLoading(false);
+      }
+    };
+
+    fetchReports();
+  }, []);
+
+  if (loading)
     return (
-        <div>
-            <h1>Reports</h1>
-            <div>
-                <h2>Orders</h2>
-                {orderChartData && <Pie data={orderChartData}/>}
-
-                {totalOrderCount &&
-                    <p>Total Orders: {totalOrderCount}. Breakdown:{" "}</p>
-                }
-            </div>
-            {listingChartData && (
-                <div>
-                    <h2>Listings</h2>
-                    <Pie data={listingChartData}/>
-                    <p>
-                        Confirmed: {listingStatsCount.confirmed}, Pending: {listingStatsCount.pending},
-                        Rejected:{listingStatsCount.rejected}
-                    </p>
-                </div>
-            )}
-        </div>
+      <p className="text-center text-xl text-gray-600">Loading reports...</p>
     );
+  if (error)
+    return <p className="text-center text-xl text-red-600">{error}</p>;
+
+  return (
+    <div className="p-6">
+      <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">
+        Reports
+      </h1>
+      <div className="flex flex-col lg:flex-row items-start mb-12">
+        {orderChartData && (
+          <div className="lg:w-1/2 flex flex-col items-center mb-6 lg:mb-0">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-700 text-center">
+              Order Stats
+            </h2>
+            <div style={{ width: "350px", height: "350px" }}>
+              <Pie
+                data={orderChartData}
+                options={{ responsive: true, maintainAspectRatio: false }}
+              />
+            </div>
+            <p className="text-gray-600 text-lg mt-4 text-center">
+              Total Orders: <span className="font-bold">{totalOrderCount}</span>
+            </p>
+            <ul className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-center mt-4">
+              {orderChartData.labels.map((label, index) => (
+                <li key={index} className="text-gray-600 text-md">
+                  <span className="font-medium">{label}</span>:{" "}
+                  {orderChartData.datasets[0].data[index]}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {listingChartData && (
+          <div className="lg:w-1/2 flex flex-col items-center">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-700 text-center">
+              Listing Stats
+            </h2>
+            <div style={{ width: "350px", height: "350px" }}>
+              <Pie
+                data={listingChartData}
+                options={{ responsive: true, maintainAspectRatio: false }}
+              />
+            </div>
+            <ul className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-center mt-4">
+              <li className="text-gray-600 text-md">
+                <span className="font-medium">Confirmed</span>:{" "}
+                {listingStatsCount.confirmed}
+              </li>
+              <li className="text-gray-600 text-md">
+                <span className="font-medium">Pending</span>:{" "}
+                {listingStatsCount.pending}
+              </li>
+              <li className="text-gray-600 text-md">
+                <span className="font-medium">Rejected</span>:{" "}
+                {listingStatsCount.rejected}
+              </li>
+            </ul>
+          </div>
+        )}
+      </div>
+      <hr className="my-8" />
+      <h2 className="text-2xl font-semibold mb-4 text-gray-700 text-center">
+        Sales by Month
+      </h2>
+      {salesByMonthData && (
+        <div className="flex justify-center">
+          <div style={{ width: "100%", maxWidth: "1000px", height: "500px" }}>
+            <Bar
+              data={salesByMonthData}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                  y: { beginAtZero: true, max: 100, stepSize: 10 },
+                },
+              }}
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default Reports;
