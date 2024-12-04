@@ -10,14 +10,15 @@ const TextInput = (props) => {
         onChange,
         placeholder,
         required,
-        disabled = false
+        disabled = false,
+        id
     } = props;
 
     return (
         <div className={label ? "" : "w-full"}>
             <p className={label && "mb-2"}>{label}</p>
             <Field invalid={error} errorText={error}>
-                <Input disabled={disabled} placeholder={placeholder} required={required} value={value} onChange={(e) => onChange(e.target.value)} size="lg"
+                <Input id={id} disabled={disabled} placeholder={placeholder} required={required} value={value} onChange={(e) => onChange(e.target.value)} size="lg"
                        className={`border ${error ? "border-red-500" : "border-gray-400"} outline-none px-4`}/>
             </Field>
         </div>

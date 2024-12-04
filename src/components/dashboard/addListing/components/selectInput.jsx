@@ -4,7 +4,18 @@ import {Field} from "../../../ui/field";
 
 const SelectInput = (props) => {
 
-    const {items = [], onChange = () => {}, placeholder, label, error, required, value="", className="", disabled=false} = props;
+    const {
+        items = [],
+        onChange = () => {},
+        placeholder,
+        label,
+        error,
+        required,
+        value = "",
+        className = "",
+        disabled = false,
+        id
+    } = props;
 
     const options = createListCollection({
         items: items,
@@ -13,6 +24,7 @@ const SelectInput = (props) => {
     return (
         <Field invalid={error} errorText={error}>
             <SelectRoot
+                id={id}
                 disabled={disabled}
                 value={[value]}
                 required={required}

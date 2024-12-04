@@ -401,6 +401,7 @@ const AddListing = () => {
                             </p>
 
                             <TextInput
+                                id="title"
                                 label="Title"
                                 placeholder="Enter title of the listing to be"
                                 error={errors.title}
@@ -413,6 +414,7 @@ const AddListing = () => {
                             />
 
                             <TextArea
+                                id="description"
                                 label="Description"
                                 placeholder="Enter description of the listing"
                                 error={errors.description}
@@ -428,6 +430,7 @@ const AddListing = () => {
                                 <p className="text-gray-500 mb-4">Location</p>
                                 <div className="grid gap-2">
                                     <SelectInput
+                                        id="district"
                                         items={districts.map(district => ({label: district, value: district}))}
                                         value={listingInfo.district}
                                         onChange={(e) => {
@@ -441,6 +444,7 @@ const AddListing = () => {
                                     />
                                     {
                                         listingInfo.district ? <SelectInput
+                                            id="city"
                                             required
                                             value={listingInfo.city}
                                             items={citiesByDistrict[listingInfo.district].cities.map(city => ({
@@ -469,6 +473,7 @@ const AddListing = () => {
                                     <div key={listingInput.name} className="mb-4">
                                         {listingInput.type === "select" &&
                                             <SelectInput
+                                                id={listingInput.name}
                                                 value={additionalInfo[listingInput.name]}
                                                 items={listingInput.items}
                                                 placeholder={listingInput.placeholder}
@@ -482,6 +487,7 @@ const AddListing = () => {
                                         }
                                         {listingInput.type === "number" &&
                                             <NumberInput
+                                                id={listingInput.name}
                                                 value={additionalInfo[listingInput.name] || 0}
                                                 hidden={listingInput.name === "delivery_fare_per_kg" && (additionalInfo.delivery_options === 'pickup' || !additionalInfo.delivery_options)}
                                                 label={listingInput.label}
@@ -495,6 +501,7 @@ const AddListing = () => {
                                         }
                                         {listingInput.type === "checkbox" &&
                                             <CheckBox
+                                                id={listingInput.name}
                                                 value={additionalInfo[listingInput.name]}
                                                 option={{
                                                     name: listingInput.label,
@@ -506,6 +513,7 @@ const AddListing = () => {
                                         }
                                         {listingInput.type === "range" &&
                                             <RangeInput
+                                                id={listingInput.name}
                                                 unit={listingInput.unit}
                                                 minLabel={listingInput.minLabel}
                                                 maxLabel={listingInput.maxLabel}
@@ -531,6 +539,7 @@ const AddListing = () => {
                                         }
                                         {listingInput.type === "text" &&
                                             <TextInput
+                                                id={listingInput.name}
                                                 label={listingInput.label}
                                                 placeholder={listingInput.placeholder}
                                                 value={additionalInfo[listingInput.name] || ""}
