@@ -6,7 +6,7 @@ const UserProfile = () => {
     const { userId } = useParams(); // Get the user ID from the URL
     const [userData, setUserData] = useState(null);
     const [listings, setListings] = useState([]);
-    const [isConnected, setIsConnected] = useState(false);
+    const [connectionStatus, setConnectionStatus] = useState(null); // null, "pending", "connected"
 
     // Fetch user profile and listings
     useEffect(() => {
@@ -18,15 +18,15 @@ const UserProfile = () => {
                 setUserData(response.data.user);
                 setListings(response.data.listings);
 
-                // Assume connection status is true initially
-                setIsConnected(true);
+                // Fetch connection status
+                const connectionResponse = await axios.get(`${baseURL}/connections/status/${userId}`);
+                setConnectionStatus(connectionResponse.data.status);
             } catch (error) {
                 console.error("Error fetching user profile:", error);
             }
         };
 
         fetchUserProfile();
-        console.log(userId);
     }, [userId]);
 
     // Remove connection handler
@@ -35,9 +35,21 @@ const UserProfile = () => {
             const baseURL = process.env.REACT_APP_SERVER_URL;
             axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("jwtToken")}`;
             await axios.delete(`${baseURL}/connections/${userId}/remove`);
-            setIsConnected(false);
+            setConnectionStatus(null);
         } catch (error) {
             console.error("Error removing connection:", error);
+        }
+    };
+
+    // Send connection request handler
+    const handleConnect = async () => {
+        try {
+            const baseURL = process.env.REACT_APP_SERVER_URL;
+            axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("jwtToken")}`;
+            await axios.post(`${baseURL}/connections/request`, { connectedUserId: userId });
+            setConnectionStatus("pending");
+        } catch (error) {
+            console.error("Error sending connection request:", error);
         }
     };
 
@@ -68,7 +80,7 @@ const UserProfile = () => {
                         >
                             Message
                         </button>
-                        {isConnected ? (
+                        {connectionStatus === "connected" ? (
                             <div className="relative">
                                 <button
                                     className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-all"
@@ -84,10 +96,17 @@ const UserProfile = () => {
                                     </button>
                                 </div>
                             </div>
+                        ) : connectionStatus === "pending" ? (
+                            <button
+                                className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition-all"
+                                onClick={handleRemoveConnection}
+                            >
+                                Pending (Remove Request)
+                            </button>
                         ) : (
                             <button
                                 className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-all"
-                                onClick={() => console.log("Re-connect feature not yet implemented")}
+                                onClick={handleConnect}
                             >
                                 Connect
                             </button>
