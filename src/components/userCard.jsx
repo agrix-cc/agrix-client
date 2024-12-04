@@ -6,7 +6,7 @@ const UserCard = ({ user, onConnect, onRemove }) => {
     const navigate = useNavigate();
 
     return (
-        <div className="p-6 border rounded-lg shadow-md bg-white flex flex-col items-center text-center w-full max-w-xs h-full">
+        <div className="p-6 border rounded-lg shadow-md bg-gradient-to-b from-mint-green flex flex-col items-center text-center w-full max-w-xs h-full">
             <Avatar src={user.profile_pic} name={`${user.first_name} ${user.last_name}`} size="2xl" />
             <h2 className="text-xl font-bold mt-2">{`${user.first_name} ${user.last_name}`}</h2>
             <p className="text-sm text-gray-500">{user.profile_type}</p>
