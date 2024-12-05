@@ -34,7 +34,7 @@ const SelectInput = (props) => {
                 <SelectLabel className="text-[16px] font-normal">{label}</SelectLabel>
                 <SelectTrigger
                     className={`border ${error ? 'border-red-500' : 'border-gray-400'} rounded px-4 py-1`}>
-                    <SelectValueText placeholder={placeholder}/>
+                    <SelectValueText placeholder={placeholder} id={id+"-value"}/>
                 </SelectTrigger>
                 <SelectContent className={className}>
                     {options.items.map((option) => (

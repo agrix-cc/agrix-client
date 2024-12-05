@@ -157,6 +157,7 @@ const Profile = (props) => {
                 </div>
                 <div className="grid gap-2">
                     <SelectInput
+                        id="profile-district"
                         items={districts.map(district => ({label: district, value: district}))}
                         value={newUser.district}
                         onChange={value => setNewUser({...newUser, district: value})}
@@ -167,6 +168,7 @@ const Profile = (props) => {
                     />
                     {newUser.district &&
                         <SelectInput
+                            id="profile-city"
                             value={newUser.city}
                             onChange={value => setNewUser({...newUser, city: value})}
                             items={citiesByDistrict[newUser.district].cities.map(city => ({
