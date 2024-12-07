@@ -28,7 +28,7 @@ const Profile = (props) => {
             toaster.create({
                 title: "Please enter a valid 10 digit mobile number",
                 type: "error",
-                duration: 1000
+                duration: 30000
             })
             setIsProcessing(false);
             return;
@@ -50,14 +50,14 @@ const Profile = (props) => {
                 toaster.create({
                     title: "Profile updated successfully!",
                     type: "success",
-                    duration: 1000
+                    duration: 30000
                 })
             })
             .catch(err => {
                 toaster.create({
                     title: err.response ? err.response.data.message : err.message,
                     type: "error",
-                    duration: 1000
+                    duration: 30000
                 })
             })
         setIsProcessing(false);
