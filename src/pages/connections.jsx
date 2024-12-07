@@ -103,18 +103,21 @@ const Connections = () => {
                 {/* Tabs Section */}
                 <div className="flex border-b w-full justify-center sticky top-0 bg-white z-10">
                     <button
+                        id="get_connected_btn"
                         onClick={() => setActiveTab("getConnected")}
                         className={`px-6 py-3 font-semibold ${activeTab === "getConnected" ? "border-b-4 border-green-500 text-green-500" : "text-gray-500"}`}
                     >
                         Get Connected
                     </button>
                     <button
+                        id="my_connections_btn"
                         onClick={() => setActiveTab("myConnections")}
                         className={`px-6 py-3 font-semibold ${activeTab === "myConnections" ? "border-b-4 border-green-500 text-green-500" : "text-gray-500"}`}
                     >
                         My Connections
                     </button>
                     <button
+                        id="connection_requests_btn"
                         onClick={() => setActiveTab("requests")}
                         className={`px-6 py-3 font-semibold ${activeTab === "requests" ? "border-b-4 border-green-500 text-green-500" : "text-gray-500"}`}
                     >
@@ -128,7 +131,7 @@ const Connections = () => {
                         <h1 className="text-lg font-bold text-gray-900 mb-4">Get Connected</h1>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                             {users.map((user) => (
-                                <UserCard key={user.id} user={user} onConnect={handleConnect} />
+                                <UserCard btnId={user.id} key={user.id} user={user} onConnect={handleConnect} />
                             ))}
                         </div>
                     </div>
@@ -140,6 +143,7 @@ const Connections = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                             {connections.map((conn) => (
                                 <UserCard
+                                    btnId={conn.id}
                                     key={conn.id}
                                     user={conn}
                                     onRemove={() => handleRemoveConnection(conn.id)}

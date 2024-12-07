@@ -39,6 +39,7 @@ const RequestsSection = ({ title, requests, type, onAction }) => {
                     <div>
                         {type === "sent" ? (
                             <button
+                                id={"undo_"+user.id}
                                 onClick={() => handleAction(user.id, "undo")}
                                 className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                             >
@@ -47,12 +48,14 @@ const RequestsSection = ({ title, requests, type, onAction }) => {
                         ) : (
                             <>
                                 <button
+                                    id={"accept_"+user.id}
                                     onClick={() => handleAction(user.id, "accept")}
                                     className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 mr-2"
                                 >
                                     Accept
                                 </button>
                                 <button
+                                    id={"reject_"+user.id}
                                     onClick={() => handleAction(user.id, "reject")}
                                     className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                                 >
