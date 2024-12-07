@@ -21,12 +21,17 @@ const Reports = () => {
   const [totalOrderCount, setTotalOrderCount] = useState(null);
   const [listingStatsCount, setListingStatsCount] = useState(null);
   const [salesByMonthData, setSalesByMonthData] = useState(null);
+  const [mostSoldCropsChartData, setMostSoldCropsChartData] = useState(null);
 
   useEffect(() => {
     const fetchReports = async () => {
       try {
         const token = localStorage.getItem("jwtToken");
         const serverUri = process.env.REACT_APP_SERVER_URL;
+
+        if (!token) {
+          throw new Error("JWT token is missing");
+        }
 
         const response = await axios.get(`${serverUri}/reports/stats`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -35,6 +40,7 @@ const Reports = () => {
         const orderStats = response.data.orderStats;
         const listingStats = response.data.listingStats;
         const salesData = response.data.salesByMonth;
+        const additionalStats = response.data.additionalStats;
 
         setTotalOrderCount(
           Object.values(orderStats).reduce((sum, value) => sum + value, 0)
@@ -55,6 +61,9 @@ const Reports = () => {
           overdue: "#E06666",
           abandoned: "#8E7CC3",
           rejected: "#CC0000",
+          delivered: "#4CAF50",
+          processing: "#FF9800",
+          cancelled: "#F44336",
         };
 
         const orderColors = Object.keys(orderStats).map(
@@ -137,8 +146,30 @@ const Reports = () => {
           ],
         });
 
+        const cropLabels = additionalStats.mostSoldCrops
+          .filter(crop => crop.CropListing)
+          .map(crop => crop.CropListing.crop_name);
+        const cropCounts = additionalStats.mostSoldCrops
+          .filter(crop => crop.CropListing)
+          .map(crop => crop.count);
+        const cropColors = cropLabels.map((_, index) => `hsl(${index * 60}, 70%, 50%)`);
+
+        setMostSoldCropsChartData({
+          labels: cropLabels,
+          datasets: [
+            {
+              label: "Most Sold Crops",
+              data: cropCounts,
+              backgroundColor: cropColors,
+              borderColor: cropColors,
+              borderWidth: 1,
+            },
+          ],
+        });
+
         setLoading(false);
       } catch (err) {
+        console.error("Error fetching reports:", err);
         setError("Failed to load reports. Please try again later.");
         setLoading(false);
       }
@@ -231,6 +262,21 @@ const Reports = () => {
             />
           </div>
         </div>
+      )}
+      {mostSoldCropsChartData && mostSoldCropsChartData.datasets[0].data.length > 0 ? (
+        <div className="mt-8">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-700 text-center">
+            Most Sold Crops
+          </h2>
+          <div style={{ width: "350px", height: "350px", margin: "0 auto" }}>
+            <Pie
+              data={mostSoldCropsChartData}
+              options={{ responsive: true, maintainAspectRatio: false }}
+            />
+          </div>
+        </div>
+      ) : (
+        <p className="text-center text-xl text-gray-600">No items sold by you.</p>
       )}
     </div>
   );
