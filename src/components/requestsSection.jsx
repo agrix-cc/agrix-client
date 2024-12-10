@@ -1,6 +1,7 @@
 import React from "react";
 import { Avatar } from "./ui/avatar";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const RequestsSection = ({ title, requests, type, onAction }) => {
     const handleAction = async (userId, action) => {
@@ -29,13 +30,13 @@ const RequestsSection = ({ title, requests, type, onAction }) => {
             <h2 className="text-lg font-semibold">{title}</h2>
             {requests.map((user) => (
                 <div key={user.id} className="flex justify-between items-center p-4 bg-gray-50 border-b">
-                    <div className="flex items-center">
+                    <Link to={`/profile/${user.id}`} className="flex items-center">
                         <Avatar src={user.profile_pic} name={`${user.first_name} ${user.last_name}`} size="lg" />
                         <div className="ml-4">
                             <h3 className="font-bold">{`${user.first_name} ${user.last_name}`}</h3>
                             <p className="text-sm text-gray-500">{user.profile_type}</p>
                         </div>
-                    </div>
+                    </Link>
                     <div>
                         {type === "sent" ? (
                             <button
