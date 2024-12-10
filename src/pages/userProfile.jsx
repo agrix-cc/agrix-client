@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 const UserProfile = () => {
@@ -120,19 +121,17 @@ const UserProfile = () => {
             {listings.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {listings.map((listing) => (
-                        <div
-                            key={listing.id}
-                            className="border rounded-lg p-4 shadow-sm hover:shadow-md transition-all"
-                        >
-                            <h3 className="font-semibold text-lg">{listing.title}</h3>
-                            <p className="text-sm text-gray-500">{listing.description}</p>
-                            <p className="text-sm font-bold text-green-600 mt-2">${listing.price}</p>
-                            <p className="text-xs text-gray-400 mt-1">{new Date(listing.createdAt).toLocaleDateString()}</p>
-                        </div>
+                        <Link to={`/product/${listing.id}`} key={listing.id}>
+                            <div className="border rounded-lg p-4 shadow-sm hover:shadow-md transition-all">
+                                <h3 className="font-semibold text-lg">{listing.title}</h3>
+                                <p className="text-sm text-gray-500">{listing.description}</p>
+                                <p className="text-sm font-bold text-green-600 mt-2">${listing.price}</p>
+                            </div>
+                        </Link>
                     ))}
                 </div>
             ) : (
-                <p className="text-gray-600">No listings available for this user.</p>
+                <p className="text-gray-600">This user has not listed anything yet!</p>
             )}
         </div>
     );
