@@ -160,15 +160,18 @@ const Connections = () => {
                             requests={receivedRequests}
                             type="received"
                             onAction={handleRequestAction}
+                            isExpandedDefault={true} // Expanded by default
                         />
                         <RequestsSection
                             title="Requests Sent"
                             requests={sentRequests}
                             type="sent"
                             onAction={handleRequestAction}
+                            isExpandedDefault={false} // Collapsed by default
                         />
                     </div>
                 )}
+
             </div>
         </div>
     );
