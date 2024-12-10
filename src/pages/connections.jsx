@@ -3,6 +3,7 @@ import axios from "axios";
 import MobileNav from "../components/mobileNav";
 import UserCard from "../components/userCard";
 import RequestsSection from "../components/requestsSection";
+import { FaUsers } from "react-icons/fa6";
 
 const Connections = () => {
     const [activeTab, setActiveTab] = useState("getConnected");
@@ -139,17 +140,32 @@ const Connections = () => {
 
                 {activeTab === "myConnections" && (
                     <div className="w-full max-w-screen-lg">
-                        <h1 className="text-lg font-bold text-gray-900 mb-4">My Connections</h1>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                            {connections.map((conn) => (
-                                <UserCard
-                                    btnId={conn.id}
-                                    key={conn.id}
-                                    user={conn}
-                                    onRemove={() => handleRemoveConnection(conn.id)}
-                                />
-                            ))}
-                        </div>
+                        {connections.length > 0 ? (
+                            <>
+                                <h1 className="text-lg font-bold text-gray-900 mb-4">My Connections</h1>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                    {connections.map((conn) => (
+                                        <UserCard
+                                            btnId={conn.id}
+                                            key={conn.id}
+                                            user={conn}
+                                            onRemove={() => handleRemoveConnection(conn.id)}
+                                        />
+                                    ))}
+                                </div>
+                            </>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center mt-8">
+                                <FaUsers className="text-6xl text-gray-500 mb-4" />
+                                <p className="text-gray-500 text-lg mb-4">You haven't made any connections. Let's Connect.</p>
+                                <button
+                                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-all"
+                                    onClick={() => setActiveTab("getConnected")}
+                                >
+                                    Connect
+                                </button>
+                            </div>
+                        )}
                     </div>
                 )}
 
