@@ -3,7 +3,8 @@ import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import MobileNav from "../components/mobileNav"; // Import the header component
-import DesktopNav from "../components/desktopNav"; // Import the desktop header component if needed
+import DesktopNav from "../components/desktopNav";
+import {Avatar} from "../components/ui/avatar"; // Import the desktop header component if needed
 
 const UserProfile = () => {
     const { userId } = useParams(); // Get the user ID from the URL
@@ -20,7 +21,6 @@ const UserProfile = () => {
                 const response = await axios.get(`${baseURL}/profile/${userId}`);
                 setUserData(response.data.user);
                 setListings(response.data.listings);
-
                 // Fetch connection status
                 const connectionResponse = await axios.get(`${baseURL}/connections/status/${userId}`);
                 setConnectionStatus(connectionResponse.data.status);
@@ -66,11 +66,10 @@ const UserProfile = () => {
             <div className="pt-16 p-4 max-w-screen-lg mx-auto"> {/* Added padding-top */}
                 <div className="flex items-center mb-6">
                     {/* Profile Icon */}
-                    <img
-                        src={userData.profile_pic || "/default-avatar.png"}
-                        alt={`${userData.first_name}'s profile`}
-                        className="w-24 h-24 rounded-full object-cover"
-                    />
+                    <Avatar
+                        src={userData.imageUrl}
+                        size="2xl"
+                        name={userData.first_name+" "+userData.last_name}/>
                     <div className="ml-6">
                         {/* User Info */}
                         <h1 className="text-2xl font-bold">{`${userData.first_name} ${userData.last_name}`}</h1>
