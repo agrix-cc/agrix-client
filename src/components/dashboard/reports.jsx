@@ -22,8 +22,8 @@ const Reports = () => {
     const [listingStatsCount, setListingStatsCount] = useState(null);
     const [salesByMonthData, setSalesByMonthData] = useState(null);
     const [mostSoldCropsChartData, setMostSoldCropsChartData] = useState(null);
-    const [additionalStats, setAdditionalStats] = useState(null);
-    const [userType, setUserType] = useState(null);
+    // const [additionalStats, setAdditionalStats] = useState(null);
+    // const [userType, setUserType] = useState(null);
     const [personalizedInsights, setPersonalizedInsights] = useState(null);
 
     useEffect(() => {
@@ -205,8 +205,8 @@ const Reports = () => {
                     });
                 }
 
-                setAdditionalStats(additionalStats);
-                setUserType(userType);
+                // setAdditionalStats(additionalStats);
+                // setUserType(userType);
                 setPersonalizedInsights(generatePersonalizedInsights(userType, additionalStats));
 
                 setLoading(false);

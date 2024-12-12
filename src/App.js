@@ -11,10 +11,11 @@ import {useTheme} from "next-themes";
 import ItemView from "./pages/itemView";
 import {useEffect} from "react";
 import Onboarding from "./pages/onboarding";
-import ProtectedRoutes from "./components/protectedRoutes";
+import {AdminProtected, ProtectedRoutes} from "./components/protectedRoutes";
 import Checkout from "./pages/checkout";
 import RentTransport from "./pages/rentTransport";
 import UserProfile from "./pages/userProfile";
+import AdminDashboard from "./pages/admin/dashboard.";
 
 function App() {
 
@@ -46,7 +47,11 @@ function App() {
                     <Route path="/connections" element={<Connections/>}/>
                     <Route path="/checkout" element={<Checkout/>}/>
                     <Route path="/rent-transport" element={<RentTransport/>}/>
-                    <Route path="/profile/:userId" element={<UserProfile />} />
+                    <Route path="/profile/:userId" element={<UserProfile/>}/>
+                </Route>
+
+                <Route element={<AdminProtected/>}>
+                    <Route path="/admin" element={<AdminDashboard/>}/>
                 </Route>
 
                 {/* Default route for 404 page */}

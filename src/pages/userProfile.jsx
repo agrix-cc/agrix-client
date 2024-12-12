@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import MobileNav from "../components/mobileNav"; // Import the header component
-import DesktopNav from "../components/desktopNav";
 import {Avatar} from "../components/ui/avatar"; // Import the desktop header component if needed
 
 const UserProfile = () => {
