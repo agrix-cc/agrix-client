@@ -16,6 +16,9 @@ import Checkout from "./pages/checkout";
 import RentTransport from "./pages/rentTransport";
 import UserProfile from "./pages/userProfile";
 import AdminDashboard from "./pages/admin/dashboard.";
+import UserManagements from "./pages/admin/components/users";
+import ListingManagement from "./pages/admin/components/listings";
+import AdminHome from "./pages/admin/components/home";
 
 function App() {
 
@@ -51,7 +54,11 @@ function App() {
                 </Route>
 
                 <Route element={<AdminProtected/>}>
-                    <Route path="/admin" element={<AdminDashboard/>}/>
+                    <Route path="/admin" element={<AdminDashboard/>}>
+                        <Route path="users" element={<UserManagements/>}/>
+                        <Route path="listings" element={<ListingManagement/>}/>
+                        <Route path="home" element={<AdminHome/>}/>
+                    </Route>
                 </Route>
 
                 {/* Default route for 404 page */}
