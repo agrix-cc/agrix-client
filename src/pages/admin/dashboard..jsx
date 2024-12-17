@@ -15,7 +15,7 @@ export default function AdminDashboard() {
                             <NavLink to="users">Users</NavLink>
                         </li>
                         <li>
-                            <NavLink to="listings">Listings</NavLink>
+                            <NavLink to="listings">Listing</NavLink>
                         </li>
                     </ul>
                 </div>
