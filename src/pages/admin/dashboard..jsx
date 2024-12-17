@@ -23,6 +23,7 @@ export default function AdminDashboard() {
                         <li>
                             <NavLink
                                 to="home"
+                                id="home_button"
                                 className={({ isActive }) =>
                                     `flex items-center space-x-2 p-3 rounded-lg bg-white text-green-700 hover:bg-gray-200 transition duration-300 ${
                                         isActive ? "shadow-md" : ""
@@ -36,6 +37,7 @@ export default function AdminDashboard() {
                         <li>
                             <NavLink
                                 to="users"
+                                id="users_button"
                                 className={({ isActive }) =>
                                     `flex items-center space-x-2 p-3 rounded-lg bg-white text-green-700 hover:bg-gray-200 transition duration-300 ${
                                         isActive ? "shadow-md" : ""
@@ -49,6 +51,7 @@ export default function AdminDashboard() {
                         <li>
                             <NavLink
                                 to="listings"
+                                id="manage_listings_button"
                                 className={({ isActive }) =>
                                     `flex items-center space-x-2 p-3 rounded-lg bg-white text-green-700 hover:bg-gray-200 transition duration-300 ${
                                         isActive ? "shadow-md" : ""
@@ -63,6 +66,7 @@ export default function AdminDashboard() {
                 </div>
                 <button
                     onClick={handleLogout}
+                    id="logout_button"
                     className="flex items-center space-x-2 p-3 rounded-lg bg-white text-green-700 hover:bg-gray-400 transition duration-300"
                 >
                     <FaSignOutAlt size={20} />

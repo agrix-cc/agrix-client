@@ -128,6 +128,7 @@ export default function UserManagement() {
           <div className="relative" ref={dropdownRef}>
             {/* Sort By Button */}
             <button
+              id="sort_button"
               onClick={handleDropdownToggle}
               className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition duration-300"
             >
@@ -138,36 +139,42 @@ export default function UserManagement() {
             {isDropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-10">
                 <button
+                  id="sort_all"
                   onClick={() => setFilter("all")}
                   className={`block w-full text-left px-4 py-2 ${filter === "all" ? "bg-blue-500 text-white" : "text-gray-700"}`}
                 >
                   Default Sort
                 </button>
                 <button
+                  id="sort_farmer"
                   onClick={() => setFilter("farmer")}
                   className={`block w-full text-left px-4 py-2 ${filter === "farmer" ? "bg-blue-500 text-white" : "text-gray-700"}`}
                 >
                   Filter Farmers Only
                 </button>
                 <button
+                  id="sort_seller"
                   onClick={() => setFilter("seller")}
                   className={`block w-full text-left px-4 py-2 ${filter === "seller" ? "bg-blue-500 text-white" : "text-gray-700"}`}
                 >
                   Filter Sellers Only
                 </button>
                 <button
+                  id="sort_storage"
                   onClick={() => setFilter("storage")}
                   className={`block w-full text-left px-4 py-2 ${filter === "storage" ? "bg-blue-500 text-white" : "text-gray-700"}`}
                 >
                   Filter Storage Only
                 </button>
                 <button
+                  id="sort_transport"
                   onClick={() => setFilter("transport")}
                   className={`block w-full text-left px-4 py-2 ${filter === "transport" ? "bg-blue-500 text-white" : "text-gray-700"}`}
                 >
                   Filter Transport Only
                 </button>
                 <button
+                  id="sort_admin"
                   onClick={() => setFilter("admin")}
                   className={`block w-full text-left px-4 py-2 ${filter === "admin" ? "bg-blue-500 text-white" : "text-gray-700"}`}
                 >
@@ -178,6 +185,7 @@ export default function UserManagement() {
           </div>
         </div>
         <button
+          id="add_user_button"
           onClick={() => setShowAddUserModal(true)}
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300"
         >
@@ -233,29 +241,28 @@ export default function UserManagement() {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
-              user && (
-                <tr key={user.id} className="hover:bg-gray-50">
-                  <td className="border px-4 py-2">{user.id}</td>
-                  <td className="border px-4 py-2">{`${user.first_name} ${user.last_name}`}</td>
-                  <td className="border px-4 py-2">{user.profile_type}</td>
-                  <td className="border px-4 py-2">{`${user.city}, ${user.district}`}</td>
-                  <td className="border px-4 py-2">{user.address}</td>
-                  <td className="border px-4 py-2">{user.contact_number}</td>
-                  <td className="border px-4 py-2">{user.email}</td>
-                  <td className="border px-4 py-2 flex space-x-2">
-                    <button
-                      className="p-2 bg-green-600 text-white rounded hover:bg-green-700"
-                      onClick={() => handleEditUser(user.id)}
-                    >
-                      <MdEdit />
-                    </button>
-                    <button className="p-2 bg-black text-white rounded hover:bg-gray-800">
-                      <MdGridView />
-                    </button>
-                  </td>
-                </tr>
-              )
+            {users.filter(user => user).map((user) => (
+              <tr key={user.id} className="hover:bg-gray-50">
+                <td className="border px-4 py-2">{user.id}</td>
+                <td className="border px-4 py-2">{`${user.first_name} ${user.last_name}`}</td>
+                <td className="border px-4 py-2">{user.profile_type}</td>
+                <td className="border px-4 py-2">{`${user.city}, ${user.district}`}</td>
+                <td className="border px-4 py-2">{user.address}</td>
+                <td className="border px-4 py-2">{user.contact_number}</td>
+                <td className="border px-4 py-2">{user.email}</td>
+                <td className="border px-4 py-2 flex space-x-2">
+                  <button
+                    id={`edit_user_${user.id}`}
+                    className="p-2 bg-green-600 text-white rounded hover:bg-green-700"
+                    onClick={() => handleEditUser(user.id)}
+                  >
+                    <MdEdit />
+                  </button>
+                  <button className="p-2 bg-black text-white rounded hover:bg-gray-800">
+                    <MdGridView />
+                  </button>
+                </td>
+              </tr>
             ))}
           </tbody>
         </table>
