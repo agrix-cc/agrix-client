@@ -11,7 +11,7 @@ import {useTheme} from "next-themes";
 import ItemView from "./pages/itemView";
 import {useEffect} from "react";
 import Onboarding from "./pages/onboarding";
-import {AdminProtected, ProtectedRoutes} from "./components/protectedRoutes";
+import {AdminProtected, GuestUserRoutes, ProtectedRoutes} from "./components/protectedRoutes";
 import Checkout from "./pages/checkout";
 import RentTransport from "./pages/rentTransport";
 import UserProfile from "./pages/userProfile";
@@ -34,9 +34,11 @@ function App() {
             {/* Routes for pages */}
             <Routes>
                 <Route path="/" element={<Home/>}/>
-                <Route path="/signin" element={<SignIn/>}/>
-                <Route path="/signup" element={<SignUp/>}/>
-                <Route path="/onboarding" element={<Onboarding/>}/>
+                <Route element={<GuestUserRoutes/>}>
+                    <Route path="/signin" element={<SignIn/>}/>
+                    <Route path="/signup" element={<SignUp/>}/>
+                    <Route path="/onboarding" element={<Onboarding/>}/>
+                </Route>
 
                 <Route path="/market/:category?" element={<Market/>}/>
 

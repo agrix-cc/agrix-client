@@ -35,3 +35,11 @@ export const AdminProtected = () => {
 
     return isAuthenticated ? <Outlet /> : <Navigate to="/onboarding" />;
 };
+
+export const GuestUserRoutes = () => {
+    const token = localStorage.getItem('jwtToken');
+    if (token) {
+        return <Navigate to='/'/>
+    }
+    return <Outlet/>;
+};
