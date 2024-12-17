@@ -73,6 +73,7 @@ export default function AddUserForm({ onSubmit, onClose }) {
               <option value="seller">Seller</option>
               <option value="transport">Transport</option>
               <option value="storage">Storage</option>
+              <option value="admin">Admin</option>
             </select>
           </div>
           <div>

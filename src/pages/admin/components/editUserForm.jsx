@@ -12,6 +12,8 @@ export default function EditUserForm({ userId, onClose, onUpdate }) {
     district: "",
     contactNumber: "",
   });
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -62,6 +64,35 @@ export default function EditUserForm({ userId, onClose, onUpdate }) {
     onClose();
   };
 
+  const handleDelete = async () => {
+    if (formData.profileType === "admin" && userId === localStorage.getItem("userId")) {
+      setErrorMessage("You cannot delete your own account");
+      return;
+    }
+
+    setIsDeleting(true);
+    try {
+      const response = await axios.delete(`${process.env.REACT_APP_SERVER_URL}/manage-users/users/${userId}`);
+      if (response.data.status === "success") {
+        alert("Successfully deleted user");
+        onUpdate();
+      } else {
+        alert("Failed to delete user: " + response.data.message);
+      }
+    } catch (error) {
+      alert("Error deleting user: " + error.message);
+    } finally {
+      setIsDeleting(false);
+      onClose();
+    }
+  };
+
+  const confirmDelete = () => {
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      handleDelete();
+    }
+  };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md max-h-[80vh] overflow-y-auto">
@@ -104,6 +135,7 @@ export default function EditUserForm({ userId, onClose, onUpdate }) {
               <option value="seller">Seller</option>
               <option value="transport">Transport</option>
               <option value="storage">Storage</option>
+              <option value="admin">Admin</option>
             </select>
           </div>
           <div>
@@ -161,7 +193,8 @@ export default function EditUserForm({ userId, onClose, onUpdate }) {
               className="w-full mt-1 p-2 border border-gray-300 rounded"
             />
           </div>
-          <div className="flex justify-end space-x-3">
+          {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+          <div className="flex justify-between space-x-3">
             <button
               type="button"
               onClick={onClose}
@@ -174,6 +207,14 @@ export default function EditUserForm({ userId, onClose, onUpdate }) {
               className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
             >
               Save
+            </button>
+            <button
+              type="button"
+              onClick={confirmDelete}
+              className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+              disabled={isDeleting}
+            >
+              {isDeleting ? "Deleting..." : "Delete User"}
             </button>
           </div>
         </form>
