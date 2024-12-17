@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { MdEdit, MdGridView } from "react-icons/md";
 import AddUserForm from "./addUserForm";
@@ -9,23 +9,29 @@ export default function UserManagement() {
   const [showEditUserModal, setShowEditUserModal] = useState(false);
   const [users, setUsers] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const [filter, setFilter] = useState("all");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State to toggle dropdown visibility
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/manage-users/users`);
-        if (response.data.status === "success") {
-          setUsers(response.data.users);
-        } else {
-          alert("Failed to fetch users: " + response.data.message);
-        }
-      } catch (error) {
-        alert("Error fetching users: " + error.message);
-      }
-    };
-
     fetchUsers();
-  }, []);
+  }, [filter]);
+
+  const fetchUsers = async () => {
+    try {
+      const url = filter === "all"
+        ? `${process.env.REACT_APP_SERVER_URL}/manage-users/users`
+        : `${process.env.REACT_APP_SERVER_URL}/manage-users/users/filter/${filter}`;
+      const response = await axios.get(url);
+      if (response.data.status === "success") {
+        setUsers(response.data.users);
+      } else {
+        alert("Failed to fetch users: " + response.data.message);
+      }
+    } catch (error) {
+      alert("Error fetching users: " + error.message);
+    }
+  };
 
   const handleAddUser = async (userData) => {
     try {
@@ -57,27 +63,75 @@ export default function UserManagement() {
 
   const handleUpdateUser = () => {
     setShowEditUserModal(false);
-    // Fetch updated users
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/manage-users/users`);
-        if (response.data.status === "success") {
-          setUsers(response.data.users);
-        } else {
-          alert("Failed to fetch users: " + response.data.message);
-        }
-      } catch (error) {
-        alert("Error fetching users: " + error.message);
-      }
-    };
-
     fetchUsers();
   };
+
+  const handleDropdownToggle = () => setIsDropdownOpen(!isDropdownOpen);
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="p-6 h-full">
       <div className="flex justify-between items-center mb-4">
-        <p className="text-xl font-semibold text-gray-700">User Management</p>
+        <div className="flex items-center space-x-4">
+          <p className="text-xl font-semibold text-gray-700">User Management</p>
+          <div className="relative" ref={dropdownRef}>
+            {/* Sort By Button */}
+            <button
+              onClick={handleDropdownToggle}
+              className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition duration-300"
+            >
+              Sort By
+            </button>
+
+            {/* Dropdown Menu */}
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-10">
+                <button
+                  onClick={() => setFilter("all")}
+                  className={`block w-full text-left px-4 py-2 ${filter === "all" ? "bg-blue-500 text-white" : "text-gray-700"}`}
+                >
+                  Default Sort
+                </button>
+                <button
+                  onClick={() => setFilter("farmer")}
+                  className={`block w-full text-left px-4 py-2 ${filter === "farmer" ? "bg-blue-500 text-white" : "text-gray-700"}`}
+                >
+                  Filter Farmers Only
+                </button>
+                <button
+                  onClick={() => setFilter("seller")}
+                  className={`block w-full text-left px-4 py-2 ${filter === "seller" ? "bg-blue-500 text-white" : "text-gray-700"}`}
+                >
+                  Filter Sellers Only
+                </button>
+                <button
+                  onClick={() => setFilter("storage")}
+                  className={`block w-full text-left px-4 py-2 ${filter === "storage" ? "bg-blue-500 text-white" : "text-gray-700"}`}
+                >
+                  Filter Storage Only
+                </button>
+                <button
+                  onClick={() => setFilter("transport")}
+                  className={`block w-full text-left px-4 py-2 ${filter === "transport" ? "bg-blue-500 text-white" : "text-gray-700"}`}
+                >
+                  Filter Transport Only
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
         <button
           onClick={() => setShowAddUserModal(true)}
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300"
