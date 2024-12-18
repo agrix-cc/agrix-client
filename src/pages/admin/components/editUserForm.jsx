@@ -99,10 +99,13 @@ export default function EditUserForm({ userId, onClose, onUpdate }) {
         <h3 className="text-2xl font-bold mb-4 text-gray-700">Edit User</h3>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-600">First Name</label>
+            <label className="block text-sm font-medium text-gray-600" htmlFor="firstName">
+              First Name
+            </label>
             <input
               type="text"
               name="firstName"
+              id="firstName"
               value={formData.firstName}
               onChange={handleChange}
               required
@@ -110,10 +113,13 @@ export default function EditUserForm({ userId, onClose, onUpdate }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-600">Last Name</label>
+            <label className="block text-sm font-medium text-gray-600" htmlFor="lastName">
+              Last Name
+            </label>
             <input
               type="text"
               name="lastName"
+              id="lastName"
               value={formData.lastName}
               onChange={handleChange}
               required
@@ -121,9 +127,12 @@ export default function EditUserForm({ userId, onClose, onUpdate }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-600">Profile Type</label>
+            <label className="block text-sm font-medium text-gray-600" htmlFor="profileType">
+              Profile Type
+            </label>
             <select
               name="profileType"
+              id="profileType"
               value={formData.profileType}
               onChange={handleChange}
               required
@@ -139,10 +148,13 @@ export default function EditUserForm({ userId, onClose, onUpdate }) {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-600">Email Address</label>
+            <label className="block text-sm font-medium text-gray-600" htmlFor="email">
+              Email Address
+            </label>
             <input
               type="email"
               name="email"
+              id="email"
               value={formData.email}
               onChange={handleChange}
               required
@@ -150,10 +162,13 @@ export default function EditUserForm({ userId, onClose, onUpdate }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-600">Address</label>
+            <label className="block text-sm font-medium text-gray-600" htmlFor="address">
+              Address
+            </label>
             <input
               type="text"
               name="address"
+              id="address"
               value={formData.address}
               onChange={handleChange}
               required
@@ -161,10 +176,13 @@ export default function EditUserForm({ userId, onClose, onUpdate }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-600">City</label>
+            <label className="block text-sm font-medium text-gray-600" htmlFor="city">
+              City
+            </label>
             <input
               type="text"
               name="city"
+              id="city"
               value={formData.city}
               onChange={handleChange}
               required
@@ -172,10 +190,13 @@ export default function EditUserForm({ userId, onClose, onUpdate }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-600">District</label>
+            <label className="block text-sm font-medium text-gray-600" htmlFor="district">
+              District
+            </label>
             <input
               type="text"
               name="district"
+              id="district"
               value={formData.district}
               onChange={handleChange}
               required
@@ -183,10 +204,13 @@ export default function EditUserForm({ userId, onClose, onUpdate }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-600">Contact Number</label>
+            <label className="block text-sm font-medium text-gray-600" htmlFor="contactNumber">
+              Contact Number
+            </label>
             <input
               type="text"
               name="contactNumber"
+              id="contactNumber"
               value={formData.contactNumber}
               onChange={handleChange}
               required
@@ -197,6 +221,7 @@ export default function EditUserForm({ userId, onClose, onUpdate }) {
           <div className="flex justify-between space-x-3">
             <button
               type="button"
+              id="cancel_button"
               onClick={onClose}
               className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
             >
@@ -204,12 +229,14 @@ export default function EditUserForm({ userId, onClose, onUpdate }) {
             </button>
             <button
               type="submit"
+              id="save_button"
               className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
             >
               Save
             </button>
             <button
               type="button"
+              id="delete_button"
               onClick={confirmDelete}
               className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
               disabled={isDeleting}
