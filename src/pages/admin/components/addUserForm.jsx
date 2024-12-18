@@ -30,12 +30,13 @@ export default function AddUserForm({ onSubmit, onClose }) {
         <h3 className="text-2xl font-bold mb-4 text-gray-700">Add New User</h3>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-600">
+            <label className="block text-sm font-medium text-gray-600" htmlFor="firstName">
               First Name
             </label>
             <input
               type="text"
               name="firstName"
+              id="firstName"
               value={formData.firstName}
               onChange={handleChange}
               placeholder="Your first name"
@@ -44,12 +45,13 @@ export default function AddUserForm({ onSubmit, onClose }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-600">
+            <label className="block text-sm font-medium text-gray-600" htmlFor="lastName">
               Last Name
             </label>
             <input
               type="text"
               name="lastName"
+              id="lastName"
               value={formData.lastName}
               onChange={handleChange}
               placeholder="Your last name"
@@ -58,11 +60,12 @@ export default function AddUserForm({ onSubmit, onClose }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-600">
+            <label className="block text-sm font-medium text-gray-600" htmlFor="profileType">
               Profile Type
             </label>
             <select
               name="profileType"
+              id="profileType"
               value={formData.profileType}
               onChange={handleChange}
               required
@@ -77,12 +80,13 @@ export default function AddUserForm({ onSubmit, onClose }) {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-600">
+            <label className="block text-sm font-medium text-gray-600" htmlFor="email">
               Email Address
             </label>
             <input
               type="email"
               name="email"
+              id="email"
               value={formData.email}
               onChange={handleChange}
               placeholder="Enter your email address"
@@ -91,12 +95,13 @@ export default function AddUserForm({ onSubmit, onClose }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-600">
+            <label className="block text-sm font-medium text-gray-600" htmlFor="password">
               Password
             </label>
             <input
               type="password"
               name="password"
+              id="password"
               value={formData.password}
               onChange={handleChange}
               required
@@ -104,12 +109,13 @@ export default function AddUserForm({ onSubmit, onClose }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-600">
+            <label className="block text-sm font-medium text-gray-600" htmlFor="confirmPassword">
               Confirm Password
             </label>
             <input
               type="password"
               name="confirmPassword"
+              id="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
               required
@@ -119,6 +125,7 @@ export default function AddUserForm({ onSubmit, onClose }) {
           <div className="flex justify-end space-x-3">
             <button
               type="button"
+              id="cancel_button"
               onClick={onClose}
               className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
             >
@@ -126,6 +133,7 @@ export default function AddUserForm({ onSubmit, onClose }) {
             </button>
             <button
               type="submit"
+              id="add_user_button"
               className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
             >
               Add User
