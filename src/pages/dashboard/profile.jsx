@@ -10,10 +10,14 @@ import Spacer from "../../components/spacer";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {toaster} from "../../components/ui/toaster";
+import {useLocation, useNavigate} from "react-router-dom";
 
-const Profile = (props) => {
+const Profile = () => {
 
-    const {onBackClick, user} = props;
+    const location = useLocation();
+    const navigate = useNavigate();
+    const {user} = location.state;
+
     const [profilePic, setProfilePic] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [newUser, setNewUser] = useState(null);
@@ -79,7 +83,7 @@ const Profile = (props) => {
     return (newUser &&
         <div className="p-4 md:max-w-md">
             <div className="flex items-center gap-4">
-                <button onClick={onBackClick} className="md:hidden md:invisible">
+                <button onClick={() => navigate(-1)} className="md:hidden md:invisible">
                     <IoChevronBack className="text-2xl"/>
                 </button>
                 <p className="text-xl font-medium">Profile</p>

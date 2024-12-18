@@ -10,7 +10,7 @@ import {Toaster} from "../components/ui/toaster";
 import {useMediaQuery} from "@mui/material";
 import Listings from "./dashboard/listings";
 import {LuLogOut} from "react-icons/lu";
-import {useNavigate} from "react-router-dom";
+import {Outlet, useNavigate} from "react-router-dom";
 import Orders from "./dashboard/orders";
 import Purchases from "./dashboard/purchases";
 import {MdCreateNewFolder} from "react-icons/md";
@@ -52,49 +52,37 @@ const Dashboard = () => {
             <MobileNav/>
             <Toaster/>
             <div className="pt-16 md:flex md:pt-14">
-                {(!activePage || isDesktop) &&
+                {isDesktop &&
                     <div className="md:h-[calc(100vh-56px)] md:max-w-xs md:shadow-xl md:px-4 md:self-start md:sticky md:top-14">
                         <div className="p-4">
                             <ProfileOverview user={user}/>
                         </div>
                         <div>
                             <HomeButton
-                                id="profile_button"
-                                isActive={activePage === "profile"}
-                                onClick={() => setActivePage("profile")}
+                                onClick={() => navigate("profile", {state: {user: user}})}
                                 icon={<FaUser/>}
                                 label="My Profile"/>
                             <HomeButton
-                                id="listings_button"
-                                isActive={activePage === "listings"}
-                                onClick={() => setActivePage("listings")}
+                                onClick={() => navigate("listings", {state: {userType: user.user_type}})}
                                 icon={<FaNewspaper/>}
                                 label="My Listings"/>
                             <HomeButton
-                                id="orders_button"
-                                isActive={activePage === "orders"}
-                                onClick={() => setActivePage("orders")}
+                                onClick={() => navigate("orders")}
                                 icon={<FaBoxesPacking/>}
                                 label="Incoming Orders"/>
                             <HomeButton
-                                id="purchases_button"
-                                isActive={activePage === "purchases"}
-                                onClick={() => setActivePage("purchases")}
+                                onClick={() => navigate("purchases")}
                                 icon={<FaShoppingBag/>}
                                 label="My Purchases"/>
                             <HomeButton
-                                id="create_listing_button"
-                                onClick={() => navigate('/add')}
+                                onClick={() => navigate('add')}
                                 icon={<MdCreateNewFolder/>}
                                 label="Create new listing"/>
                             <HomeButton
-                                id="reports_button"
-                                isActive={activePage === "reports"}
-                                onClick={() => setActivePage("reports")}
+                                onClick={() => navigate("reports")}
                                 icon={<HiDocumentReport />}
                                 label="Reports"/>
                             <HomeButton
-                                id="logout_button"
                                 isLogOut
                                 onClick={handleLogOut}
                                 icon={<LuLogOut/>}
@@ -104,27 +92,28 @@ const Dashboard = () => {
                 }
                 <div className="md:flex-grow sm:max-w-md md:max-w-none">
                     <div className="w-full md:flex md:justify-center">
-                        {activePage && activePage === "profile" &&
-                            <Profile
-                                onBackClick={() => setActivePage(null)}
-                                user={user}/>
-                        }
-                        {activePage && activePage === "listings" &&
-                            <Listings
-                                onBackClick={() => setActivePage(null)}/>
-                        }
-                        {activePage && activePage === "orders" &&
-                            <Orders
-                                userType={user.profile_type}
-                                onBackClick={() => setActivePage(null)}/>
-                        }
-                        {activePage && activePage === "purchases" &&
-                            <Purchases
-                                onBackClick={() => setActivePage(null)}/>
-                        }
-                        {activePage && activePage === "reports" && 
-                            <Reports onBackClick={() => setActivePage(null)} />
-                        }
+                        <Outlet/>
+                        {/*{activePage && activePage === "profile" &&*/}
+                        {/*    <Profile*/}
+                        {/*        onBackClick={() => setActivePage(null)}*/}
+                        {/*        user={user}/>*/}
+                        {/*}*/}
+                        {/*{activePage && activePage === "listings" &&*/}
+                        {/*    <Listings*/}
+                        {/*        onBackClick={() => setActivePage(null)}/>*/}
+                        {/*}*/}
+                        {/*{activePage && activePage === "orders" &&*/}
+                        {/*    <Orders*/}
+                        {/*        userType={user.profile_type}*/}
+                        {/*        onBackClick={() => setActivePage(null)}/>*/}
+                        {/*}*/}
+                        {/*{activePage && activePage === "purchases" &&*/}
+                        {/*    <Purchases*/}
+                        {/*        onBackClick={() => setActivePage(null)}/>*/}
+                        {/*}*/}
+                        {/*{activePage && activePage === "reports" && */}
+                        {/*    <Reports onBackClick={() => setActivePage(null)} />*/}
+                        {/*}*/}
                     </div>
                 </div>
             </div>
