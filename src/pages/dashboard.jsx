@@ -59,35 +59,42 @@ const Dashboard = () => {
                         </div>
                         <div>
                             <HomeButton
+                                id="profile_button"
                                 isActive={activePage === "profile"}
                                 onClick={() => setActivePage("profile")}
                                 icon={<FaUser/>}
                                 label="My Profile"/>
                             <HomeButton
+                                id="listings_button"
                                 isActive={activePage === "listings"}
                                 onClick={() => setActivePage("listings")}
                                 icon={<FaNewspaper/>}
                                 label="My Listings"/>
                             <HomeButton
+                                id="orders_button"
                                 isActive={activePage === "orders"}
                                 onClick={() => setActivePage("orders")}
                                 icon={<FaBoxesPacking/>}
                                 label="Incoming Orders"/>
                             <HomeButton
+                                id="purchases_button"
                                 isActive={activePage === "purchases"}
                                 onClick={() => setActivePage("purchases")}
                                 icon={<FaShoppingBag/>}
                                 label="My Purchases"/>
                             <HomeButton
+                                id="create_listing_button"
                                 onClick={() => navigate('/add')}
                                 icon={<MdCreateNewFolder/>}
                                 label="Create new listing"/>
                             <HomeButton
+                                id="reports_button"
                                 isActive={activePage === "reports"}
                                 onClick={() => setActivePage("reports")}
                                 icon={<HiDocumentReport />}
                                 label="Reports"/>
                             <HomeButton
+                                id="logout_button"
                                 isLogOut
                                 onClick={handleLogOut}
                                 icon={<LuLogOut/>}
