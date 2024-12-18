@@ -19,6 +19,11 @@ import AdminDashboard from "./pages/admin/dashboard.";
 import UserManagements from "./pages/admin/components/users";
 import ListingManagement from "./pages/admin/components/listings";
 import AdminHome from "./pages/admin/components/home";
+import Profile from "./pages/dashboard/profile";
+import Listings from "./pages/dashboard/listings";
+import Purchases from "./pages/dashboard/purchases";
+import Reports from "./components/dashboard/reports";
+import Orders from "./pages/dashboard/orders";
 
 function App() {
 
@@ -46,7 +51,14 @@ function App() {
 
                 {/*Protected routes*/}
                 <Route element={<ProtectedRoutes/>}>
-                    <Route path="/dashboard" element={<Dashboard/>}/>
+                    <Route path="/dashboard" element={<Dashboard/>}>
+                        <Route path="profile" element={<Profile/>}/>
+                        <Route path="listings" element={<Listings/>}/>
+                        <Route path="orders" element={<Orders/>}/>
+                        <Route path="purchases" element={<Purchases/>}/>
+                        <Route path="add" element={<AddListing/>}/>
+                        <Route path="reports" element={<Reports/>}/>
+                    </Route>
                     <Route path="/add" element={<AddListing/>}/>
                     <Route path="/edit/:id" element={<AddListing/>}/>
                     <Route path="/connections" element={<Connections/>}/>

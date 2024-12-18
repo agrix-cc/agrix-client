@@ -1,5 +1,5 @@
 import {Avatar} from "./ui/avatar";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {jwtDecode} from "jwt-decode";
 
 const DesktopNav = (props) => {
@@ -11,6 +11,7 @@ const DesktopNav = (props) => {
         role = decoded.user.user_role;
     }
     const {colorTopBar, location, user} = props;
+    const navigate = useNavigate();
     return (
         <div className="w-full justify-around items-center relative hidden md:flex">
             <Link to="/"
@@ -31,14 +32,18 @@ const DesktopNav = (props) => {
                     <p className={`px-4 py-2 justify-self-center ${location === "/connections" ? 'text-white' : 'text-primary-green'} hover:text-primary-green`}>Connections</p>
                 </Link>
             </div>
-            <Link to={role === "admin" ? '/admin/home' : '/dashboard'}>
+            <button
+                onClick={
+                    role === "admin" ?
+                        () => navigate('admin/home') : () => navigate('/dashboard/profile', {state: {user: user}})
+                }>
                 {user &&
                     <Avatar name={user.first_name + " " + user.last_name} src={user.image}/>
                 }
                 {!user &&
                     <Avatar name="Guest User"/>
                 }
-            </Link>
+            </button>
         </div>
     )
 };

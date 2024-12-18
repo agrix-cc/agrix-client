@@ -1,5 +1,5 @@
 import {useEffect, useState, useMemo} from "react";
-import {Link, useLocation} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {IconContext} from "react-icons";
 
 import {GoHomeFill} from "react-icons/go";
@@ -17,6 +17,7 @@ import {jwtDecode} from "jwt-decode";
 
 const MobileNavItem = (props) => {
 
+    const navigate = useNavigate();
     // map icons with the props name
     // useMemo cache object so that useEffect doesn't rerender unnecessarily
     const iconMap = useMemo(() => ({
@@ -30,6 +31,14 @@ const MobileNavItem = (props) => {
         "Profile": <HiOutlineUser/>,
         "Profile-active": <HiUser/>
     }), []);
+
+    let decoded;
+    let role;
+    const token = localStorage.getItem('jwtToken');
+    if (token) {
+        decoded = jwtDecode(token);
+        role = decoded.user.user_role;
+    }
 
     // useState hook to hold the icon
     const [icon, setIcon] = useState(<></>);
@@ -45,22 +54,15 @@ const MobileNavItem = (props) => {
             setIcon(iconMap[`${props.name}-active`]);
         } else if (props.name === "Profile" && location.pathname === '/dashboard') {
             setIcon(iconMap[`${props.name}-active`]);
-        }
-        else if (`/${props.name.toLowerCase()}` === location.pathname && !(props.name === "add")) {
+        } else if (`/${props.name.toLowerCase()}` === location.pathname && !(props.name === "add")) {
             setIcon(iconMap[`${props.name}-active`]);
         }
 
     }, [props.name, iconMap, location.pathname]);
 
+
     // Decide which route to go based on the button name
     const destination = (name) => {
-        let decoded;
-        let role;
-        const token = localStorage.getItem('jwtToken');
-        if (token) {
-            decoded = jwtDecode(token);
-            role = decoded.user.user_role;
-        }
         if (!name) return null;
         if (name === "Home") {
             return '/';
@@ -69,14 +71,13 @@ const MobileNavItem = (props) => {
             if (role === "admin") {
                 return '/admin/home';
             }
-            return '/dashboard';
+            return '/dashboard/profile';
         }
         return `/${name.toLowerCase()}`;
     }
 
     return (
-        <Link
-            to={destination(props.name)}>
+        <div className="cursor-pointer" onClick={() => navigate(destination(props.name), {state: {user: decoded.user}})}>
             <div className="flex flex-col items-center justify-center">
                 {
                     props.name === 'add' ?
@@ -98,7 +99,7 @@ const MobileNavItem = (props) => {
                         : <></>
                 }
             </div>
-        </Link>
+        </div>
     )
 }
 
@@ -131,8 +132,11 @@ const MobileNav = () => {
 
     return (
         <div>
-            <div className={`p-4 md:py-2 z-50 fixed top-0 left-0 w-full ${colorTopBar ? "bg-white shadow-lg" : ""} duration-150 transition-all`}>
-                <Link to="/" className={`md:hidden text-2xl font-medium ${colorTopBar ? "text-primary-green" : "text-white"} duration-200 transition-all`}>Agri<span className="text-primary-green">X</span></Link>
+            <div
+                className={`p-4 md:py-2 z-50 fixed top-0 left-0 w-full ${colorTopBar ? "bg-white shadow-lg" : ""} duration-150 transition-all`}>
+                <Link to="/"
+                      className={`md:hidden text-2xl font-medium ${colorTopBar ? "text-primary-green" : "text-white"} duration-200 transition-all`}>Agri<span
+                    className="text-primary-green">X</span></Link>
                 <DesktopNav
                     user={user}
                     colorTopBar={colorTopBar}
