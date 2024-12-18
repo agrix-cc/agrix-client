@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
-import { Pie, Bar } from "react-chartjs-2";
+import {Pie, Bar} from "react-chartjs-2";
 import {
     Chart as ChartJS,
     ArcElement,
@@ -37,7 +37,7 @@ const Reports = () => {
                 }
 
                 const response = await axios.get(`${serverUri}/reports/stats`, {
-                    headers: { Authorization: `Bearer ${token}` },
+                    headers: {Authorization: `Bearer ${token}`},
                 });
 
                 const orderStats = response.data.orderStats;
@@ -222,7 +222,7 @@ const Reports = () => {
 
     const generatePersonalizedInsights = (userType, stats) => {
         const insights = [];
-    
+
         if (userType === 'farmer') {
             // Recommendation: Optimize crop yields
             const lowPerformingCrops = stats.salesByMonth.filter(sale => sale.count < 50); // Example threshold
@@ -231,14 +231,14 @@ const Reports = () => {
                     `Consider focusing on improving yields for crops like ${lowPerformingCrops.map(crop => crop.name).join(', ')}. Explore better farming techniques or seed varieties.`
                 );
             }
-    
+
             // Recommendation: Reduce wastage
             if (stats.surplusCrops && stats.surplusCrops.length) {
                 insights.push(
                     `To reduce wastage, consider storing or processing surplus crops such as ${stats.surplusCrops.map(crop => crop.name).join(', ')}.`
                 );
             }
-    
+
             // Recommendation: Leverage seasonal trends
             if (stats.seasonalTrends && stats.seasonalTrends.length) {
                 insights.push(
@@ -246,7 +246,7 @@ const Reports = () => {
                 );
             }
         }
-    
+
         if (userType === 'seller') {
             // Recommendation: Suggest alternate buyers
             const unsoldCrops = stats.unsoldInventory.filter(crop => crop.count > 0);
@@ -255,7 +255,7 @@ const Reports = () => {
                     `There are unsold items such as ${unsoldCrops.map(crop => crop.name).join(', ')}. Connect with alternate buyers in nearby regions.`
                 );
             }
-    
+
             // Recommendation: Price optimization
             if (stats.priceTrends && stats.priceTrends.length) {
                 const highDemandCrops = stats.priceTrends.filter(trend => trend.demand > trend.supply);
@@ -266,7 +266,7 @@ const Reports = () => {
                 }
             }
         }
-    
+
         if (userType === 'transport') {
             // Recommendation: Enhance logistics
             if (stats.delayedDeliveries && stats.delayedDeliveries.length) {
@@ -274,7 +274,7 @@ const Reports = () => {
                     `Optimize delivery routes to reduce delays. Consider alternate routes to destinations like ${stats.delayedDeliveries.map(dest => dest.name).join(', ')}.`
                 );
             }
-    
+
             // Recommendation: Common destinations
             if (stats.mostCommonDestinations && stats.mostCommonDestinations.length) {
                 insights.push(
@@ -282,7 +282,7 @@ const Reports = () => {
                 );
             }
         }
-    
+
         if (userType === 'storage') {
             // Recommendation: Optimize storage usage
             if (stats.mostUsedFeatures && stats.mostUsedFeatures.length) {
@@ -291,7 +291,7 @@ const Reports = () => {
                     `Enhance the usage of ${topFeature} to cater to growing demand.`
                 );
             }
-    
+
             // Recommendation: Manage surplus
             if (stats.surplusCrops && stats.surplusCrops.length) {
                 insights.push(
@@ -299,17 +299,17 @@ const Reports = () => {
                 );
             }
         }
-    
+
         // Default case: Generic recommendation
         if (insights.length === 0) {
             insights.push('No personalized insights available at this time. Check back later for updated recommendations.');
         }
-    
+
         return {
             recommendations: insights,
         };
     };
-    
+
 
     if (loading)
         return (
@@ -329,10 +329,10 @@ const Reports = () => {
                         <h2 className="text-2xl font-semibold mb-4 text-gray-700 text-center">
                             Order Stats
                         </h2>
-                        <div style={{ width: "350px", height: "350px" }}>
+                        <div style={{width: "350px", height: "350px"}}>
                             <Pie
                                 data={orderChartData}
-                                options={{ responsive: true, maintainAspectRatio: false }}
+                                options={{responsive: true, maintainAspectRatio: false}}
                             />
                         </div>
                         <p className="text-gray-600 text-lg mt-4 text-center">
@@ -353,10 +353,10 @@ const Reports = () => {
                         <h2 className="text-2xl font-semibold mb-4 text-gray-700 text-center">
                             Listing Stats
                         </h2>
-                        <div style={{ width: "350px", height: "350px" }}>
+                        <div style={{width: "350px", height: "350px"}}>
                             <Pie
                                 data={listingChartData}
-                                options={{ responsive: true, maintainAspectRatio: false }}
+                                options={{responsive: true, maintainAspectRatio: false}}
                             />
                         </div>
                         <ul className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-center mt-4">
@@ -376,20 +376,20 @@ const Reports = () => {
                     </div>
                 )}
             </div>
-            <hr className="my-8" />
+            <hr className="my-8"/>
             <h2 className="text-2xl font-semibold mb-4 text-gray-700 text-center">
                 Sales by Month
             </h2>
             {salesByMonthData && (
                 <div className="flex justify-center">
-                    <div style={{ width: "100%", maxWidth: "1000px", height: "500px" }}>
+                    <div style={{width: "100%", maxWidth: "1000px", height: "500px"}}>
                         <Bar
                             data={salesByMonthData}
                             options={{
                                 responsive: true,
                                 maintainAspectRatio: false,
                                 scales: {
-                                    y: { beginAtZero: true, max: 100, stepSize: 10 },
+                                    y: {beginAtZero: true, stepSize: 10},
                                 },
                             }}
                         />
@@ -403,10 +403,10 @@ const Reports = () => {
                     </h2>
                     <div className="flex">
                         <div className="w-1/2">
-                            <div style={{ width: "350px", height: "350px", margin: "0 auto" }}>
+                            <div style={{width: "350px", height: "350px", margin: "0 auto"}}>
                                 <Pie
                                     data={mostSoldCropsChartData}
-                                    options={{ responsive: true, maintainAspectRatio: false }}
+                                    options={{responsive: true, maintainAspectRatio: false}}
                                 />
                             </div>
                         </div>
