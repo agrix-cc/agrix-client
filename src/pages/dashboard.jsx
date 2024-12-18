@@ -5,16 +5,11 @@ import ProfileOverview from "../components/profile/profileOverview";
 import HomeButton from "../components/profile/homeButton";
 import {FaBoxesPacking, FaNewspaper, FaUser} from "react-icons/fa6";
 import {FaShoppingBag} from "react-icons/fa";
-import Profile from "./dashboard/profile";
 import {Toaster} from "../components/ui/toaster";
 import {useMediaQuery} from "@mui/material";
-import Listings from "./dashboard/listings";
 import {LuLogOut} from "react-icons/lu";
 import {Outlet, useNavigate} from "react-router-dom";
-import Orders from "./dashboard/orders";
-import Purchases from "./dashboard/purchases";
 import {MdCreateNewFolder} from "react-icons/md";
-import Reports from "../components/dashboard/reports";
 import { HiDocumentReport } from "react-icons/hi";
 
 
@@ -23,8 +18,6 @@ const Dashboard = () => {
     const navigate = useNavigate();
 
     const isDesktop = useMediaQuery('(min-width: 768px)');
-
-    const [activePage, setActivePage] = useState(null);
 
     const [user, setUser] = useState(null);
 
@@ -40,12 +33,6 @@ const Dashboard = () => {
             setUser(decoded.user);
         }
     }, []);
-
-    useEffect(() => {
-        if (isDesktop) {
-            setActivePage("profile");
-        }
-    }, [isDesktop])
 
     return (user &&
         <div>
@@ -93,27 +80,6 @@ const Dashboard = () => {
                 <div className="md:flex-grow sm:max-w-md md:max-w-none">
                     <div className="w-full md:flex md:justify-center">
                         <Outlet/>
-                        {/*{activePage && activePage === "profile" &&*/}
-                        {/*    <Profile*/}
-                        {/*        onBackClick={() => setActivePage(null)}*/}
-                        {/*        user={user}/>*/}
-                        {/*}*/}
-                        {/*{activePage && activePage === "listings" &&*/}
-                        {/*    <Listings*/}
-                        {/*        onBackClick={() => setActivePage(null)}/>*/}
-                        {/*}*/}
-                        {/*{activePage && activePage === "orders" &&*/}
-                        {/*    <Orders*/}
-                        {/*        userType={user.profile_type}*/}
-                        {/*        onBackClick={() => setActivePage(null)}/>*/}
-                        {/*}*/}
-                        {/*{activePage && activePage === "purchases" &&*/}
-                        {/*    <Purchases*/}
-                        {/*        onBackClick={() => setActivePage(null)}/>*/}
-                        {/*}*/}
-                        {/*{activePage && activePage === "reports" && */}
-                        {/*    <Reports onBackClick={() => setActivePage(null)} />*/}
-                        {/*}*/}
                     </div>
                 </div>
             </div>
