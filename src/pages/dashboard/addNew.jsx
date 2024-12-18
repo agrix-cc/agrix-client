@@ -8,16 +8,19 @@ import CheckBox from "../../components/dashboard/addListing/components/checkBox"
 import RangeInput from "../../components/dashboard/addListing/components/rangeInput";
 import listingTypes from "../../assets/listingTypes";
 import DateInput from "../../components/dashboard/addListing/components/dateInput";
-import {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {jwtDecode} from "jwt-decode";
 import {citiesByDistrict, districts} from "../../assets/citiesByDistrict";
 import axios from "axios";
 import {Toaster, toaster} from "../../components/ui/toaster";
 import {useNavigate, useParams} from "react-router-dom";
+import {APIProvider, useMapsLibrary} from "@vis.gl/react-google-maps";
 
 const AddListing = () => {
 
     const {id} = useParams();
+
+    const [location, setLocation] = useState(null);
 
     const navigate = useNavigate();
 
@@ -96,7 +99,13 @@ const AddListing = () => {
         // Create new formData object include all the information
         const formData = new FormData();
         // Append main listing information to the formDate object
-        formData.append('listingInfo', JSON.stringify({...listingInfo, listing_type: listingType}));
+        formData.append('listingInfo', JSON.stringify({
+            ...listingInfo,
+            listing_type: listingType,
+            address: location.name,
+            lat: location.lat,
+            lng: location.lng
+        }));
         // Append other listing information according to the listing type
         switch (listingType) {
             case "storage":
@@ -127,7 +136,6 @@ const AddListing = () => {
             }
         })
             .then((res) => {
-                console.log(res);
                 setIsSubmitting(false);
                 toaster.create({
                     title: res.data.message,
@@ -380,8 +388,12 @@ const AddListing = () => {
         }
     }, [isSubmitting]);
 
+    useEffect(() => {
+        console.log(location);
+    }, [location]);
+
     return (listingTypes &&
-        <div className="mb-20 pb-8">
+        <div className="mb-20 pb-8 add-listing">
             <MobileNav/>
             <Toaster/>
             <p className="mt-16 p-4 font-medium text-2xl">
@@ -394,12 +406,9 @@ const AddListing = () => {
                     <div className="mb-2 pb-4 border-b border-gray-400 mx-4">
                         <p className="text-lg font-medium text-gray-500 text-center py-2">Listing Information</p>
                         <div className="grid gap-4">
-
                             <UploadImages files={files} setFiles={setFiles}/>
-
                             <p>Listing type: <span className="font-medium text-gray-500 capitalize">{listingType}</span>
                             </p>
-
                             <TextInput
                                 id="title"
                                 label="Title"
@@ -412,7 +421,6 @@ const AddListing = () => {
                                 }}
                                 required
                             />
-
                             <TextArea
                                 id="description"
                                 label="Description"
@@ -425,7 +433,6 @@ const AddListing = () => {
                                 }}
                                 required
                             />
-
                             <div>
                                 <p className="text-gray-500 mb-4">Location</p>
                                 <div className="grid gap-2">
@@ -460,6 +467,10 @@ const AddListing = () => {
                                             error={errors.city}
                                         /> : <></>
                                     }
+                                    <p>Address</p>
+                                    <APIProvider apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
+                                        <PlaceAutocomplete onPlaceSelect={setLocation}/>
+                                    </APIProvider>
                                 </div>
                             </div>
 
@@ -518,8 +529,8 @@ const AddListing = () => {
                                                 minLabel={listingInput.minLabel}
                                                 maxLabel={listingInput.maxLabel}
                                                 isChecked={additionalInfo && additionalInfo[listingInput.name]}
-                                                min_val={additionalInfo && additionalInfo[listingInput.name+"_min"]}
-                                                max_val={additionalInfo && additionalInfo[listingInput.name+"_max"]}
+                                                min_val={additionalInfo && additionalInfo[listingInput.name + "_min"]}
+                                                max_val={additionalInfo && additionalInfo[listingInput.name + "_max"]}
                                                 onUpperChange={(e) => {
                                                     handleInputChange(`${listingInput.name}_max`, parseFloat(e));
                                                     setErrors({...errors, temperature_control: ""});
@@ -578,6 +589,38 @@ const AddListing = () => {
             </div>
         </div>
     )
+};
+
+export const PlaceAutocomplete = (props) => {
+
+    const {onPlaceSelect} = props;
+
+    const [placeAutocomplete, setPlaceAutocomplete] = useState(null);
+    const inputRef = useRef(null);
+    const places = useMapsLibrary("places");
+
+    useEffect(() => {
+        if (!places || !inputRef.current) return;
+        const options = {
+            fields: ["geometry", "name", "formatted_address"],
+            componentRestrictions: {country: "lk"},
+        };
+        setPlaceAutocomplete(new places.Autocomplete(inputRef.current, options));
+    }, [places]);
+
+    useEffect(() => {
+        if (!placeAutocomplete) return;
+        placeAutocomplete.addListener("place_changed", () => {
+            onPlaceSelect({
+                lat: placeAutocomplete.getPlace().geometry.location.lat(),
+                lng: placeAutocomplete.getPlace().geometry.location.lng(),
+                name: placeAutocomplete.getPlace().name,
+            });
+        });
+    }, [onPlaceSelect, placeAutocomplete]);
+    return (
+        <input ref={inputRef} className="w-full px-4 py-2 rounded outline-none border border-gray-400" required/>
+    );
 };
 
 export default AddListing;

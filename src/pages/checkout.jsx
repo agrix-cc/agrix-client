@@ -7,6 +7,7 @@ import {jwtDecode} from "jwt-decode";
 import {Toaster, toaster} from "../components/ui/toaster";
 import TransportOrder from "../components/checkout/transportOrder";
 import StorageOrder from "../components/checkout/storageOrder";
+import {APIProvider} from "@vis.gl/react-google-maps";
 
 const Checkout = () => {
 
@@ -65,6 +66,7 @@ const Checkout = () => {
 
     useEffect(() => {
         if (!user || !listing) return;
+        console.log(listing);
         if (listing.CropListing) {
             const deliveryOption = listing.CropListing.delivery_options === "both" ? 'deliver' : listing.CropListing.delivery_options
             // This is where we process data to send to backend
@@ -104,13 +106,15 @@ const Checkout = () => {
         <div>
             <Toaster/>
             <MobileNav/>
-            <div className="h-dvh w-full">
+            <div className="h-dvh w-full mt-12">
                 <div className="flex justify-center items-center p-4 w-full h-full">
                     <div className="w-full sm:max-w-sm md:max-w-lg">
                         {isProcessing ?
-                            <>
+                            <div className="mb-8">
                                 {listing.CropListing &&
-                                    <CropOrder listing={listing} data={data} setData={setData}/>
+                                    <APIProvider apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
+                                        <CropOrder listing={listing} data={data} setData={setData}/>
+                                    </APIProvider>
                                 }
                                 {listing.TransportListing &&
                                     <TransportOrder listing={listing} data={data} setData={setData}/>
@@ -125,7 +129,7 @@ const Checkout = () => {
                                     className="px-4 py-2 rounded bg-primary-green text-white font-medium mt-4 w-full disabled:opacity-25 shadow-xl active:shadow-md active:translate-y-0.5 transition-all duration-300">
                                     Proceed to checkout
                                 </button>
-                            </> :
+                            </div> :
                             <>
                                 <h1 className="text-xl mb-8">Payment options</h1>
                                 <Payment order={data} user={user} listing={listing}/>
