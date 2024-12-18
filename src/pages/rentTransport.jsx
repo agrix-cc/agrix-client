@@ -149,6 +149,7 @@ const PlaceAutocomplete = (props) => {
         if (!places || !inputRef.current) return;
         const options = {
             fields: ["geometry", "name", "formatted_address"],
+            componentRestrictions: { country: "lk" },
         };
         setPlaceAutocomplete(new places.Autocomplete(inputRef.current, options));
     }, [places]);

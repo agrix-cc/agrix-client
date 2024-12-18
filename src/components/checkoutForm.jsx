@@ -49,7 +49,38 @@ const CheckoutForm = (props) => {
         let orderType = null;
         let processedOrder = null;
 
-        if (listing.CropListing) {
+        if (order.deliveryTransport) {
+            console.log("From delivery");
+            console.log(listing);
+            console.log(order);
+            orderType = "delivery";
+            processedOrder = {
+                stripeId: id,
+                order: {
+                    crop: {
+                        cropId: listing.CropListing.id,
+                        qty: listing.qty,
+                        deliveryMethod: order.deliveryOption,
+                        address: order.address,
+                        amount: order.subTotal,
+                    },
+                    transport: {
+                        booked_date: new Date(),
+                        origin_lng: listing.lng,
+                        origin_lat: listing.lat,
+                        destination_lng: order.location.lng,
+                        destination_lat: order.location.lat,
+                        origin_address: listing.address,
+                        destination_address: order.location.name,
+                        avg_distance: order.distance,
+                        transportId: order.deliveryTransport.id,
+                        amount: order.deliveryFee,
+                    },
+                    total: order.subTotal + order.deliveryFee,
+
+                }
+            };
+        } else if (listing.CropListing) {
             orderType = "crop";
             processedOrder = {
                 stripeId: id,
