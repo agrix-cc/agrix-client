@@ -3,13 +3,14 @@ import {Field} from "../../../ui/field";
 
 const NumberInput = (props) => {
 
-    const {error, label, value, onChange, min, max, hidden} = props;
+    const {error, label, value, onChange, min, max, hidden, id} = props;
 
     return (!hidden &&
         <div>
             <p className="mb-2">{label}</p>
             <Field invalid={error} errorText={error}>
                 <NumberInputRoot
+                    id={id}
                     defaultValue="0"
                     width="200px"
                     size="lg"

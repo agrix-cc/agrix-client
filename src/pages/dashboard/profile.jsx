@@ -28,7 +28,7 @@ const Profile = (props) => {
             toaster.create({
                 title: "Please enter a valid 10 digit mobile number",
                 type: "error",
-                duration: 1000
+                duration: 30000
             })
             setIsProcessing(false);
             return;
@@ -50,14 +50,14 @@ const Profile = (props) => {
                 toaster.create({
                     title: "Profile updated successfully!",
                     type: "success",
-                    duration: 1000
+                    duration: 30000
                 })
             })
             .catch(err => {
                 toaster.create({
                     title: err.response ? err.response.data.message : err.message,
                     type: "error",
-                    duration: 1000
+                    duration: 30000
                 })
             })
         setIsProcessing(false);
@@ -100,6 +100,7 @@ const Profile = (props) => {
             <div className="my-4">
                 <div className="flex gap-4 my-4">
                     <TextInput
+                        id="first-name"
                         error={false}
                         required
                         value={newUser.first_name || ""}
@@ -107,6 +108,7 @@ const Profile = (props) => {
                         label="First name"
                         placeholder="Your first name"/>
                     <TextInput
+                        id="last-name"
                         error={false}
                         required
                         value={newUser.last_name || ""}
@@ -116,6 +118,7 @@ const Profile = (props) => {
                 </div>
                 <div className="my-4">
                     <TextInput
+                        id="email"
                         disabled={true}
                         error={false}
                         value={newUser.email || ""}
@@ -124,6 +127,7 @@ const Profile = (props) => {
                 </div>
                 <div className="my-4">
                     <TextArea
+                        id="bio"
                         error={false}
                         value={newUser.bio || ""}
                         onChange={value => setNewUser({...newUser, bio: value})}
@@ -135,6 +139,7 @@ const Profile = (props) => {
                     <Group attached className="w-full">
                         <InputAddon>+94</InputAddon>
                         <TextInput
+                            id="contact-number"
                             error={false}
                             value={newUser.contact_number || ""}
                             onChange={value => setNewUser({...newUser, contact_number: value})}
@@ -143,6 +148,7 @@ const Profile = (props) => {
                 </div>
                 <div className="my-4">
                     <TextInput
+                        id="address"
                         error={false}
                         value={newUser.address || ""}
                         onChange={value => setNewUser({...newUser, address: value})}
@@ -151,6 +157,7 @@ const Profile = (props) => {
                 </div>
                 <div className="grid gap-2">
                     <SelectInput
+                        id="profile-district"
                         items={districts.map(district => ({label: district, value: district}))}
                         value={newUser.district}
                         onChange={value => setNewUser({...newUser, district: value})}
@@ -161,6 +168,7 @@ const Profile = (props) => {
                     />
                     {newUser.district &&
                         <SelectInput
+                            id="profile-city"
                             value={newUser.city}
                             onChange={value => setNewUser({...newUser, city: value})}
                             items={citiesByDistrict[newUser.district].cities.map(city => ({

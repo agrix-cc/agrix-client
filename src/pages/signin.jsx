@@ -1,10 +1,11 @@
-import {Link, useNavigate,  } from "react-router-dom";
+import {Link, useNavigate,} from "react-router-dom";
 import WelcomeSlider from "../components/onboarding/welcomeSlider";
 import Button from "../components/onboarding/button";
 import BackToHome from "../components/onboarding/backtohome";
 import InputField from "../components/onboarding/inputField";
 import {useState} from "react";
 import axios from "axios";
+import {jwtDecode} from "jwt-decode";
 
 const SignIn = () => {
 
@@ -27,8 +28,13 @@ const SignIn = () => {
             .then(response => {
                 const token = response.data.token;
                 localStorage.setItem('jwtToken', token);
+                const decoded = jwtDecode(token);
                 setError('');
-                navigate('/');
+                if (decoded.user.user_role === "admin") {
+                    navigate('/admin/home');
+                } else {
+                    navigate('/');
+                }
             })
             .catch(error => {
                 if (error.response) {

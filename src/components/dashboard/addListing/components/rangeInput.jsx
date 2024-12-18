@@ -15,6 +15,7 @@ const RangeInput = (props) => {
         isChecked,
         min_val,
         max_val,
+        id,
         onUpperChange = (e) => {
         },
         onLowerChange = (e) => {
@@ -39,6 +40,7 @@ const RangeInput = (props) => {
         <div>
             <Field invalid={error} errorText={error}>
                 <Checkbox
+                    id={id}
                     key={option.name}
                     className="chakraCheckBox"
                     colorPalette="green"
@@ -57,6 +59,7 @@ const RangeInput = (props) => {
                         <div>
                             <p className="text-sm">{minLabel}</p>
                             <NumberInputRoot
+                                id={id+"_min"}
                                 min={minLower}
                                 max={maxLower}
                                 className="border border-gray-400 rounded px-2"
@@ -75,6 +78,7 @@ const RangeInput = (props) => {
                         <div>
                             <p className="text-sm">{maxLabel}</p>
                             <NumberInputRoot
+                                id={id+"_max"}
                                 max={maxUpper}
                                 min={minUpper}
                                 className="border border-gray-400 rounded px-2 outline-none"

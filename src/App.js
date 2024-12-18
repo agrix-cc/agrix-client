@@ -11,9 +11,14 @@ import {useTheme} from "next-themes";
 import ItemView from "./pages/itemView";
 import {useEffect} from "react";
 import Onboarding from "./pages/onboarding";
-import ProtectedRoutes from "./components/protectedRoutes";
+import {AdminProtected, GuestUserRoutes, ProtectedRoutes} from "./components/protectedRoutes";
 import Checkout from "./pages/checkout";
 import RentTransport from "./pages/rentTransport";
+import UserProfile from "./pages/userProfile";
+import AdminDashboard from "./pages/admin/dashboard.";
+import UserManagements from "./pages/admin/components/users";
+import ListingManagement from "./pages/admin/components/listings";
+import AdminHome from "./pages/admin/components/home";
 
 function App() {
 
@@ -29,9 +34,11 @@ function App() {
             {/* Routes for pages */}
             <Routes>
                 <Route path="/" element={<Home/>}/>
-                <Route path="/signin" element={<SignIn/>}/>
-                <Route path="/signup" element={<SignUp/>}/>
-                <Route path="/onboarding" element={<Onboarding/>}/>
+                <Route element={<GuestUserRoutes/>}>
+                    <Route path="/signin" element={<SignIn/>}/>
+                    <Route path="/signup" element={<SignUp/>}/>
+                    <Route path="/onboarding" element={<Onboarding/>}/>
+                </Route>
 
                 <Route path="/market/:category?" element={<Market/>}/>
 
@@ -45,6 +52,15 @@ function App() {
                     <Route path="/connections" element={<Connections/>}/>
                     <Route path="/checkout" element={<Checkout/>}/>
                     <Route path="/rent-transport" element={<RentTransport/>}/>
+                    <Route path="/profile/:userId" element={<UserProfile/>}/>
+                </Route>
+
+                <Route element={<AdminProtected/>}>
+                    <Route path="/admin" element={<AdminDashboard/>}>
+                        <Route path="users" element={<UserManagements/>}/>
+                        <Route path="listings" element={<ListingManagement/>}/>
+                        <Route path="home" element={<AdminHome/>}/>
+                    </Route>
                 </Route>
 
                 {/* Default route for 404 page */}
