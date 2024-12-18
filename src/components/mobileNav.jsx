@@ -54,11 +54,21 @@ const MobileNavItem = (props) => {
 
     // Decide which route to go based on the button name
     const destination = (name) => {
+        let decoded;
+        let role;
+        const token = localStorage.getItem('jwtToken');
+        if (token) {
+            decoded = jwtDecode(token);
+            role = decoded.user.user_role;
+        }
         if (!name) return null;
         if (name === "Home") {
             return '/';
         }
         if (name === "Profile") {
+            if (role === "admin") {
+                return '/admin/home';
+            }
             return '/dashboard';
         }
         return `/${name.toLowerCase()}`;

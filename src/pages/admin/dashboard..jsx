@@ -5,7 +5,8 @@ export default function AdminDashboard() {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        navigate("/");
+        localStorage.removeItem("jwtToken");
+        navigate("/signin");
     };
 
     return (

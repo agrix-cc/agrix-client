@@ -47,9 +47,9 @@ const ListingRow = (props) => {
             <p className="md:grid md:place-content-center flex justify-between">
                 <span className="md:hidden">ID: </span> {listing.id}</p>
             <p className="md:grid md:place-content-center flex justify-between">
-                <span className="md:hidden">Title: </span> {listing.title}</p>
+                <span className="md:hidden">Title: </span> {listing.title.length > 10 ? listing.title.substring(0, 10)+"..." : listing.title}</p>
             <p className="md:grid md:place-content-center flex justify-between">
-                <span className="md:hidden">Description: </span> {listing.description}</p>
+                <span className="md:hidden">Description: </span> {listing.description.length > 10 ? listing.description.substring(0, 10)+"..." : listing.description}</p>
             <p className="md:grid md:place-content-center flex justify-between">
                 <span className="md:hidden">Created at: </span> {new Date(listing.createdAt).toLocaleDateString()}</p>
             <div className="flex justify-end pt-4 md:pt-0 md:grid md:place-content-center"><ActionButtons id={listing.id}/></div>
