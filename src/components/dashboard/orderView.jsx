@@ -40,7 +40,6 @@ const OrderView = (props) => {
                     type: "error",
                 })
             })
-        window.location.reload();
     }, [status, order]);
 
     return (order &&
