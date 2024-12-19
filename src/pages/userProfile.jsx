@@ -10,6 +10,7 @@ const UserProfile = () => {
     const [userData, setUserData] = useState(null);
     const [listings, setListings] = useState([]);
     const [connectionStatus, setConnectionStatus] = useState(null); // null, "pending", "connected"
+    const [openedRemoveBtn, setOpenedRemoveBtn] = useState(false);
 
     // Fetch user profile and listings
     useEffect(() => {
@@ -73,7 +74,7 @@ const UserProfile = () => {
                         {/* User Info */}
                         <h1 className="text-2xl font-bold">{`${userData.first_name} ${userData.last_name}`}</h1>
                         <p className="text-sm text-gray-600">{userData.profile_type}</p>
-                        <p className="text-sm text-gray-500">{`${userData.city}, ${userData.district}`}</p>
+                        <p className="text-sm text-gray-500">{`${userData.city || ""} ${userData.district || ""}`}</p>
                         <p className="text-gray-700 mt-2">{userData.bio}</p>
                         <div className="flex items-center space-x-4 mt-4">
                             {/* Message Button */}
@@ -83,14 +84,15 @@ const UserProfile = () => {
                             >
                                 Message
                             </button>
-                            {connectionStatus === "connected" ? (
+                            {connectionStatus === "accepted" ? (
                                 <div className="relative">
                                     <button
+                                        onClick={() => setOpenedRemoveBtn(!openedRemoveBtn)}
                                         className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-all"
                                     >
                                         Connected
                                     </button>
-                                    <div className="absolute mt-2 right-0 bg-white border rounded shadow-lg">
+                                    <div className={`${openedRemoveBtn ? '' : 'invisible'} absolute mt-2 right-0 bg-white border rounded shadow-lg"`}>
                                         <button
                                             onClick={handleRemoveConnection}
                                             className="block px-4 py-2 text-red-600 hover:bg-gray-100 transition-all w-full text-left"
@@ -102,7 +104,6 @@ const UserProfile = () => {
                             ) : connectionStatus === "pending" ? (
                                 <button
                                     className="px-4 py-2 bg-black text-white rounded transition-all"
-                                    onClick={handleRemoveConnection}
                                 >
                                     Pending 
                                 </button>
