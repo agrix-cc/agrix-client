@@ -72,13 +72,14 @@ const AddListing = () => {
 
     // This function is to handle the form submit
     const handleSubmit = async (e) => {
+        setIsSubmitting(true);
         e.preventDefault();
         // Check whether all the inputs are validated
         if (!validateForm()) {
+            setIsSubmitting(false);
             return;
         }
 
-        setIsSubmitting(false);
 
         // This is a helper function to append data to the formData according to the listing type
         const appendInfo = (listingType, formData) => {
@@ -136,13 +137,13 @@ const AddListing = () => {
             }
         })
             .then((res) => {
-                setIsSubmitting(false);
                 toaster.create({
                     title: res.data.message,
                     type: "success",
                     duration: 1000,
                     onStatusChange({status}) {
                         if (status === "unmounted") {
+                            setIsSubmitting(false);
                             navigate('/');
                         }
                     }
@@ -387,10 +388,6 @@ const AddListing = () => {
             })
         }
     }, [isSubmitting]);
-
-    useEffect(() => {
-        console.log(location);
-    }, [location]);
 
     return (listingTypes &&
         <div className="mb-20 pb-8 add-listing">
