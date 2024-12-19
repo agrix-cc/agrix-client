@@ -252,6 +252,10 @@ const AddListing = () => {
             }
         }
 
+        if (!location) {
+            isValid = false;
+        }
+
         setErrors(errorState);
         if (!isValid) {
             toaster.create({
