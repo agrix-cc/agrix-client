@@ -3,6 +3,9 @@ import Home from "./pages/home";
 import PageNotFound from "./pages/404";
 import SignIn from "./pages/signin";
 import SignUp from "./pages/signup";
+import ForgotPas from "./pages/forgotpassword"
+import VerifyCode from "./pages/verifycode"
+import ResetPas from "./pages/passwordreset"
 import Market from "./pages/market";
 import Connections from "./pages/connections";
 import Dashboard from "./pages/dashboard";
@@ -42,6 +45,9 @@ function App() {
                 <Route element={<GuestUserRoutes/>}>
                     <Route path="/signin" element={<SignIn/>}/>
                     <Route path="/signup" element={<SignUp/>}/>
+                    <Route path="/forgotpassword" element={<ForgotPas/>}/>
+                    <Route path="/verifycode" element={<VerifyCode/>}/>
+                    <Route path="/passwordreset" element={<ResetPas/>}/>
                     <Route path="/onboarding" element={<Onboarding/>}/>
                 </Route>
 
