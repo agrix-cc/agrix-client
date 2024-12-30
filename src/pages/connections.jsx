@@ -100,9 +100,9 @@ const Connections = () => {
     return (
         <div>
             <MobileNav />
-            <div className="h-dvh flex flex-col items-center pt-16">
+            <div className="flex h-dvh flex-col items-center pt-16">
                 {/* Tabs Section */}
-                <div className="flex border-b w-full justify-center sticky top-0 bg-white z-10">
+                <div className="sticky top-0 z-10 flex w-full justify-center border-b bg-white">
                     <button
                         id="get_connected_btn"
                         onClick={() => setActiveTab("getConnected")}
@@ -129,8 +129,8 @@ const Connections = () => {
                 {/* Tab Content */}
                 {activeTab === "getConnected" && (
                     <div className="w-full max-w-screen-lg">
-                        <h1 className="text-lg font-bold text-gray-900 mb-4">Get Connected</h1>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <h1 className="mb-4 text-lg font-bold text-gray-900">Get Connected</h1>
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
                             {users.map((user) => (
                                 <UserCard btnId={user.id} key={user.id} user={user} onConnect={handleConnect} />
                             ))}
@@ -142,8 +142,8 @@ const Connections = () => {
                     <div className="w-full max-w-screen-lg">
                         {connections.length > 0 ? (
                             <>
-                                <h1 className="text-lg font-bold text-gray-900 mb-4">My Connections</h1>
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <h1 className="mb-4 text-lg font-bold text-gray-900">My Connections</h1>
+                                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
                                     {connections.map((conn) => (
                                         <UserCard
                                             btnId={conn.id}
@@ -155,11 +155,11 @@ const Connections = () => {
                                 </div>
                             </>
                         ) : (
-                            <div className="flex flex-col items-center justify-center mt-8">
-                                <FaUsers className="text-6xl text-gray-500 mb-4" />
-                                <p className="text-gray-500 text-lg mb-4">You haven't made any connections. Let's Connect.</p>
+                            <div className="mt-8 flex flex-col items-center justify-center">
+                                <FaUsers className="mb-4 text-6xl text-gray-500" />
+                                <p className="mb-4 text-lg text-gray-500">You haven't made any connections. Let's Connect.</p>
                                 <button
-                                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-all"
+                                    className="rounded bg-green-500 px-4 py-2 text-white transition-all hover:bg-green-600"
                                     onClick={() => setActiveTab("getConnected")}
                                 >
                                     Connect
@@ -170,7 +170,7 @@ const Connections = () => {
                 )}
 
                 {activeTab === "requests" && (
-                    <div className="w-full max-w-md md:max-w-[80%] mx-auto">
+                    <div className="mx-auto w-full max-w-md md:max-w-[80%]">
                         <RequestsSection
                             title="Pending Requests"
                             requests={receivedRequests}

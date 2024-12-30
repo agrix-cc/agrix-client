@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {jwtDecode} from "jwt-decode";
 import ProfileOverview from "../components/profile/profileOverview";
 import HomeButton from "../components/profile/homeButton";
-import {FaBoxesPacking, FaNewspaper, FaUser} from "react-icons/fa6";
+import {FaBoxesPacking, FaMessage, FaNewspaper, FaUser} from "react-icons/fa6";
 import {FaShoppingBag} from "react-icons/fa";
 import {Toaster} from "../components/ui/toaster";
 import {useMediaQuery} from "@mui/material";
@@ -11,6 +11,7 @@ import {LuLogOut} from "react-icons/lu";
 import {Outlet, useNavigate} from "react-router-dom";
 import {MdCreateNewFolder} from "react-icons/md";
 import { HiDocumentReport } from "react-icons/hi";
+
 
 
 const Dashboard = () => {
@@ -40,7 +41,7 @@ const Dashboard = () => {
             <Toaster/>
             <div className="pt-16 md:flex md:pt-14">
                 {isDesktop &&
-                    <div className="md:h-[calc(100vh-56px)] md:max-w-xs md:shadow-xl md:px-4 md:self-start md:sticky md:top-14">
+                    <div className="md:sticky md:top-14 md:h-[calc(100vh-56px)] md:max-w-xs md:self-start md:px-4 md:shadow-xl">
                         <div className="p-4">
                             <ProfileOverview user={user}/>
                         </div>
@@ -62,6 +63,10 @@ const Dashboard = () => {
                                 icon={<FaShoppingBag/>}
                                 label="My Purchases"/>
                             <HomeButton
+                                onClick={() => navigate("messages")}
+                                icon={<FaMessage />}
+                                label="Messages"/>
+                            <HomeButton
                                 onClick={() => navigate('add')}
                                 icon={<MdCreateNewFolder/>}
                                 label="Create new listing"/>
@@ -77,7 +82,7 @@ const Dashboard = () => {
                         </div>
                     </div>
                 }
-                <div className="md:flex-grow sm:max-w-md md:max-w-none">
+                <div className="sm:max-w-md md:max-w-none md:flex-grow">
                     <div className="w-full md:flex md:justify-center">
                         <Outlet/>
                     </div>
