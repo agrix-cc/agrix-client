@@ -150,6 +150,7 @@ const ItemView = () => {
                     label="Rent Transport"
                     location="/rent-transport"/>
             }
+            {/*TODO ADD A FLOATING BUTTON TO SEND OFFERS OR DONATE*/}
             {(!user || user.id === data.listing.UserId) &&
                 <div className="fixed bottom-16 md:bottom-0 left-0 w-full md:max-w-md md:left-1/2 md:-translate-x-1/2">
                     <div className="bg-lime-green rounded-xl shadow-lg flex justify-center items-center p-4 m-4">
