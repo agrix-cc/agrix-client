@@ -88,7 +88,7 @@ const listingTypes = {
       label: "This crop is organically grown.",
     },
   ],
-  manufacturer: [
+  generaluser: [
     {
       name: "wanted_quantity",
       type: "number",

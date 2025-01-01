@@ -116,8 +116,8 @@ const AddListing = () => {
       case "transport":
         appendInfo("transport", formData);
         break;
-      case "manufacturer":
-        appendInfo("manufacturer", formData);
+      case "generaluser":
+        appendInfo("generaluser", formData);
         break;
       // Since listingType is initialized to crop we are adding it in default
       default:
@@ -407,8 +407,8 @@ const AddListing = () => {
       case "farmer":
         setListingType("crop");
         break;
-      case "manufacturer":
-        setListingType("manufacturer");
+      case "generaluser":
+        setListingType("generaluser");
         break;
       default:
         setListingType("crop");
