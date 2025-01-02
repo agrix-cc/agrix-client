@@ -26,7 +26,7 @@ const ListingInformation = (props) => {
                     qty: null
                 })
                 break;
-            default:
+            case "crop":
                 setPricing({
                     price: listing.CropListing.price_per_kg,
                     priceDescription: "Price per kg",
@@ -34,6 +34,14 @@ const ListingInformation = (props) => {
                         `${listing.CropListing.available_quantity} Kg available` : 'Sold out'
                 })
                 break;
+            default:
+                setPricing({
+                    // TODO Add a demand price
+                    price: 15,
+                    priceDescription: "Demand price",
+                    qty: listing.GeneralUserListing.wanted_quantity+ "Kg"
+                })
+                break
         }
     }, [listing]);
 

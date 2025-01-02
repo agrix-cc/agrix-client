@@ -37,10 +37,17 @@ const Card = (props) => {
                     availableAmount: `${listing.transport.max_weight} Kg Max Capacity`
                 });
                 break;
-            default:
+            case "crop":
                 setData({
                     price: `Rs. ${listing.crop.price_per_kg.toFixed(2)}`,
                     availableAmount: `${listing.crop.available_quantity} Kg`
+                });
+                break;
+            case "generaluser":
+                setData({
+                    // Add a required price (demand)
+                    price: `Rs. `,
+                    availableAmount: `${listing.wantedListing?.wanted_quantity || 0} Kg`
                 });
                 break
         }
@@ -60,9 +67,9 @@ const Card = (props) => {
                             </p>
                         </div>
                         <div>
-                            <p><span className="text-gray-500">Price: </span>{data.price}</p>
+                            <p><span className="text-gray-500">{listing.wantedListing ? "Wanted price" : "Price"}: </span>{data.price}</p>
                             <p><span className="text-gray-500">Location: </span>{listing.city}, {listing.district}</p>
-                            <p><span className="text-gray-500">Availability: </span>{data.availableAmount}</p>
+                            <p><span className="text-gray-500">{listing.wantedListing ? "Required amount" : "Availability"}: </span>{data.availableAmount}</p>
                         </div>
                     </div>
                 </div>

@@ -37,7 +37,7 @@ const UploadImages = (props) => {
     };
 
     return (
-        <div>
+        <div className="content-between">
             <p className="mb-2">Listing images</p>
             <ImagePreview files={files}/>
             <FileUploadRoot
