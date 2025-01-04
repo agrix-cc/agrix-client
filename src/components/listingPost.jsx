@@ -46,7 +46,7 @@ const Card = (props) => {
             case "generaluser":
                 setData({
                     // Add a required price (demand)
-                    price: `Rs. `,
+                    price: `Rs. ${listing.wantedListing.price_per_kg.toFixed(2)}`,
                     availableAmount: `${listing.wantedListing?.wanted_quantity || 0} Kg`
                 });
                 break
