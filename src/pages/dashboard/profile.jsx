@@ -17,7 +17,6 @@ const Profile = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = location.state;
-
   const [profilePic, setProfilePic] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [newUser, setNewUser] = useState(null);

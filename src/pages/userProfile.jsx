@@ -842,8 +842,8 @@ const UserProfile = () => {
                             >
                                 Send Message
                             </button>
-                            {connectionStatus === "accepted" ? (
-                                <div id="connection-status" className="relative">
+                            {/* {connectionStatus === "accepted" ? (
+                                <div className="relative">
                                     <button
                                         id="remove-connection-btn"
                                         onClick={() => setOpenedRemoveBtn(!openedRemoveBtn)}
@@ -874,7 +874,7 @@ const UserProfile = () => {
                                 >
                                     Connect
                                 </button>
-                            )}
+                            )} */}
                         </div>
                     </div>
                 </div>
