@@ -1,3 +1,4 @@
+//agrix-client\src\assets\listingTypes.js
 const listingTypes = {
   crop: [
     {
@@ -24,6 +25,18 @@ const listingTypes = {
       type: "date",
       label: "Harvested Date",
       required: true,
+    },
+    {
+      name: "best_before_date",
+      type: "date",
+      label: "Best Before Date",
+      required: false,
+    },
+    {
+      name: "expiration_date",
+      type: "date",
+      label: "Expiration Date",
+      required: false,
     },
     {
       name: "available_quantity",
