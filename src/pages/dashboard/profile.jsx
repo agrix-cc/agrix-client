@@ -87,13 +87,13 @@ const Profile = () => {
         <div className="flex items-center gap-4">
           <button
             onClick={() => navigate(-1)}
-            className="md:hidden md:invisible"
+            className="md:invisible md:hidden"
           >
             <IoChevronBack className="text-2xl" />
           </button>
           <p className="text-xl font-medium">Profile</p>
         </div>
-        <div className="flex items-center justify-center my-4">
+        <div className="my-4 flex items-center justify-center">
           <div className="relative w-fit">
             <Avatar
               src={previewImage}
@@ -108,14 +108,14 @@ const Profile = () => {
             />
             <label
               htmlFor="profile-pic"
-              className="rounded-full bg-primary-green p-1 absolute bottom-0 -right-4"
+              className="absolute -right-4 bottom-0 rounded-full bg-primary-green p-1"
             >
-              <MdEdit className="text-white text-2xl" />
+              <MdEdit className="text-2xl text-white" />
             </label>
           </div>
         </div>
         <div className="my-4">
-          <div className="flex gap-4 my-4">
+          <div className="my-4 flex gap-4">
             <TextInput
               id="first-name"
               error={false}
@@ -227,7 +227,7 @@ const Profile = () => {
         <button
           disabled={isProcessing}
           type="submit"
-          className="px-4 py-2 rounded bg-primary-green text-white text-lg w-full shadow-lg active:shadow-md active:translate-y-0.5 translate-y-0 duration-300 transition-all disabled:opacity-25"
+          className="w-full translate-y-0 rounded bg-primary-green px-4 py-2 text-lg text-white shadow-lg transition-all duration-300 active:translate-y-0.5 active:shadow-md disabled:opacity-25"
           onClick={handleSave}
         >
           Save

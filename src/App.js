@@ -8,7 +8,7 @@ import VerifyCode from "./pages/verifycode"
 import ResetPas from "./pages/passwordreset"
 import Market from "./pages/market";
 import Connections from "./pages/connections";
-import FlashSale from "./pages/flashsale";
+import FlashSalesPage from "./pages/FlashSalesPage";
 import Dashboard from "./pages/dashboard";
 import AddListing from "./pages/dashboard/addNew";
 import {useTheme} from "next-themes";
@@ -71,7 +71,8 @@ function App() {
                     <Route path="/add" element={<AddListing/>}/>
                     <Route path="/edit/:id" element={<AddListing/>}/>
                     <Route path="/connections" element={<Connections/>}/>
-                    <Route path="/flashsale" element={<FlashSale/>}/>
+                    <Route path="/flash-sales" element={<FlashSalesPage />} />
+
 
                     <Route path="/checkout" element={<Checkout/>}/>
                     <Route path="/rent-transport" element={<RentTransport/>}/>

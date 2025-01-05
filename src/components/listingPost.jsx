@@ -4,6 +4,7 @@ import ProfileBadge from "./profileBadge";
 import ListingImagesSlider from "./listingImageSlider";
 import {Link} from "react-router-dom";
 
+
 const Post = (props) => {
     const {listing = null} = props;
 
@@ -48,10 +49,12 @@ const Card = (props) => {
                 setData({
                     // Add a required price (demand)
                     price: `Rs. `,
-                    availableAmount: `${listing.wantedListing?.wanted_quantity || 0} Kg`
+                    availableAmount: `${listing.wantedListing?.wanted_quantity || 0} Kg`,
+                    
+                    
                 });
                 break
-            default:
+            default:    
                 setData({
                     price: `Rs. 0.00`,
                     availableAmount: `0 Kg`
@@ -65,7 +68,7 @@ const Card = (props) => {
     let isFlashSale = false;
 
     if (listing.listing_type === 'crop' && currentDate > bestBeforeDate) {
-        finalPrice = listing.price_per_kg ? listing.price_per_kg * 0.8 : 0; // Apply 20% discount if price_per_kg is defined
+        finalPrice = listing.price_per_kg ? listing.price_per_kg * 0.6 : 0; // Apply 20% discount if price_per_kg is defined
         isFlashSale = true;
     }
 
@@ -117,7 +120,6 @@ const Card = (props) => {
     )
 }
 export default Post;
-
 
 
 
