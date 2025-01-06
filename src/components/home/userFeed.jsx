@@ -14,6 +14,7 @@ const UserFeed = () => {
                 console.log(res.data)
             })
             .catch(err => {
+                console.log(err);
                 if (err.response) {
                     console.error(err.response.data.message);
                 } else {

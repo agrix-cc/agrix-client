@@ -79,6 +79,7 @@ const SignIn = () => {
                         />
                         <div className="mb-2 pt-2">
                             <Button
+                                id="signInBtn"
                                 primary={true}
                                 label='Sign in'
                                 type="submit"
@@ -94,6 +95,7 @@ const SignIn = () => {
                             </Link></p>
                             <p className="text-center text-gray-500 mt-4">
                             <Link to="/forgotpassword"
+                                  id="forgot-password-link"
                                   className="font-medium text-blue-900">
                                 Forgot Password?
                             </Link></p>

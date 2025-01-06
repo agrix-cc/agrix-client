@@ -229,6 +229,7 @@ const ResetPas = () => {
             </div>
             <div className="pt-2">
               <Button
+                  id="reset-pwd-btn"
                 label="Reset Password"
                 primary={true}
                 onClick={resetPassword}
