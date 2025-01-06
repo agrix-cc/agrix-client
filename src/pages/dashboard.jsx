@@ -17,6 +17,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { MdCreateNewFolder } from "react-icons/md";
 import { HiDocumentReport } from "react-icons/hi";
 
+
 const Dashboard = () => {
   const navigate = useNavigate();
 
@@ -60,7 +61,7 @@ const Dashboard = () => {
                       state: { userType: user.user_type },
                     })
                   }
-                  icon={<FaNewspaper />}
+                  icon={<FaNewspaper />}a
                   label="My Listings"
                 />
                 <HomeButton
@@ -74,7 +75,7 @@ const Dashboard = () => {
                   label="My Purchases"
                 />
                 <HomeButton
-                  onClick={() => navigate("/connections")}
+                  onClick={() => navigate("viewusers")}
                   icon={<FaStreetView />}
                   label="View Users"
                 />

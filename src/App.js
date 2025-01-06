@@ -7,7 +7,6 @@ import ForgotPas from "./pages/forgotpassword"
 import VerifyCode from "./pages/verifycode"
 import ResetPas from "./pages/passwordreset"
 import Market from "./pages/market";
-import Connections from "./pages/connections";
 import FlashSalesPage from "./pages/FlashSalesPage";
 import Dashboard from "./pages/dashboard";
 import AddListing from "./pages/dashboard/addNew";
@@ -25,11 +24,11 @@ import ListingManagement from "./pages/admin/components/listings";
 import AdminHome from "./pages/admin/components/home";
 import Profile from "./pages/dashboard/profile";
 import Listings from "./pages/dashboard/listings";
+import ViewUsers from "./pages/dashboard/viewusers";
 import Purchases from "./pages/dashboard/purchases";
 import Reports from "./components/dashboard/reports";
 import Orders from "./pages/dashboard/orders";
 import Messages from "./pages/dashboard/messages";
-
 function App() {
 
     // Change default theme to light theme
@@ -67,10 +66,10 @@ function App() {
                         <Route path="messages" element={<Messages/>}/>
                         <Route path="add" element={<AddListing/>}/>
                         <Route path="reports" element={<Reports/>}/>
+                        <Route path="viewusers" element={<ViewUsers />} />
                     </Route>
                     <Route path="/add" element={<AddListing/>}/>
                     <Route path="/edit/:id" element={<AddListing/>}/>
-                    <Route path="/connections" element={<Connections/>}/>
                     <Route path="/flash-sales" element={<FlashSalesPage />} />
 
 

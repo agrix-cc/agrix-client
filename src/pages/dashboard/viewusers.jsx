@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import MobileNav from "../components/mobileNav";
-import UserCard from "../components/userCard";
-import RequestsSection from "../components/requestsSection";
-import BackToHome from "../components/onboarding/backtohome";
+import MobileNav from "../../components/mobileNav";
+import UserCard from "../../components/userCard";
+import RequestsSection from "../../components/requestsSection";
+// import BackToHome from "../components/onboarding/backtohome";
+import { Toaster } from "../../components/ui/toaster";
+
 import { FaUsers } from "react-icons/fa6";
 
-const Connections = () => {
+const Viewusers = () => {
   const [activeTab, setActiveTab] = useState("getConnected");
   const [users, setUsers] = useState([]);
   const [sentRequests, setSentRequests] = useState([]);
@@ -116,7 +118,9 @@ const Connections = () => {
 
   return (
     <div>
-        <BackToHome/>
+        {/* <BackToHome/> */}
+        <MobileNav />
+        <Toaster />
 
       <div className="flex h-dvh flex-col items-center pt-16">
         {/* Tabs Section */}
@@ -233,4 +237,4 @@ const Connections = () => {
   );
 };
 
-export default Connections;
+export default Viewusers;
