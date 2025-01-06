@@ -1,103 +1,3 @@
-// C:\Users\user\Documents\AxgriX\agrix-client\src\pages\FlashSalesPage.jsx
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-// import ListingImagesSlider from "../components/listingImageSlider"; // Corrected import path
-// import MobileNav from "../components/mobileNav";
-
-
-// const FlashSalesPage = () => {
-//     const [flashSales, setFlashSales] = useState([]);
-//     const [params, setParams] = useState({});
-//     const [search, setSearch] = useState("");
-//     const [loading, setLoading] = useState(true);
-//     const [error, setError] = useState(null);
-
-//     useEffect(() => {
-//         const fetchFlashSales = async () => {
-//             try {
-//                 const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/listing/flash-sales`);
-//                 setFlashSales(response.data.listings);
-//                 console.log(response.data.listings); // Debugging line
-//             } catch (err) {
-//                 setError(err.message);
-//             } finally {
-//                 setLoading(false);
-//             }
-//         };
-
-//         fetchFlashSales();
-//     }, []);
-
-//     const getTimeRemaining = (endTime) => {
-//         const currentTime = new Date();
-//         const timeDiff = new Date(endTime) - currentTime;
-        
-//         if (timeDiff <= 0) {
-//             return "Sale Ended";
-//         }
-
-//         const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-//         const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-//         const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-
-//         return `${days}d ${hours}h ${minutes}m`;
-//     };
-
-//     if (loading) return <div className="mt-10 text-center text-xl">Loading flash sales...</div>;
-//     if (error) return <div className="mt-10 text-center text-xl text-red-600">Error: {error}</div>;
-
-//     return (
-//         <div className="md:pe-[4vw] md:ps-[4vw] md:pt-2">
-//             <MobileNav />
-
-//             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-//                 {flashSales.map((item) => {
-//                     const timeRemaining = getTimeRemaining(item.crop.flash_sale_end); // Assuming `flash_sale_end` is part of item.crop
-//                     return (
-//                         <div
-//                             key={item.id}
-//                             className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-md"
-//                         >
-//                             <ListingImagesSlider images={item.images} />
-//                             <div className="p-4">
-//                                 <h2 className="text-xl font-semibold text-gray-800">{item.crop.crop_name}</h2>
-//                                 <p className="mt-2 text-gray-600">{item.description}</p>
-//                                 <p className="mt-4 font-bold text-green-600">
-//                                     ${item.crop.discounted_price.toFixed(2)} /kg
-//                                 </p>
-//                                 <p className="mt-2 text-gray-500">
-//                                     Seller: {item.user.first_name} {item.user.last_name}
-//                                 </p>
-//                                 <p className="mt-2 font-semibold text-red-600">{timeRemaining}</p>
-//                             </div>
-//                         </div>
-//                     );
-//                 })}
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default FlashSalesPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ListingImagesSlider from "../components/listingImageSlider";
@@ -195,13 +95,22 @@ const FlashSalesPage = () => {
                         >
                             {/* Flash Sale Banner */}
                             <div
-                                className="absolute -right-7 top-7 z-10 rotate-45 transform bg-orange-500 px-4 py-1 text-xl font-bold text-white shadow-lg"
+                                className="absolute -right-7 top-7 z-10 rotate-45 transform bg-yellow-500 px-4 py-1 text-xl font-bold text-white shadow-lg"
                                 data-testid={`flash-sale-banner-${item.id}`}
                             >
                                 Flash Sale
                             </div>
 
-                            <ListingImagesSlider images={item.images} />
+                            <div className="relative">
+                                <ListingImagesSlider images={item.images} />
+                                {/* Time Remaining */}
+                                <p
+                                    className="absolute bottom-2 right-2 rounded bg-red-600 px-2 py-1 text-sm font-semibold text-white"
+                                    data-testid={`item-time-remaining-${item.id}`}
+                                >Ends in : 
+                                    {timeRemaining}
+                                </p>
+                            </div>
 
                             <div className="p-4">
                                 <h2
@@ -210,12 +119,6 @@ const FlashSalesPage = () => {
                                 >
                                     {item.crop.crop_name}
                                 </h2>
-                                <p
-                                    className="mt-2 line-clamp-2 text-gray-600"
-                                    data-testid={`item-description-${item.id}`}
-                                >
-                                    {item.description}
-                                </p>
                                 <p
                                     className="mt-2 line-clamp-2 text-gray-600"
                                     data-testid={`item-available-quantity-${item.id}`}
@@ -239,12 +142,6 @@ const FlashSalesPage = () => {
                                     data-testid={`item-seller-${item.id}`}
                                 >
                                     Seller: {item.user.first_name} {item.user.last_name}
-                                </p>
-                                <p
-                                    className="mt-2 text-base font-semibold text-red-600"
-                                    data-testid={`item-time-remaining-${item.id}`}
-                                >
-                                    {timeRemaining}
                                 </p>
 
                                 {/* Quantity Controls and Buy Now */}
@@ -288,10 +185,15 @@ const FlashSalesPage = () => {
                                         Rs. {totalPrice}
                                     </p>
                                     <button
-                                        className="rounded-md bg-white px-4 py-2 font-semibold text-green-500"
+                                        className={`rounded-md px-4 py-2 font-semibold ${
+                                            timeRemaining === "Sale Ended"
+                                            ? "bg-red-700 text-white cursor-not-allowed"
+                                            : "bg-white text-green-500"
+                                        }`}
                                         data-testid={`buy-now-${item.id}`}
-                                    >
-                                        Buy now
+                                        disabled={timeRemaining === "Sale Ended"}
+                                        >
+                                        {timeRemaining === "Sale Ended" ? "Ends" : "Buy now"}
                                     </button>
                                 </div>
                             </div>
@@ -304,3 +206,6 @@ const FlashSalesPage = () => {
 };
 
 export default FlashSalesPage;
+
+
+

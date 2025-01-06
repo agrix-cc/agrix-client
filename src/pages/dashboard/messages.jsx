@@ -139,7 +139,7 @@ const Messages = () => {
                         >
                             <p>{msg.content}</p>
                             <small className="block text-xs text-gray-400">
-                                {new Date(msg.created_at).toLocaleTimeString()} by {msg.sender_id}
+                                {new Date(msg.created_at).toLocaleTimeString()}
                             </small>
                         </div>
                     );
@@ -151,8 +151,8 @@ const Messages = () => {
     return (
         <div id="messages-app" className="flex h-screen w-full gap-2 p-8">
             {/* Sidebar */}
-            <div id="sidebar" className="h-3/4 w-1/4 overflow-y-auto border-r bg-gray-100 relative">
-                <div id="sidebar-header" className="z-10 sticky top-0 bg-gray-200 p-4 shadow-md">
+            <div id="sidebar" className="relative h-3/4 w-1/4 overflow-y-auto border-r bg-gray-100">
+                <div id="sidebar-header" className="sticky top-0 z-10 bg-gray-200 p-4 shadow-md">
                     <h2 className="text-xl font-bold text-gray-800">Connections</h2>
                 </div>
                 <div className="sticky top-12 z-10 w-full border border-zinc-300">
@@ -163,7 +163,7 @@ const Messages = () => {
                         value={findUserName}
                         onChange={(e) => setFindUserName(e.target.value)}
                         maxLength={256}
-                        className="flex-1 p-3 text-black focus:ring-2 focus:ring-blue-500 w-full"
+                        className="w-full flex-1 p-3 text-black focus:ring-2 focus:ring-blue-500"
                     />
                 </div>
                 <div className="mb-16">
