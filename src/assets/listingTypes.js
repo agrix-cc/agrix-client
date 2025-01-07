@@ -33,12 +33,6 @@ const listingTypes = {
       required: false,
     },
     {
-      name: "expiration_date",
-      type: "date",
-      label: "Expiration Date",
-      required: false,
-    },
-    {
       name: "available_quantity",
       type: "number",
       label: "Available quantity in kg",
