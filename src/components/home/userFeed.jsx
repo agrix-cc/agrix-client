@@ -22,8 +22,8 @@ const UserFeed = () => {
     }, []);
 
     return (listings &&
-        <div className="overflow-hidden py-2 md:ps-[10vw] md:pe-[10vw]">
-            <div className="mb-2 flex justify-between items-start px-4">
+        <div className="overflow-hidden py-2 md:pe-[10vw] md:ps-[10vw]">
+            <div className="mb-2 flex items-start justify-between px-4">
                 <p className="font-medium md:text-xl md:font-normal">Recently added listings</p>
             </div>
             {

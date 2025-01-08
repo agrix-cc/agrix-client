@@ -154,7 +154,7 @@ const MobileNav = () => {
                     name="add"
                 />
                 <MobileNavItem
-                    name="Connections"
+                    name="Flash Sale"
                 />
                 <MobileNavItem
                     name="Profile"

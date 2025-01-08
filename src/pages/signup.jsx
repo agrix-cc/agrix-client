@@ -171,7 +171,7 @@ const SignUp = () => {
         });
     }, [data.confirmPassword, data.password]);
 
-    return (<div className="h-dvh relative">
+    return (<div className="relative h-dvh">
         <BackToHome/>
         <div
             className="signin-header">
@@ -179,7 +179,7 @@ const SignUp = () => {
                 <WelcomeSlider/>
             </div>
         </div>
-        <div className="px-4 flex justify-center items-center w-full mt-11">
+        <div className="mt-11 flex w-full items-center justify-center px-4">
             <div className="w-full sm:max-w-sm">
                 <form>
                     <div className="mb-4 flex justify-between gap-4">
@@ -197,7 +197,7 @@ const SignUp = () => {
                                 autoComplete="given-name"
                             />
                             {error.first_name.isActive ?
-                                <p className="text-center text-red-500 font-medium">{error.first_name.message}</p> : ""}
+                                <p className="text-center font-medium text-red-500">{error.first_name.message}</p> : ""}
                         </div>
 
                         <div>
@@ -214,7 +214,7 @@ const SignUp = () => {
                                 autoComplete="family-name"
                             />
                             {error.last_name.isActive ?
-                                <p className="text-center text-red-500 font-medium">{error.last_name.message}</p> : ""}
+                                <p className="text-center font-medium text-red-500">{error.last_name.message}</p> : ""}
                         </div>
 
                     </div>
@@ -228,7 +228,7 @@ const SignUp = () => {
                             title="Select a profile type"
                             label="Profile type"/>
                         {error.profile_type.isActive ?
-                            <p className="text-center text-red-500 font-medium">{error.profile_type.message}</p> : ""}
+                            <p className="text-center font-medium text-red-500">{error.profile_type.message}</p> : ""}
                     </div>
                     <div className="mb-4">
                         <InputField
@@ -244,7 +244,7 @@ const SignUp = () => {
                             autoComplete="email"
                         />
                         {error.email.isActive ?
-                            <p className="text-center text-red-500 font-medium">{error.email.message}</p> : ""}
+                            <p className="text-center font-medium text-red-500">{error.email.message}</p> : ""}
                     </div>
                     <div className="mb-4">
                         <InputField
@@ -271,7 +271,7 @@ const SignUp = () => {
                             error={error.password.isActive}
                         />
                         {error.password.isActive ?
-                            <p className="text-center text-red-500 font-medium">{error.password.message}</p> : ""}
+                            <p className="text-center font-medium text-red-500">{error.password.message}</p> : ""}
                     </div>
                     <div className="mb-4">
                         <InputField
@@ -289,7 +289,7 @@ const SignUp = () => {
                             error={error.confirmPassword.isActive}
                         />
                         {error.confirmPassword.isActive ?
-                            <p className="text-center text-red-500 font-medium">{error.confirmPassword.message}</p> : ""}
+                            <p className="text-center font-medium text-red-500">{error.confirmPassword.message}</p> : ""}
                     </div>
                     <div className="pt-2">
                         <Button
@@ -298,10 +298,10 @@ const SignUp = () => {
                             onClick={(e) => handleSubmit(e)}
                         />
                     </div>
-                    {error.serverResponse.message ? <p className="text-center text-red-500 font-medium mt-2">
+                    {error.serverResponse.message ? <p className="mt-2 text-center font-medium text-red-500">
                         {error.serverResponse.message}
                     </p> : ""}
-                    <p className="text-center text-gray-500 mt-4">
+                    <p className="mt-4 text-center text-gray-500">
                         Already have an account?
                         <Link to="/signin" className="font-medium text-black"> Sign in</Link>
                     </p>
@@ -333,7 +333,7 @@ const ProfileType = (props) => {
 const profileTypes = createListCollection({
     items: [{label: "Farmer", value: "farmer"}, {label: "Transport", value: "transport"}, {
         label: "Storage", value: "storage"
-    }, {label: "Seller", value: "seller"},],
+    }, {label: "Seller", value: "seller"}, {label: "General User", value: "generaluser"}],
 });
 
 export default SignUp;

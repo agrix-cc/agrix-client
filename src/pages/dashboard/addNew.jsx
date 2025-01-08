@@ -17,7 +17,6 @@ import {useNavigate, useParams} from "react-router-dom";
 import {APIProvider, useMapsLibrary} from "@vis.gl/react-google-maps";
 
 const AddListing = () => {
-
     const {id} = useParams();
 
     const [location, setLocation] = useState(null);
@@ -42,8 +41,10 @@ const AddListing = () => {
         description: "",
         district: "",
         city: "",
-        listing_type: ""
+        listing_type: "",
     });
+
+    const [isDonation, setIsDonation] = useState(false);
 
     // This state object is to hold all the other listing information of (storage, transport, and crop)
     const [additionalInfo, setAdditionalInfo] = useState({});
@@ -51,7 +52,7 @@ const AddListing = () => {
     // This function handles the user inputs onChange
     const handleInputChange = (name, value) => {
         // Change the value relevant object key using its name
-        setAdditionalInfo(prevState => {
+        setAdditionalInfo((prevState) => {
             const newState = {...prevState, [name]: value};
 
             // Reset temperature_control_min and temperature_control_max when temperature_control changes
@@ -67,7 +68,7 @@ const AddListing = () => {
         });
 
         // Clear error message when user input data
-        setErrors(prevErrors => ({...prevErrors, [name]: ""}));
+        setErrors((prevErrors) => ({...prevErrors, [name]: ""}));
     };
 
     // This function is to handle the form submit
@@ -80,13 +81,12 @@ const AddListing = () => {
             return;
         }
 
-
         // This is a helper function to append data to the formData according to the listing type
         const appendInfo = (listingType, formData) => {
             // Temporary object to hold information to append
             const info = {};
             // Iterate through the prepared listing types and information object
-            listingTypes[listingType].forEach(item => {
+            listingTypes[listingType].forEach((item) => {
                 // If it is temperature range it handles separately
                 if (item.type === "range") {
                     info[`${item.name}_min`] = additionalInfo[`${item.name}_min`];
@@ -94,19 +94,25 @@ const AddListing = () => {
                 }
                 info[item.name] = additionalInfo[item.name];
             });
+            if (listingType === "wanted") {
+                info["is_donation"] = additionalInfo["is_donation"]
+            }
             formData.append(`${listingType}Info`, JSON.stringify({...info}));
         };
 
         // Create new formData object include all the information
         const formData = new FormData();
         // Append main listing information to the formDate object
-        formData.append('listingInfo', JSON.stringify({
-            ...listingInfo,
-            listing_type: listingType,
-            address: location.name,
-            lat: location.lat,
-            lng: location.lng
-        }));
+        formData.append(
+            "listingInfo",
+            JSON.stringify({
+                ...listingInfo,
+                listing_type: listingType,
+                address: location.name,
+                lat: location.lat,
+                lng: location.lng,
+            })
+        );
         // Append other listing information according to the listing type
         switch (listingType) {
             case "storage":
@@ -114,6 +120,9 @@ const AddListing = () => {
                 break;
             case "transport":
                 appendInfo("transport", formData);
+                break;
+            case "wanted":
+                appendInfo("wanted", formData);
                 break;
             // Since listingType is initialized to crop we are adding it in default
             default:
@@ -126,16 +135,18 @@ const AddListing = () => {
             formData.append(`images`, file);
         });
 
-        const route = id ? `edit/${id}` : 'add-new'
+        const route = id ? `edit/${id}` : "add-new";
 
         // attach jwt token to the request headers
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
+        axios.defaults.headers.common["Authorization"] =
+            "Bearer " + localStorage.getItem("jwtToken");
 
-        await axios.post(`${process.env.REACT_APP_SERVER_URL}/${route}`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            }
-        })
+        await axios
+            .post(`${process.env.REACT_APP_SERVER_URL}/${route}`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
             .then((res) => {
                 toaster.create({
                     title: res.data.message,
@@ -144,9 +155,9 @@ const AddListing = () => {
                     onStatusChange({status}) {
                         if (status === "unmounted") {
                             setIsSubmitting(false);
-                            navigate('/');
+                            navigate("/");
                         }
-                    }
+                    },
                 });
             })
             .catch((error) => {
@@ -154,15 +165,15 @@ const AddListing = () => {
                 if (error.response) {
                     toaster.create({
                         title: error.response.data.message,
-                        type: "error"
+                        type: "error",
                     });
                     return;
                 }
                 toaster.create({
                     title: error.message,
-                    type: "error"
+                    type: "error",
                 });
-            })
+            });
     };
 
     // This is to keep track of form validation
@@ -171,7 +182,6 @@ const AddListing = () => {
     const errorState = {...errors};
 
     const validateForm = () => {
-
         const errorMessages = {
             requiredFields: {
                 title: "Title can not be empty",
@@ -205,8 +215,8 @@ const AddListing = () => {
                 minimum_days: "Please enter minimum duration to rent",
                 maximum_days: "Please enter maximum duration to rent",
                 daily_rate: "Please enter daily rental fee",
-            }
-        }
+            },
+        };
 
         validateFields(errorMessages.requiredFields, listingInfo);
 
@@ -217,25 +227,40 @@ const AddListing = () => {
             case "transport":
                 validateFields(errorMessages.transportErrors, additionalInfo);
                 break;
-            default:
+            case "crop":
                 validateFields(errorMessages.cropErrors, additionalInfo);
+                break;
+            default:
                 break;
         }
 
-        if ((listingType === "crop") && (additionalInfo.harvested_date && new Date(additionalInfo.harvested_date) > new Date())) {
+        if (
+            listingType === "crop" &&
+            additionalInfo.harvested_date &&
+            new Date(additionalInfo.harvested_date) > new Date()
+        ) {
             isValid = false;
             errorState.harvested_date = "Please enter a valid harvested date";
         }
 
-        if ((listingType === "crop") && (additionalInfo.delivery_options !== "pickup")) {
-            if (!additionalInfo.delivery_fare_per_kg || additionalInfo.delivery_fare_per_kg <= 0) {
+        if (
+            listingType === "crop" &&
+            additionalInfo.delivery_options !== "pickup"
+        ) {
+            if (
+                !additionalInfo.delivery_fare_per_kg ||
+                additionalInfo.delivery_fare_per_kg <= 0
+            ) {
                 isValid = false;
-                errorState.delivery_fare_per_kg = "Please enter the delivery fare per kg";
+                errorState.delivery_fare_per_kg =
+                    "Please enter the delivery fare per kg";
             }
         }
 
-        if ((listingType === "transport" || listingType === "storage") && additionalInfo.temperature_control) {
-
+        if (
+            (listingType === "transport" || listingType === "storage") &&
+            additionalInfo.temperature_control
+        ) {
             if (isNaN(additionalInfo.temperature_control_min)) {
                 isValid = false;
                 errorState.temperature_control = "Please enter minimum temperature";
@@ -246,45 +271,47 @@ const AddListing = () => {
                 errorState.temperature_control = "Please enter maximum temperature";
             }
 
-            if (additionalInfo.temperature_control_min > additionalInfo.temperature_control_max) {
+            if (
+                additionalInfo.temperature_control_min >
+                additionalInfo.temperature_control_max
+            ) {
                 isValid = false;
-                errorState.temperature_control = "Minimum temperature can not be larger than minimum";
+                errorState.temperature_control =
+                    "Minimum temperature can not be larger than minimum";
             }
-        }
-
-        if (!location) {
-            isValid = false;
         }
 
         setErrors(errorState);
         if (!isValid) {
             toaster.create({
                 title: "Invalid submit!",
-                description: "Please fill all the required fields and enter valid details",
+                description:
+                    "Please fill all the required fields and enter valid details",
                 type: "error",
-                duration: 1500
-            })
+                duration: 1500,
+            });
         }
         return isValid;
     };
 
     const validateFields = (errorMessages, inputData) => {
-        Object.keys(errorMessages).forEach(field => {
+        Object.keys(errorMessages).forEach((field) => {
             if (!inputData[field]) {
                 isValid = false;
                 errorState[field] = errorMessages[field];
             } else {
                 errorState[field] = "";
             }
-        })
+        });
     };
 
     useEffect(() => {
         if (!id) return;
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
-        axios.get(`${process.env.REACT_APP_SERVER_URL}/view/edit/${id}`)
-            .then(res => {
-
+        axios.defaults.headers.common["Authorization"] =
+            "Bearer " + localStorage.getItem("jwtToken");
+        axios
+            .get(`${process.env.REACT_APP_SERVER_URL}/view/edit/${id}`)
+            .then((res) => {
                 const listing = res.data.listing;
                 const listingType = listing.listing_type;
 
@@ -307,10 +334,12 @@ const AddListing = () => {
                             max_weight: listing.TransportListing.max_weight,
                             max_volume: listing.TransportListing.max_volume,
                             temperature_control: listing.TransportListing.temperature_control,
-                            temperature_control_max: listing.TransportListing.temperature_control_max || 0,
-                            temperature_control_min: listing.TransportListing.temperature_control_min || 0,
+                            temperature_control_max:
+                                listing.TransportListing.temperature_control_max || 0,
+                            temperature_control_min:
+                                listing.TransportListing.temperature_control_min || 0,
                             refrigerated: listing.TransportListing.refrigerated,
-                        })
+                        });
                         return;
                     case "storage":
                         setAdditionalInfo({
@@ -323,12 +352,17 @@ const AddListing = () => {
                             minimum_days: listing.StorageListing.minimum_days,
                             maximum_days: listing.StorageListing.maximum_days,
                             temperature_control: listing.StorageListing.temperature_control,
-                            temperature_control_max: listing.StorageListing.temperature_control_max || 0,
-                            temperature_control_min: -listing.StorageListing.temperature_control_min || 0,
-                            humidity_control_availability: listing.StorageListing.humidity_control_availability,
-                            ventilation_availability: listing.StorageListing.ventilation_availability,
-                            pest_control_availability: listing.StorageListing.pest_control_availability,
-                        })
+                            temperature_control_max:
+                                listing.StorageListing.temperature_control_max || 0,
+                            temperature_control_min:
+                                -listing.StorageListing.temperature_control_min || 0,
+                            humidity_control_availability:
+                            listing.StorageListing.humidity_control_availability,
+                            ventilation_availability:
+                            listing.StorageListing.ventilation_availability,
+                            pest_control_availability:
+                            listing.StorageListing.pest_control_availability,
+                        });
                         return;
                     default:
                         setAdditionalInfo({
@@ -342,26 +376,25 @@ const AddListing = () => {
                             delivery_options: listing.CropListing.delivery_options,
                             delivery_fare_per_kg: listing.CropListing.delivery_fare_per_kg,
                             organic: listing.CropListing.organic,
-                        })
+                        });
                         return;
                 }
-
             })
-            .catch(error => {
+            .catch((error) => {
                 if (error.response) {
                     toaster.create({
                         title: error.response.data.message,
                         duration: 2000,
-                        type: 'error',
+                        type: "error",
                         onStatusChange({status}) {
                             if (status === "unmounted") {
-                                navigate('/dashboard')
+                                navigate("/dashboard");
                             }
-                        }
-                    })
+                        },
+                    });
                 }
-            })
-    }, [id, navigate])
+            });
+    }, [id, navigate]);
 
     // This determines which listing should provide based on the user type
     useEffect(() => {
@@ -377,6 +410,9 @@ const AddListing = () => {
             case "farmer":
                 setListingType("crop");
                 break;
+            case "generaluser":
+                setListingType("wanted");
+                break;
             default:
                 setListingType("crop");
                 break;
@@ -388,212 +424,278 @@ const AddListing = () => {
             toaster.create({
                 title: "Submitting!",
                 type: "loading",
-                description: "Please wait until your listing is submitted!"
-            })
+                description: "Please wait until your listing is submitted!",
+            });
         }
     }, [isSubmitting]);
 
-    return (listingTypes &&
-        <div className="mb-20 pb-8 add-listing">
-            <MobileNav/>
-            <Toaster/>
-            <p className="mt-16 p-4 font-medium text-2xl">
-                {
-                    id ? `Edit listing Id: #${id}` : "Create new listing"
-                }
-            </p>
-            <div className="md:flex md:justify-center md:items-center">
-                <form className="md:max-w-md w-full">
-                    <div className="mb-2 pb-4 border-b border-gray-400 mx-4">
-                        <p className="text-lg font-medium text-gray-500 text-center py-2">Listing Information</p>
-                        <div className="grid gap-4">
-                            <UploadImages files={files} setFiles={setFiles}/>
-                            <p>Listing type: <span className="font-medium text-gray-500 capitalize">{listingType}</span>
+    useEffect(() => {
+        if (!additionalInfo) return;
+        setAdditionalInfo((prevState) => ({...prevState, is_donation: isDonation}));
+    }, [isDonation, additionalInfo])
+
+    useEffect(() => {
+        console.log(additionalInfo)
+    }, [additionalInfo])
+
+    return (
+        listingTypes && (
+            <div className="mb-20 pb-8 add-listing">
+                <MobileNav/>
+                <Toaster/>
+                <p className="mt-16 p-4 font-medium text-2xl">
+                    {id ? `Edit listing Id: #${id}` : `Create new ${listingType === "wanted" && "wanted"} listing`}
+                </p>
+                <div className="md:flex md:justify-center md:items-center">
+                    <form className="w-full md:min-w-[512px] md:max-w-md">
+                        <div className="mb-2 pb-4 border-b border-gray-400 mx-4">
+                            <p className="text-lg font-medium text-gray-500 text-center py-2">
+                                Listing Information
                             </p>
-                            <TextInput
-                                id="title"
-                                label="Title"
-                                placeholder="Enter title of the listing to be"
-                                error={errors.title}
-                                value={listingInfo.title || ""}
-                                onChange={(value) => {
-                                    setListingInfo({...listingInfo, title: value});
-                                    setErrors({...errors, title: ""});
-                                }}
-                                required
-                            />
-                            <TextArea
-                                id="description"
-                                label="Description"
-                                placeholder="Enter description of the listing"
-                                error={errors.description}
-                                value={listingInfo.description || ""}
-                                onChange={(value) => {
-                                    setListingInfo({...listingInfo, description: value});
-                                    setErrors({...errors, description: ""});
-                                }}
-                                required
-                            />
-                            <div>
-                                <p className="text-gray-500 mb-4">Location</p>
-                                <div className="grid gap-2">
-                                    <SelectInput
-                                        id="district"
-                                        items={districts.map(district => ({label: district, value: district}))}
-                                        value={listingInfo.district}
-                                        onChange={(e) => {
-                                            setListingInfo({...listingInfo, district: e, city: ""});
-                                            setErrors({...errors, district: ""});
-                                        }}
-                                        placeholder="Select district"
-                                        label="District"
-                                        required
-                                        error={errors.district}
-                                    />
-                                    {
-                                        listingInfo.district ? <SelectInput
-                                            id="city"
-                                            required
-                                            value={listingInfo.city}
-                                            items={citiesByDistrict[listingInfo.district].cities.map(city => ({
-                                                label: city,
-                                                value: city
+                            {listingType === "wanted" &&
+                                <div className="flex justify-between gap-4 py-2">
+                                    <div
+                                        className="border border-zinc-200 rounded p-4 flex-grow flex gap-2 items-center">
+                                        <input
+                                            onChange={() => setIsDonation(true)}
+                                            type="radio" id="wanted_donation" name="wanted_type" value="donation"
+                                            checked={isDonation}/>
+                                        <label htmlFor="wanted_donation">Donation Request</label>
+                                    </div>
+                                    <div
+                                        className="border border-zinc-200 rounded p-4 flex-grow flex gap-2 items-center">
+                                        <input
+                                            onChange={() => setIsDonation(false)}
+                                            type="radio" id="wanted_listing" name="wanted_type" value="wanted"
+                                            checked={!isDonation}/>
+                                        <label htmlFor="wanted_listing">Wanted Listing</label>
+                                    </div>
+                                </div>
+                            }
+                            <div className="grid gap-4">
+                                <UploadImages files={files} setFiles={setFiles}/>
+                                <p>
+                                    Listing type:{" "}
+                                    <span className="font-medium text-gray-500 capitalize">{listingType}</span>
+                                </p>
+                                <TextInput
+                                    id="title"
+                                    label="Title"
+                                    placeholder="Enter title of the listing to be"
+                                    error={errors.title}
+                                    value={listingInfo.title || ""}
+                                    onChange={(value) => {
+                                        setListingInfo({...listingInfo, title: value});
+                                        setErrors({...errors, title: ""});
+                                    }}
+                                    required
+                                />
+                                <TextArea
+                                    id="description"
+                                    label="Description"
+                                    placeholder="Enter description of the listing"
+                                    error={errors.description}
+                                    value={listingInfo.description || ""}
+                                    onChange={(value) => {
+                                        setListingInfo({...listingInfo, description: value});
+                                        setErrors({...errors, description: ""});
+                                    }}
+                                    required
+                                />
+                                <div>
+                                    <p className="text-gray-500 mb-4">Location</p>
+                                    <div className="grid gap-2">
+                                        <SelectInput
+                                            id="district"
+                                            items={districts.map((district) => ({
+                                                label: district,
+                                                value: district,
                                             }))}
+                                            value={listingInfo.district}
                                             onChange={(e) => {
-                                                setListingInfo({...listingInfo, city: e});
-                                                setErrors({...errors, city: ""});
+                                                setListingInfo({
+                                                    ...listingInfo,
+                                                    district: e,
+                                                    city: "",
+                                                });
+                                                setErrors({...errors, district: ""});
                                             }}
                                             placeholder="Select district"
-                                            label="City"
-                                            error={errors.city}
-                                        /> : <></>
-                                    }
-                                    <p>Address</p>
-                                    <APIProvider apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
-                                        <PlaceAutocomplete onPlaceSelect={setLocation}/>
-                                    </APIProvider>
+                                            label="District"
+                                            required
+                                            error={errors.district}
+                                        />
+                                        {listingInfo.district ? (
+                                            <SelectInput
+                                                id="city"
+                                                required
+                                                value={listingInfo.city}
+                                                items={citiesByDistrict[
+                                                    listingInfo.district
+                                                    ].cities.map((city) => ({
+                                                    label: city,
+                                                    value: city,
+                                                }))}
+                                                onChange={(e) => {
+                                                    setListingInfo({...listingInfo, city: e});
+                                                    setErrors({...errors, city: ""});
+                                                }}
+                                                placeholder="Select district"
+                                                label="City"
+                                                error={errors.city}
+                                            />
+                                        ) : (
+                                            <></>
+                                        )}
+                                        <p>Address</p>
+                                        <APIProvider
+                                            apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
+                                        >
+                                            <PlaceAutocomplete onPlaceSelect={setLocation}/>
+                                        </APIProvider>
+                                    </div>
                                 </div>
                             </div>
-
                         </div>
-                    </div>
-                    <div className="mb-2 pb-4 border-b border-gray-400 mx-4">
-                        <p className="text-lg font-medium text-gray-500 text-center py-2">Additional Information</p>
-                        <div>
-                            {listingType &&
-                                listingTypes[listingType].map((listingInput, key) =>
-                                    <div key={listingInput.name} className="mb-4">
-                                        {listingInput.type === "select" &&
-                                            <SelectInput
-                                                id={listingInput.name}
-                                                value={additionalInfo[listingInput.name]}
-                                                items={listingInput.items}
-                                                placeholder={listingInput.placeholder}
-                                                label={listingInput.label}
-                                                onChange={(e) => {
-                                                    handleInputChange(listingInput.name, e);
-                                                }}
-                                                error={errors[listingInput.name]}
-                                                required={listingInput.required}
-                                            />
-                                        }
-                                        {listingInput.type === "number" &&
-                                            <NumberInput
-                                                id={listingInput.name}
-                                                value={additionalInfo[listingInput.name] || 0}
-                                                hidden={listingInput.name === "delivery_fare_per_kg" && (additionalInfo.delivery_options === 'pickup' || !additionalInfo.delivery_options)}
-                                                label={listingInput.label}
-                                                min={listingInput.min}
-                                                required={listingInput.required}
-                                                onChange={(e) => {
-                                                    handleInputChange(listingInput.name, e);
-                                                }}
-                                                error={errors[listingInput.name]}
-                                            />
-                                        }
-                                        {listingInput.type === "checkbox" &&
-                                            <CheckBox
-                                                id={listingInput.name}
-                                                value={additionalInfo[listingInput.name]}
-                                                option={{
-                                                    name: listingInput.label,
-                                                    onCheck: (e) => {
+                        <div className="mb-2 pb-4 border-b border-gray-400 mx-4">
+                            <p className="text-lg font-medium text-gray-500 text-center py-2">
+                                Additional Information
+                            </p>
+                            <div>
+                                {listingType &&
+                                    listingTypes[listingType].map((listingInput, key) => (
+                                        <div key={listingInput.name} className="mb-4">
+                                            {listingInput.type === "select" && (
+                                                <SelectInput
+                                                    id={listingInput.name}
+                                                    value={additionalInfo[listingInput.name]}
+                                                    items={listingInput.items}
+                                                    placeholder={listingInput.placeholder}
+                                                    label={listingInput.label}
+                                                    onChange={(e) => {
                                                         handleInputChange(listingInput.name, e);
+                                                    }}
+                                                    error={errors[listingInput.name]}
+                                                    required={listingInput.required}
+                                                />
+                                            )}
+                                            {listingInput.type === "number" && (
+                                                <NumberInput
+                                                    id={listingInput.name}
+                                                    value={additionalInfo[listingInput.name] || 0}
+                                                    hidden={
+                                                        listingInput.name === "delivery_fare_per_kg" &&
+                                                        (additionalInfo.delivery_options === "pickup" ||
+                                                            !additionalInfo.delivery_options)
                                                     }
-                                                }}
-                                            />
-                                        }
-                                        {listingInput.type === "range" &&
-                                            <RangeInput
-                                                id={listingInput.name}
-                                                unit={listingInput.unit}
-                                                minLabel={listingInput.minLabel}
-                                                maxLabel={listingInput.maxLabel}
-                                                isChecked={additionalInfo && additionalInfo[listingInput.name]}
-                                                min_val={additionalInfo && additionalInfo[listingInput.name + "_min"]}
-                                                max_val={additionalInfo && additionalInfo[listingInput.name + "_max"]}
-                                                onUpperChange={(e) => {
-                                                    handleInputChange(`${listingInput.name}_max`, parseFloat(e));
-                                                    setErrors({...errors, temperature_control: ""});
-                                                }}
-                                                onLowerChange={(e) => {
-                                                    handleInputChange(`${listingInput.name}_min`, parseFloat(e));
-                                                    setErrors({...errors, temperature_control: ""});
-                                                }}
-                                                option={{
-                                                    name: listingInput.label,
-                                                    onCheck: (e) => {
+                                                    label={listingInput.label}
+                                                    min={listingInput.min}
+                                                    required={listingInput.required}
+                                                    onChange={(e) => {
                                                         handleInputChange(listingInput.name, e);
+                                                    }}
+                                                    error={errors[listingInput.name]}
+                                                />
+                                            )}
+                                            {listingInput.type === "checkbox" && (
+                                                <CheckBox
+                                                    id={listingInput.name}
+                                                    value={additionalInfo[listingInput.name]}
+                                                    option={{
+                                                        name: listingInput.label,
+                                                        onCheck: (e) => {
+                                                            handleInputChange(listingInput.name, e);
+                                                        },
+                                                    }}
+                                                />
+                                            )}
+                                            {listingInput.type === "range" && (
+                                                <RangeInput
+                                                    id={listingInput.name}
+                                                    unit={listingInput.unit}
+                                                    minLabel={listingInput.minLabel}
+                                                    maxLabel={listingInput.maxLabel}
+                                                    isChecked={
+                                                        additionalInfo && additionalInfo[listingInput.name]
                                                     }
-                                                }}
-                                                error={errors.temperature_control}
-                                            />
-                                        }
-                                        {listingInput.type === "text" &&
-                                            <TextInput
-                                                id={listingInput.name}
-                                                label={listingInput.label}
-                                                placeholder={listingInput.placeholder}
-                                                value={additionalInfo[listingInput.name] || ""}
-                                                onChange={(e) => {
-                                                    handleInputChange(listingInput.name, e);
-                                                }}
-                                                required={listingInput.required}
-                                                error={errors[listingInput.name]}
-                                            />
-                                        }
-                                        {listingInput.type === "date" &&
-                                            <DateInput
-                                                label={listingInput.label}
-                                                name={listingInput.name}
-                                                value={additionalInfo[listingInput.name]}
-                                                onChange={(e) => handleInputChange(listingInput.name, e)}
-                                                required={listingInput.required}
-                                                error={errors[listingInput.name]}
-                                            />
-                                        }
-                                    </div>
-                                )
-                            }
+                                                    min_val={
+                                                        additionalInfo &&
+                                                        additionalInfo[listingInput.name + "_min"]
+                                                    }
+                                                    max_val={
+                                                        additionalInfo &&
+                                                        additionalInfo[listingInput.name + "_max"]
+                                                    }
+                                                    onUpperChange={(e) => {
+                                                        handleInputChange(
+                                                            `${listingInput.name}_max`,
+                                                            parseFloat(e)
+                                                        );
+                                                        setErrors({...errors, temperature_control: ""});
+                                                    }}
+                                                    onLowerChange={(e) => {
+                                                        handleInputChange(
+                                                            `${listingInput.name}_min`,
+                                                            parseFloat(e)
+                                                        );
+                                                        setErrors({...errors, temperature_control: ""});
+                                                    }}
+                                                    option={{
+                                                        name: listingInput.label,
+                                                        onCheck: (e) => {
+                                                            handleInputChange(listingInput.name, e);
+                                                        },
+                                                    }}
+                                                    error={errors.temperature_control}
+                                                />
+                                            )}
+                                            {listingInput.type === "text" && (
+                                                <TextInput
+                                                    id={listingInput.name}
+                                                    label={listingInput.label}
+                                                    placeholder={listingInput.placeholder}
+                                                    value={additionalInfo[listingInput.name] || ""}
+                                                    onChange={(e) => {
+                                                        handleInputChange(listingInput.name, e);
+                                                    }}
+                                                    required={listingInput.required}
+                                                    error={errors[listingInput.name]}
+                                                />
+                                            )}
+                                            {listingInput.type === "date" && (
+                                                <DateInput
+                                                    label={listingInput.label}
+                                                    name={listingInput.name}
+                                                    value={additionalInfo[listingInput.name]}
+                                                    onChange={(e) =>
+                                                        handleInputChange(listingInput.name, e)
+                                                    }
+                                                    required={listingInput.required}
+                                                    error={errors[listingInput.name]}
+                                                />
+                                            )}
+                                        </div>
+                                    ))}
+                            </div>
                         </div>
-                    </div>
-                    <div className="px-4 mt-4">
-                        <button
-                            disabled={isSubmitting}
-                            type="submit"
-                            className="px-4 py-2 rounded bg-primary-green text-white text-lg w-full shadow-lg active:shadow-md active:translate-y-0.5 translate-y-0 duration-300 transition-all disabled:opacity-25"
-                            onClick={handleSubmit}>
-                            Submit
-                        </button>
-                    </div>
-                </form>
+                        <div className="px-4 mt-4">
+                            <button
+                                disabled={isSubmitting}
+                                type="submit"
+                                className="px-4 py-2 rounded bg-primary-green text-white text-lg w-full shadow-lg active:shadow-md active:translate-y-0.5 translate-y-0 duration-300 transition-all disabled:opacity-25"
+                                onClick={handleSubmit}
+                            >
+                                Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
-    )
+        )
+    );
 };
 
 export const PlaceAutocomplete = (props) => {
-
     const {onPlaceSelect} = props;
 
     const [placeAutocomplete, setPlaceAutocomplete] = useState(null);
@@ -620,7 +722,11 @@ export const PlaceAutocomplete = (props) => {
         });
     }, [onPlaceSelect, placeAutocomplete]);
     return (
-        <input ref={inputRef} className="w-full px-4 py-2 rounded outline-none border border-gray-400" required/>
+        <input
+            ref={inputRef}
+            className="w-full px-4 py-2 rounded outline-none border border-gray-400"
+            required
+        />
     );
 };
 

@@ -5,7 +5,7 @@ const listingTypes = {
             type: "text",
             label: "Crop name",
             placeholder: "Enter title of the listing to be",
-            required: true
+            required: true,
         },
         {
             name: "crop_type",
@@ -17,27 +17,33 @@ const listingTypes = {
                 {label: "Grains", value: "grains"},
             ],
             placeholder: "Select crop type",
-            required: true
+            required: true,
         },
         {
             name: "harvested_date",
             type: "date",
             label: "Harvested Date",
-            required: true
+            required: true,
+        },
+        {
+            name: "best_before_date",
+            type: "date",
+            label: "Best Before Date",
+            required: false,
         },
         {
             name: "available_quantity",
             type: "number",
             label: "Available quantity in kg",
             min: 1,
-            required: true
+            required: true,
         },
         {
             name: "price_per_kg",
             type: "number",
             label: "Price per kg (Rs.)",
             min: 0,
-            required: true
+            required: true,
         },
         {
             name: "quality_condition",
@@ -49,7 +55,7 @@ const listingTypes = {
                 {label: "Overripe", value: "overripe"},
             ],
             placeholder: "Select the quality condition of crop",
-            required: true
+            required: true,
         },
         {
             name: "quality_grade",
@@ -61,7 +67,7 @@ const listingTypes = {
                 {label: "Grade C", value: "C"},
             ],
             placeholder: "Select the quality grade of crop",
-            required: true
+            required: true,
         },
         {
             name: "delivery_options",
@@ -73,19 +79,28 @@ const listingTypes = {
                 {label: "Both", value: "both"},
             ],
             placeholder: "Select available delivery options",
-            required: true
+            required: true,
         },
         {
             name: "delivery_fare_per_kg",
             type: "number",
             label: "Delivery fare per kg (Rs.)",
             min: 0,
-            required: true
+            required: true,
         },
         {
             name: "organic",
             type: "checkbox",
             label: "This crop is organically grown.",
+        },
+    ],
+    wanted: [
+        {
+            name: "wanted_quantity",
+            type: "number",
+            label: "Wanted quantity(Kg)",
+            min: 1,
+            required: true,
         },
     ],
     transport: [
@@ -103,7 +118,7 @@ const listingTypes = {
                 {label: "Three-Wheeler", value: "three_wheeler"},
             ],
             placeholder: "Select your vehicle type",
-            required: true
+            required: true,
         },
         {
             name: "fuel_type",
@@ -115,28 +130,28 @@ const listingTypes = {
                 {label: "Electric", value: "electric"},
             ],
             placeholder: "Select your vehicle fuel",
-            required: true
+            required: true,
         },
         {
             name: "price_per_km",
             type: "number",
             label: "Enter price per km (Rs.)",
             min: 0,
-            required: true
+            required: true,
         },
         {
             name: "max_weight",
             type: "number",
             label: "Enter maximum weight can transport (kg)",
             min: 0,
-            required: true
+            required: true,
         },
         {
             name: "max_volume",
             type: "number",
             label: "Enter maximum volume can transport (m³)",
             min: 0,
-            required: true
+            required: true,
         },
         {
             name: "temperature_control",
@@ -162,35 +177,35 @@ const listingTypes = {
                 {label: "Dry room", value: "dry_room"},
             ],
             placeholder: "Select your storage type",
-            required: true
+            required: true,
         },
         {
             name: "max_capacity",
             type: "number",
             label: "Enter the maximum capacity can store (kg)",
             min: 0,
-            required: true
+            required: true,
         },
         {
             name: "width",
             type: "number",
             label: "Enter width of storage facility (m)",
             min: 0,
-            required: true
+            required: true,
         },
         {
             name: "height",
             type: "number",
             label: "Enter height of storage facility (m)",
             min: 0,
-            required: true
+            required: true,
         },
         {
             name: "length",
             type: "number",
             label: "Enter length of storage facility (m)",
             min: 0,
-            required: true
+            required: true,
         },
         {
             name: "temperature_control",
@@ -226,16 +241,16 @@ const listingTypes = {
             type: "number",
             label: "Enter minimum duration to rent (days)",
             min: 0,
-            required: true
+            required: true,
         },
         {
             name: "maximum_days",
             type: "number",
             label: "Enter maximum duration to rent (days)",
             min: 0,
-            required: true
-        }
-    ]
-}
+            required: true,
+        },
+    ],
+};
 
 export default listingTypes;

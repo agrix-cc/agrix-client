@@ -3,8 +3,11 @@ import Home from "./pages/home";
 import PageNotFound from "./pages/404";
 import SignIn from "./pages/signin";
 import SignUp from "./pages/signup";
+import ForgotPas from "./pages/forgotpassword"
+import VerifyCode from "./pages/verifycode"
+import ResetPas from "./pages/passwordreset"
 import Market from "./pages/market";
-import Connections from "./pages/connections";
+import FlashSalesPage from "./pages/FlashSalesPage";
 import Dashboard from "./pages/dashboard";
 import AddListing from "./pages/dashboard/addNew";
 import {useTheme} from "next-themes";
@@ -21,10 +24,13 @@ import ListingManagement from "./pages/admin/components/listings";
 import AdminHome from "./pages/admin/components/home";
 import Profile from "./pages/dashboard/profile";
 import Listings from "./pages/dashboard/listings";
+import ViewUsers from "./pages/dashboard/viewusers";
 import Purchases from "./pages/dashboard/purchases";
 import Reports from "./components/dashboard/reports";
 import Orders from "./pages/dashboard/orders";
-
+import Offers from "./pages/dashboard/offers";
+import Messages from "./pages/dashboard/messages";
+import Order from "./pages/Order";
 function App() {
 
     // Change default theme to light theme
@@ -42,6 +48,9 @@ function App() {
                 <Route element={<GuestUserRoutes/>}>
                     <Route path="/signin" element={<SignIn/>}/>
                     <Route path="/signup" element={<SignUp/>}/>
+                    <Route path="/forgotpassword" element={<ForgotPas/>}/>
+                    <Route path="/verifycode" element={<VerifyCode/>}/>
+                    <Route path="/passwordreset" element={<ResetPas/>}/>
                     <Route path="/onboarding" element={<Onboarding/>}/>
                 </Route>
 
@@ -55,13 +64,18 @@ function App() {
                         <Route path="profile" element={<Profile/>}/>
                         <Route path="listings" element={<Listings/>}/>
                         <Route path="orders" element={<Orders/>}/>
+                        <Route path="offers" element={<Offers/>}/>
                         <Route path="purchases" element={<Purchases/>}/>
+                        <Route path="messages" element={<Messages/>}/>
                         <Route path="add" element={<AddListing/>}/>
                         <Route path="reports" element={<Reports/>}/>
+                        <Route path="viewusers" element={<ViewUsers />} />
                     </Route>
                     <Route path="/add" element={<AddListing/>}/>
                     <Route path="/edit/:id" element={<AddListing/>}/>
-                    <Route path="/connections" element={<Connections/>}/>
+                    <Route path="/flash-sales" element={<FlashSalesPage />} />
+
+                    <Route path="/flashSalesOrders" element={<Order/>} />
                     <Route path="/checkout" element={<Checkout/>}/>
                     <Route path="/rent-transport" element={<RentTransport/>}/>
                     <Route path="/profile/:userId" element={<UserProfile/>}/>

@@ -20,7 +20,7 @@ const UserCard = ({ user, onConnect, onRemove, btnId }) => {
                     View Profile
                 </button>
                 {/* Conditional Buttons */}
-                {onConnect && (
+                {/* {onConnect && (
                     <button
                         className="w-full px-4 py-2 bg-green-500 text-white font-medium rounded hover:bg-green-600 transition-all"
                         onClick={() => onConnect(user.id)}
@@ -28,7 +28,7 @@ const UserCard = ({ user, onConnect, onRemove, btnId }) => {
                     >
                         Connect Now
                     </button>
-                )}
+                )} */}
                 {onRemove && (
                     <button
                         className="w-full px-4 py-2 bg-white border border-black text-black font-medium rounded hover:bg-red-500 hover:text-white hover:border-transparent transition-all"
