@@ -434,17 +434,13 @@ const AddListing = () => {
         setAdditionalInfo((prevState) => ({...prevState, is_donation: isDonation}));
     }, [isDonation, additionalInfo])
 
-    useEffect(() => {
-        console.log(additionalInfo)
-    }, [additionalInfo])
-
     return (
         listingTypes && (
             <div className="mb-20 pb-8 add-listing">
                 <MobileNav/>
                 <Toaster/>
                 <p className="mt-16 p-4 font-medium text-2xl">
-                    {id ? `Edit listing Id: #${id}` : `Create new ${listingType === "wanted" && "wanted"} listing`}
+                    {id ? `Edit listing Id: #${id}` : `Create new ${listingType === "wanted" ? "wanted listing" : "listing"} `}
                 </p>
                 <div className="md:flex md:justify-center md:items-center">
                     <form className="w-full md:min-w-[512px] md:max-w-md">
@@ -584,9 +580,8 @@ const AddListing = () => {
                                                     id={listingInput.name}
                                                     value={additionalInfo[listingInput.name] || 0}
                                                     hidden={
-                                                        listingInput.name === "delivery_fare_per_kg" &&
-                                                        (additionalInfo.delivery_options === "pickup" ||
-                                                            !additionalInfo.delivery_options)
+                                                        (listingInput.name === "delivery_fare_per_kg" &&
+                                                            (additionalInfo.delivery_options === "pickup" || !additionalInfo.delivery_options)) || (isDonation && listingInput.name === "wanted_price")
                                                     }
                                                     label={listingInput.label}
                                                     min={listingInput.min}

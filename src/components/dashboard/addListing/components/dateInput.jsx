@@ -20,7 +20,8 @@ const DateInput = (props) => {
                     required={required}
                     id={name}
                     value={value ? new Date(value).toISOString().split('T')[0] : ''}
-                    max={`${new Date().toISOString().split('T')[0]}`}
+                    max={name === "best_before_date" ? null : `${new Date().toISOString().split('T')[0]}`}
+                    min={name === "best_before_date" ? `${new Date().toISOString().split('T')[0]}` : null}
                     className={`${error ? 'border-red-500' : 'border-gray-400'} border px-4 py-2 rounded w-full`}
                     onChange={(e) => onChange(e.target.value)}/>
             </Field>

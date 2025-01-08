@@ -102,6 +102,13 @@ const listingTypes = {
             min: 1,
             required: true,
         },
+        {
+            name: "wanted_price",
+            type: "number",
+            label: "Wanted price per Kg (Rs)",
+            min: 1,
+            required: true,
+        },
     ],
     transport: [
         {

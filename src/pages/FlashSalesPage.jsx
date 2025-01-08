@@ -48,11 +48,14 @@ const FlashSalesPage = () => {
 
     // Update quantity of items
     const handleQuantityChange = (id, newQuantity) => {
-        setFlashSales((prevFlashSales) =>
-            prevFlashSales.map((item) =>
-                item.id === id ? {...item, quantity: newQuantity} : item
-            )
-        );
+        const target = flashSales.filter(item => item.id === id);
+        if (target[0].crop.available_quantity >= newQuantity) {
+            setFlashSales((prevFlashSales) =>
+                prevFlashSales.map((item) =>
+                    item.id === id ? {...item, quantity: newQuantity} : item
+                )
+            );
+        }
     };
 
     // Handle loading and error states
