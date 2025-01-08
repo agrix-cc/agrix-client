@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 const ListingInformation = (props) => {
 
     const {listing} = props;
+    listing.wantedListing = undefined;
 
     const [pricing, setPricing] = useState({
         price: 0,
@@ -34,20 +35,15 @@ const ListingInformation = (props) => {
                         `${listing.CropListing.available_quantity} Kg available` : 'Sold out'
                 })
                 break;
-                case "generaluser":
-                    setPricing({
-
-                        qty: listing.GeneralUserListing.wanted_quantity > 0 ?
-                            `${listing.GeneralUserListing.wanted_quantity} Kg Wanted` : 'Sold out'
-                    })
-                    break;
-            default:
+            case "wanted":
                 setPricing({
-                    // TODO Add a demand price
-                    price: 15,
-                    priceDescription: "Demand price",
-                    qty: listing.GeneralUserListing.wanted_quantity+ "Kg"
+                    price: listing.WantedListing.wanted_price,
+                    priceDescription: "Expecting price per kg",
+                    qty: listing.WantedListing.wanted_quantity > 0 ?
+                        `${listing.WantedListing.wanted_quantity} Kg Wanted` : 'Sold out'
                 })
+                break;
+            default:
                 break
         }
     }, [listing]);
@@ -59,14 +55,27 @@ const ListingInformation = (props) => {
                 <p className="capitalize text-gray-500">{listing.listing_type}</p>
             </div>
             <div className="mb-2 flex items-center justify-between">
-                <div>
-                    <p className="text-2xl font-medium">Rs. {pricing.price.toFixed(2)}</p>
-                    <p className="text-gray-500">{pricing.priceDescription}</p>
-                </div>
+                {!listing.WantedListing?.is_donation &&
+                    <div>
+                        <p className="text-2xl font-medium">Rs. {pricing.price?.toFixed(2)}</p>
+                        <p className="text-gray-500">{pricing.priceDescription}</p>
+                    </div>
+                }
                 {listing.CropListing &&
                     <p className={`font-medium ${listing.CropListing.available_quantity ? 'text-sage-green' : 'text-red-500'}`}>{pricing.qty}</p>
                 }
             </div>
+            {listing.WantedListing?.is_donation &&
+                <div className="rounded bg-lime-green p-2 text-white text-center md:max-w-sm">
+                    <p>Donation request</p>
+                </div>
+            }
+            {listing.WantedListing?.wanted_quantity &&
+                <div className="mt-4">
+                    <p className="text-lg font-medium">Requested quantity</p>
+                    <p className="text-lg">{listing.WantedListing?.wanted_quantity} Kg</p>
+                </div>
+            }
             <div className="mt-2">
                 <p className="mb-2 text-lg font-medium">Description</p>
                 <p>{listing.description}</p>
@@ -80,9 +89,6 @@ const ListingInformation = (props) => {
                 }
                 {listing.StorageListing &&
                     <StorageInformation {...listing.StorageListing}/>
-                }
-                {listing.GeneralUserListing &&
-                    <WantedListingInformation {...listing.GeneralUserListing}/>
                 }
             </div>
             <div className={`mt-2 ${listing.CropListing && "mb-32"}`}>
@@ -251,27 +257,6 @@ const StorageInformation = (props) => {
         </div>
     );
 }
-
-const WantedListingInformation = (props) => {
-    const {
-        description,
-        price,
-        location,
-        contact_name,
-        contact_phone,
-        contact_email,
-        condition,
-        createdAt,
-        updatedAt,
-    } = props;
-
-    return (
-        <div>
-            
-        </div>
-    )
-}
-
 
 
 export default ListingInformation;

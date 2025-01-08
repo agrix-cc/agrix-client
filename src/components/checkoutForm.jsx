@@ -34,6 +34,10 @@ const CheckoutForm = (props) => {
                     })
                 } else if (res.paymentIntent && res.paymentIntent.status === "succeeded") {
                     placeOrder(res.paymentIntent.id);
+                    if (listing.offerId) {
+                        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
+                        axios.delete(`${process.env.REACT_APP_SERVER_URL}/offers/${listing.offerId}`);
+                    }
                 } else {
                     toaster.create({
                         title: "Unidentified status!",
@@ -50,9 +54,6 @@ const CheckoutForm = (props) => {
         let processedOrder = null;
 
         if (order.deliveryTransport) {
-            console.log("From delivery");
-            console.log(listing);
-            console.log(order);
             orderType = "delivery";
             processedOrder = {
                 stripeId: id,

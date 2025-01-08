@@ -1,6 +1,6 @@
 import MobileNav from "../components/mobileNav";
 import Payment from "../components/payment";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import CropOrder from "../components/checkout/cropOrder";
 import {jwtDecode} from "jwt-decode";
@@ -8,6 +8,7 @@ import {Toaster, toaster} from "../components/ui/toaster";
 import TransportOrder from "../components/checkout/transportOrder";
 import StorageOrder from "../components/checkout/storageOrder";
 import {APIProvider} from "@vis.gl/react-google-maps";
+import axios from "axios";
 
 const Checkout = () => {
 
@@ -16,8 +17,48 @@ const Checkout = () => {
     const [user, setUser] = useState(null);
     const [data, setData] = useState(null);
     const [isProcessing, setIsProcessing] = useState(true);
+    const navigate = useNavigate();
+
+    const handleDonationOrder = async () => {
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
+
+        await axios.post(`${process.env.REACT_APP_SERVER_URL}/order/crop`, {
+            stripeId: null,
+            order: {
+                address: data.address,
+                amount: data.subTotal,
+                cropId: listing.CropListing.id,
+                deliveryMethod: data.deliveryMethod,
+                qty: listing.qty,
+            }
+        })
+            .then(_ => {
+                toaster.create({
+                    title: "Order placed successfully!",
+                    type: 'success',
+                    duration: 2000,
+                    onStatusChange({status}) {
+                        if (status === 'unmounted') {
+                            axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
+                            axios.delete(`${process.env.REACT_APP_SERVER_URL}/offers/${listing.offerId}`);
+                            navigate('/');
+                        }
+                    },
+                })
+            })
+            .catch((error) => {
+                toaster.create({
+                    title: error.response ? error.response.data.message : error.message,
+                    type: 'error',
+                });
+            })
+    }
 
     const handleClick = () => {
+        if (location.state?.is_donation && data.subTotal <= 0) {
+            handleDonationOrder();
+            return;
+        }
         if (!data) {
             toaster.create({
                 type: 'error',
@@ -66,7 +107,6 @@ const Checkout = () => {
 
     useEffect(() => {
         if (!user || !listing) return;
-        console.log(listing);
         if (listing.CropListing) {
             const deliveryOption = listing.CropListing.delivery_options === "both" ? 'deliver' : listing.CropListing.delivery_options
             // This is where we process data to send to backend

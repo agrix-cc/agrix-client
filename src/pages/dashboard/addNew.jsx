@@ -44,6 +44,8 @@ const AddListing = () => {
         listing_type: "",
     });
 
+    const [isDonation, setIsDonation] = useState(false);
+
     // This state object is to hold all the other listing information of (storage, transport, and crop)
     const [additionalInfo, setAdditionalInfo] = useState({});
 
@@ -92,6 +94,9 @@ const AddListing = () => {
                 }
                 info[item.name] = additionalInfo[item.name];
             });
+            if (listingType === "wanted") {
+                info["is_donation"] = additionalInfo["is_donation"]
+            }
             formData.append(`${listingType}Info`, JSON.stringify({...info}));
         };
 
@@ -116,8 +121,8 @@ const AddListing = () => {
             case "transport":
                 appendInfo("transport", formData);
                 break;
-            case "generaluser":
-                appendInfo("generaluser", formData);
+            case "wanted":
+                appendInfo("wanted", formData);
                 break;
             // Since listingType is initialized to crop we are adding it in default
             default:
@@ -225,6 +230,8 @@ const AddListing = () => {
             case "crop":
                 validateFields(errorMessages.cropErrors, additionalInfo);
                 break;
+            default:
+                break;
         }
 
         if (
@@ -273,10 +280,6 @@ const AddListing = () => {
                     "Minimum temperature can not be larger than minimum";
             }
         }
-
-        // if (!location) {
-        //   isValid = false;
-        // }
 
         setErrors(errorState);
         if (!isValid) {
@@ -408,7 +411,7 @@ const AddListing = () => {
                 setListingType("crop");
                 break;
             case "generaluser":
-                setListingType("generaluser");
+                setListingType("wanted");
                 break;
             default:
                 setListingType("crop");
@@ -426,27 +429,54 @@ const AddListing = () => {
         }
     }, [isSubmitting]);
 
+    useEffect(() => {
+        if (!additionalInfo) return;
+        setAdditionalInfo((prevState) => ({...prevState, is_donation: isDonation}));
+    }, [isDonation, additionalInfo])
+
+    useEffect(() => {
+        console.log(additionalInfo)
+    }, [additionalInfo])
+
     return (
         listingTypes && (
             <div className="mb-20 pb-8 add-listing">
                 <MobileNav/>
                 <Toaster/>
                 <p className="mt-16 p-4 font-medium text-2xl">
-                    {id ? `Edit listing Id: #${id}` : "Create new listing"}
+                    {id ? `Edit listing Id: #${id}` : `Create new ${listingType === "wanted" && "wanted"} listing`}
                 </p>
                 <div className="md:flex md:justify-center md:items-center">
-                    <form className="md:max-w-md w-full">
+                    <form className="w-full md:min-w-[512px] md:max-w-md">
                         <div className="mb-2 pb-4 border-b border-gray-400 mx-4">
                             <p className="text-lg font-medium text-gray-500 text-center py-2">
                                 Listing Information
                             </p>
+                            {listingType === "wanted" &&
+                                <div className="flex justify-between gap-4 py-2">
+                                    <div
+                                        className="border border-zinc-200 rounded p-4 flex-grow flex gap-2 items-center">
+                                        <input
+                                            onChange={() => setIsDonation(true)}
+                                            type="radio" id="wanted_donation" name="wanted_type" value="donation"
+                                            checked={isDonation}/>
+                                        <label htmlFor="wanted_donation">Donation Request</label>
+                                    </div>
+                                    <div
+                                        className="border border-zinc-200 rounded p-4 flex-grow flex gap-2 items-center">
+                                        <input
+                                            onChange={() => setIsDonation(false)}
+                                            type="radio" id="wanted_listing" name="wanted_type" value="wanted"
+                                            checked={!isDonation}/>
+                                        <label htmlFor="wanted_listing">Wanted Listing</label>
+                                    </div>
+                                </div>
+                            }
                             <div className="grid gap-4">
                                 <UploadImages files={files} setFiles={setFiles}/>
                                 <p>
                                     Listing type:{" "}
-                                    <span className="font-medium text-gray-500 capitalize">
-                    {listingType}
-                  </span>
+                                    <span className="font-medium text-gray-500 capitalize">{listingType}</span>
                                 </p>
                                 <TextInput
                                     id="title"

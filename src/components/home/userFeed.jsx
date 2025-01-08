@@ -11,10 +11,8 @@ const UserFeed = () => {
         axios.get(`${process.env.REACT_APP_SERVER_URL}/listings/latest`)
             .then(res => {
                 setListings(res.data.listings);
-                console.log(res.data)
             })
             .catch(err => {
-                console.log(err);
                 if (err.response) {
                     console.error(err.response.data.message);
                 } else {

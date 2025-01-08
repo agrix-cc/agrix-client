@@ -262,29 +262,6 @@ const TransportItem = (props) => {
                          className="px-4 py-2 bg-mint-green h-full w-full block rounded">View</NavLink>
                 <button
                     onClick={() => {
-                        // console.log({
-                        //     ...listing.listing,
-                        //     image: listing.imageUrl,
-                        //     distance: distance,
-                        //     total: (distance / 1000) * listing.listing.TransportListing.price_per_km + cropTotal,
-                        //     locations: {
-                        //         end: {
-                        //             address: location.name,
-                        //             geoCodes: {
-                        //                 lat: location.lat,
-                        //                 lng: location.lng
-                        //             }
-                        //         },
-                        //         start: {
-                        //             address: listing.address,
-                        //             geoCodes: {
-                        //                 lat: listing.lat,
-                        //                 lng: listing.lng
-                        //             }
-                        //         },
-                        //     },
-                        //     selectedDate: listing.selectedDate,
-                        // })
                         setData({
                             ...data,
                             deliveryFee: (distance / 1000) * listing.listing.TransportListing.price_per_km,

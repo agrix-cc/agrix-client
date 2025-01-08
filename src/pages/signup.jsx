@@ -333,7 +333,7 @@ const ProfileType = (props) => {
 const profileTypes = createListCollection({
     items: [{label: "Farmer", value: "farmer"}, {label: "Transport", value: "transport"}, {
         label: "Storage", value: "storage"
-    }, {label: "Seller", value: "seller"},{label: "General User", value: "generaluser"}],
+    }, {label: "Seller", value: "seller"}, {label: "General User", value: "generaluser"}],
 });
 
 export default SignUp;

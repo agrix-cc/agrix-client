@@ -28,6 +28,7 @@ import ViewUsers from "./pages/dashboard/viewusers";
 import Purchases from "./pages/dashboard/purchases";
 import Reports from "./components/dashboard/reports";
 import Orders from "./pages/dashboard/orders";
+import Offers from "./pages/dashboard/offers";
 import Messages from "./pages/dashboard/messages";
 function App() {
 
@@ -62,6 +63,7 @@ function App() {
                         <Route path="profile" element={<Profile/>}/>
                         <Route path="listings" element={<Listings/>}/>
                         <Route path="orders" element={<Orders/>}/>
+                        <Route path="offers" element={<Offers/>}/>
                         <Route path="purchases" element={<Purchases/>}/>
                         <Route path="messages" element={<Messages/>}/>
                         <Route path="add" element={<AddListing/>}/>
