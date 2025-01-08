@@ -30,6 +30,7 @@ import Reports from "./components/dashboard/reports";
 import Orders from "./pages/dashboard/orders";
 import Offers from "./pages/dashboard/offers";
 import Messages from "./pages/dashboard/messages";
+import Order from "./pages/Order";
 function App() {
 
     // Change default theme to light theme
@@ -74,7 +75,7 @@ function App() {
                     <Route path="/edit/:id" element={<AddListing/>}/>
                     <Route path="/flash-sales" element={<FlashSalesPage />} />
 
-
+                    <Route path="/flashSalesOrders" element={<Order/>} />
                     <Route path="/checkout" element={<Checkout/>}/>
                     <Route path="/rent-transport" element={<RentTransport/>}/>
                     <Route path="/profile/:userId" element={<UserProfile/>}/>

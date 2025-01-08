@@ -32,12 +32,6 @@ const listingTypes = {
             required: false,
         },
         {
-            name: "expiration_date",
-            type: "date",
-            label: "Expiration Date",
-            required: false,
-        },
-        {
             name: "available_quantity",
             type: "number",
             label: "Available quantity in kg",
@@ -106,13 +100,6 @@ const listingTypes = {
             type: "number",
             label: "Wanted quantity(Kg)",
             min: 1,
-            required: true,
-        },
-        {
-            name: "wanted_price",
-            type: "number",
-            label: "Wanted price per kg (Rs.)",
-            min: 0,
             required: true,
         },
     ],
