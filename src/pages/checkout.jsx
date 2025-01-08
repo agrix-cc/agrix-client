@@ -87,6 +87,9 @@ const Checkout = () => {
             return;
         }
         setIsProcessing(false);
+        console.log(data)
+        console.log(user)
+        console.log(listing)
     }
 
     useEffect(() => {
