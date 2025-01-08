@@ -1,5 +1,5 @@
-import { IoClose } from "react-icons/io5";
-import { useEffect, useState } from "react";
+import {IoClose} from "react-icons/io5";
+import {useEffect, useState} from "react";
 import axios from "axios";
 
 const OfferScreen = (props) => {
@@ -78,12 +78,13 @@ const OfferScreen = (props) => {
     }
 
     return (listings &&
-        <div className="shadow-md fixed top-0 left-0 h-screen w-screen z-50 grid place-content-center bg-opacity-10 bg-black backdrop-blur">
+        <div
+            className="shadow-md fixed top-0 left-0 h-screen w-screen z-50 grid place-content-center bg-opacity-10 bg-black backdrop-blur">
             <div className="bg-white rounded relative">
                 <div className="flex justify-between items-center gap-4 sticky top-0 left-0 bg-white p-4">
                     <p>Select your offer</p>
                     <button onClick={closer}>
-                        <IoClose className="text-lg" />
+                        <IoClose className="text-lg"/>
                     </button>
                 </div>
                 <div className="max-h-[calc(100vh-512px)] overflow-y-auto">
@@ -92,7 +93,7 @@ const OfferScreen = (props) => {
                             key={idx}
                             listing={listing}
                             selected={selectedListing?.id === listing.listing.id}
-                            selectListing={setSelectedListing} />
+                            selectListing={setSelectedListing}/>
                     )}
                 </div>
                 {selectedListing &&
@@ -103,15 +104,15 @@ const OfferScreen = (props) => {
                                 <label htmlFor="offer_price">Offer price per kg: </label>
                                 <div>
                                     Rs. <input
-                                        required
-                                        name="offerPrice"
-                                        onChange={(e) => setOfferPrice(e.target.value)}
-                                        value={offerPrice}
-                                        placeholder="Enter price"
-                                        className="p-2 border-zinc-400 border rounded md:w-52"
-                                        type="number"
-                                        id="offer_price"
-                                        min={0} />
+                                    required
+                                    name="offerPrice"
+                                    onChange={(e) => setOfferPrice(e.target.value)}
+                                    value={offerPrice}
+                                    placeholder="Enter price"
+                                    className="p-2 border-zinc-400 border rounded md:w-52"
+                                    type="number"
+                                    id="offer_price"
+                                    min={0}/>
                                 </div>
                             </div>
                         }
@@ -119,16 +120,16 @@ const OfferScreen = (props) => {
                             <label htmlFor="offer_qty">Quantity offering: </label>
                             <div>
                                 Kg <input
-                                    required
-                                    name="offerPrice"
-                                    onChange={(e) => setOfferQty(e.target.value)}
-                                    value={offerQty}
-                                    placeholder="Enter quantity"
-                                    className="p-2 border-zinc-400 border rounded md:min-w-52"
-                                    type="number"
-                                    id="offer_qty"
-                                    max={selectedListing.CropListing.available_quantity}
-                                    min={0} />
+                                required
+                                name="offerPrice"
+                                onChange={(e) => setOfferQty(e.target.value)}
+                                value={offerQty}
+                                placeholder="Enter quantity"
+                                className="p-2 border-zinc-400 border rounded md:min-w-52"
+                                type="number"
+                                id="offer_qty"
+                                max={selectedListing.CropListing.available_quantity}
+                                min={0}/>
                             </div>
                         </div>
                         {!isDonation &&
@@ -150,12 +151,14 @@ const OfferScreen = (props) => {
 }
 
 const Listing = (props) => {
-    const { listing, selectListing, selected } = props;
+    const {listing, selectListing, selected} = props;
     return (
         <div
+            id={listing.listing.id}
             onClick={() => selectListing(listing.listing)}
             className={`flex justify-between gap-4 cursor-pointer border-b border-zinc-300 p-4 ${selected ? "bg-mint-green" : ""}`}>
-            <img className="w-32 h-32 rounded object-cover aspect-square flex-shrink-0" src={listing.listing_image} alt="" />
+            <img className="w-32 h-32 rounded object-cover aspect-square flex-shrink-0" src={listing.listing_image}
+                 alt=""/>
             <div>
                 <p>Id: {listing.listing.id}</p>
                 <p>{listing.listing.title.length > 50 ? listing.listing.title.slice(0, 50) + "..." : listing.listing.title}</p>

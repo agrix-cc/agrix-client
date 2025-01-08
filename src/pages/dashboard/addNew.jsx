@@ -440,7 +440,7 @@ const AddListing = () => {
                 <MobileNav/>
                 <Toaster/>
                 <p className="mt-16 p-4 font-medium text-2xl">
-                    {id ? `Edit listing Id: #${id}` : `Create new ${listingType === "wanted" && "wanted"} listing`}
+                    {id ? `Edit listing Id: #${id}` : `Create new ${listingType === "wanted" ? "wanted listing" : "listing"} `}
                 </p>
                 <div className="md:flex md:justify-center md:items-center">
                     <form className="w-full md:min-w-[512px] md:max-w-md">
