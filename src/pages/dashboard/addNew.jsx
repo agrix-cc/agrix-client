@@ -580,9 +580,8 @@ const AddListing = () => {
                                                     id={listingInput.name}
                                                     value={additionalInfo[listingInput.name] || 0}
                                                     hidden={
-                                                        listingInput.name === "delivery_fare_per_kg" &&
-                                                        (additionalInfo.delivery_options === "pickup" ||
-                                                            !additionalInfo.delivery_options)
+                                                        (listingInput.name === "delivery_fare_per_kg" &&
+                                                            (additionalInfo.delivery_options === "pickup" || !additionalInfo.delivery_options)) || (isDonation && listingInput.name === "wanted_price")
                                                     }
                                                     label={listingInput.label}
                                                     min={listingInput.min}
