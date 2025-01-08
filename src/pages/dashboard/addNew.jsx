@@ -434,10 +434,6 @@ const AddListing = () => {
         setAdditionalInfo((prevState) => ({...prevState, is_donation: isDonation}));
     }, [isDonation, additionalInfo])
 
-    useEffect(() => {
-        console.log(additionalInfo)
-    }, [additionalInfo])
-
     return (
         listingTypes && (
             <div className="mb-20 pb-8 add-listing">

@@ -116,7 +116,7 @@ const DeleteButton = (props) => {
     return(
         <DialogRoot>
             <DialogTrigger asChild>
-                <button className="text-red-500">
+                <button className="text-red-500 delete-button">
                     <MdDeleteForever/>
                 </button>
             </DialogTrigger>
@@ -131,7 +131,7 @@ const DeleteButton = (props) => {
                     <DialogActionTrigger asChild>
                         <button
                             onClick={handleDelete}
-                            className="text-red-500"> Confirm
+                            className="text-red-500 confirm-delete"> Confirm
                         </button>
                     </DialogActionTrigger>
                     <DialogActionTrigger asChild>
