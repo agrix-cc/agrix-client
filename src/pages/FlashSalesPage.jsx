@@ -16,7 +16,7 @@ const FlashSalesPage = () => {
     useEffect(() => {
         const fetchFlashSales = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/listing/flash-sales`);
+                const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/listings/flash-sales`);
                 const updatedListings = response.data.listings.map((item) => ({
                     ...item,
                     quantity: 1, // Initialize quantity for each item
