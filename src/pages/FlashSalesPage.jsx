@@ -28,23 +28,8 @@ const FlashSalesPage = () => {
                 setLoading(false);
             }
         };
-
         fetchFlashSales();
     }, []);
-
-    // Calculate time remaining for flash sales
-    const getTimeRemaining = (endTime) => {
-        const currentTime = new Date();
-        const timeDiff = new Date(endTime) - currentTime;
-
-        if (timeDiff <= 0) return "Sale Ended";
-
-        const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-
-        return `${days}d ${hours}h ${minutes}m`;
-    };
 
     // Update quantity of items
     const handleQuantityChange = (id, newQuantity) => {
@@ -92,11 +77,10 @@ const FlashSalesPage = () => {
             <MobileNav/>
 
             <div
-                className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4"
+                className="mt-12 md:mt-6 mx-4 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4"
                 data-testid="flash-sales-grid"
             >
                 {flashSales.map((item) => {
-                    const timeRemaining = getTimeRemaining(item.crop.flash_sale_end);
                     const totalPrice = (item.crop.discounted_price * item.quantity).toFixed(2);
 
                     return (
@@ -105,22 +89,8 @@ const FlashSalesPage = () => {
                             data-testid={`flash-sale-item-${item.id}`}
                             className="relative mt-[40px] rounded-lg border bg-white shadow-md transition-shadow hover:shadow-lg"
                         >
-                            {/* Flash Sale Banner */}
-                            <div
-                                className="absolute -right-7 top-7 z-10 rotate-45 transform bg-yellow-500 px-4 py-1 text-xl font-bold text-white shadow-lg"
-                                data-testid={`flash-sale-banner-${item.id}`}
-                            >
-                                Flash Sale
-                            </div>
-
                             <div className="relative">
                                 <ListingImagesSlider images={item.images}/>
-                                <p
-                                    className="absolute bottom-2 right-2 rounded bg-red-600 px-2 py-1 text-sm font-semibold text-white"
-                                    data-testid={`item-time-remaining-${item.id}`}
-                                >
-                                    Ends in: {timeRemaining}
-                                </p>
                             </div>
 
                             <div className="p-4">
@@ -196,20 +166,13 @@ const FlashSalesPage = () => {
                                     </p>
                                     <button
 
-                                        className={`rounded-md px-4 py-2 font-semibold ${
-                                            timeRemaining === "Sale Ended"
-                                                ? "bg-red-700 text-white cursor-not-allowed"
-                                                : "bg-white text-green-500"
-                                        }`}
+                                        className="rounded-md px-4 py-2 font-semibold bg-white text-green-500"
                                         data-testid={`buy-now-${item.id}`}
-                                        disabled={timeRemaining === "Sale Ended"}
                                         onClick={() => {
                                             setSelectedItem(item);
                                             setShowOrderCard(true);
-                                        }}
-
-                                    >
-                                        {timeRemaining === "Sale Ended" ? "Ends" : "Buy now"}
+                                        }}>
+                                        Buy now
                                     </button>
                                 </div>
                             </div>

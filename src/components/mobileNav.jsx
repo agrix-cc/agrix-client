@@ -13,6 +13,7 @@ import {HiOutlineUser} from "react-icons/hi2";
 import {HiUser} from "react-icons/hi2";
 import DesktopNav from "./desktopNav";
 import {jwtDecode} from "jwt-decode";
+import {IoFlash, IoFlashOutline} from "react-icons/io5";
 
 
 const MobileNavItem = (props) => {
@@ -29,7 +30,9 @@ const MobileNavItem = (props) => {
         "Connections": <HiOutlineUserGroup/>,
         "Connections-active": <HiMiniUserGroup/>,
         "Profile": <HiOutlineUser/>,
-        "Profile-active": <HiUser/>
+        "Profile-active": <HiUser/>,
+        "Flash Sale" : <IoFlashOutline/>,
+        "Flash Sale-active" : <IoFlash/>
     }), []);
 
     let decoded;
@@ -66,6 +69,9 @@ const MobileNavItem = (props) => {
         if (!name) return null;
         if (name === "Home") {
             return '/';
+        }
+        if (name === "Flash Sale") {
+            return "/flash-sales";
         }
         if (name === "Profile") {
             if (role === "admin") {
