@@ -24,7 +24,7 @@ const ItemCard = (props) => {
             break;
         case "crop":
             cardDetails.quantity = `${data.crop.available_quantity}Kg Available`;
-            cardDetails.price = data.crop.price_per_kg;
+            cardDetails.price = data.crop.is_flash_sale ? data.crop.discounted_price : data.crop.price_per_kg;
             cardDetails.priceDescription = "Price per Kg";
             break;
         default:
@@ -53,6 +53,9 @@ const ItemCard = (props) => {
                             (cardDetails.quantity || data.transport.vehicle_type.replace("_", " "))
                         }
                     </p>
+                    {
+                        data.crop?.is_flash_sale && "Flash sale"
+                    }
                     {listingType === "wanted" && data.wantedListing.is_donation
                         ? <div className="rounded bg-lime-green p-2 text-white text-center">
                             <p>Donation request</p>

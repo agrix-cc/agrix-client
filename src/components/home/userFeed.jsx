@@ -10,7 +10,7 @@ const UserFeed = () => {
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_SERVER_URL}/listings/latest`)
             .then(res => {
-                setListings(res.data.listings);
+                setListings(res.data.listings.filter(listing => !listing.crop?.is_flash_sale));
             })
             .catch(err => {
                 if (err.response) {
