@@ -51,10 +51,11 @@ const Market = () => {
 
         axios.get(`${process.env.REACT_APP_SERVER_URL}/listings/${params.offset}/${type}/${sort}/${city}/${district}/${search}`)
             .then(res => {
+                console.log(res)
                 if (params.offset > 0) {
                     setListings(prevListing => [...prevListing, ...res.data.listings]);
                 } else {
-                    setListings(res.data.listings);
+                    setListings(res.data.listings.filter(listing => !listing.crop?.is_flash_sale));
                 }
                 setIsEnd(res.data.end);
             })

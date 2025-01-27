@@ -12,6 +12,7 @@ const Offers = () => {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('jwtToken');
         axios.get(`${process.env.REACT_APP_SERVER_URL}/offers/all`)
             .then(res => {
+                console.log(res.data.offers)
                 setOffers(res.data.offers);
             })
             .catch(err => {
@@ -66,6 +67,7 @@ const Offers = () => {
 
 const OfferRow = (props) => {
     const {offer, onDelete} = props;
+    console.log(offer)
 
     const navigate = useNavigate();
 

@@ -348,33 +348,6 @@ const Reports = () => {
                         </ul>
                     </div>
                 )}
-                {listingChartData && (
-                    <div className="lg:w-1/2 flex flex-col items-center mt-8 lg:mt-0">
-                        <h2 className="text-2xl font-semibold mb-4 text-gray-700 text-center">
-                            Listing Stats
-                        </h2>
-                        <div style={{width: "350px", height: "350px"}}>
-                            <Pie
-                                data={listingChartData}
-                                options={{responsive: true, maintainAspectRatio: false}}
-                            />
-                        </div>
-                        <ul className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-center mt-4">
-                            <li className="text-gray-600 text-md">
-                                <span className="font-medium">Confirmed</span>:{" "}
-                                {listingStatsCount.confirmed}
-                            </li>
-                            <li className="text-gray-600 text-md">
-                                <span className="font-medium">Pending</span>:{" "}
-                                {listingStatsCount.pending}
-                            </li>
-                            <li className="text-gray-600 text-md">
-                                <span className="font-medium">Rejected</span>:{" "}
-                                {listingStatsCount.rejected}
-                            </li>
-                        </ul>
-                    </div>
-                )}
             </div>
             <hr className="my-8"/>
             <h2 className="text-2xl font-semibold mb-4 text-gray-700 text-center">

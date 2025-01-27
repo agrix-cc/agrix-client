@@ -9,7 +9,7 @@ import {
     FaNewspaper,
     FaUser,
 } from "react-icons/fa6";
-import {FaShoppingBag, FaStreetView} from "react-icons/fa";
+import {FaShoppingBag} from "react-icons/fa";
 import {Toaster} from "../components/ui/toaster";
 import {useMediaQuery} from "@mui/material";
 import {LuLogOut} from "react-icons/lu";
@@ -84,11 +84,6 @@ const Dashboard = () => {
                                     label="My Purchases"
                                 />
                                 <HomeButton
-                                    onClick={() => navigate("viewusers")}
-                                    icon={<FaStreetView/>}
-                                    label="View Users"
-                                />
-                                <HomeButton
                                     onClick={() => navigate("messages")}
                                     icon={<FaMessage/>}
                                     label="Messages"
@@ -98,11 +93,15 @@ const Dashboard = () => {
                                     icon={<MdCreateNewFolder/>}
                                     label="Create new listing"
                                 />
-                                <HomeButton
-                                    onClick={() => navigate("reports")}
-                                    icon={<HiDocumentReport/>}
-                                    label="Reports"
-                                />
+                                {
+                                    user.profile_type !== "generalUser" &&
+                                    <HomeButton
+                                        onClick={() => navigate("reports")}
+                                        icon={<HiDocumentReport/>}
+                                        label="Reports"
+                                    />
+                                }
+
                                 <HomeButton
                                     isLogOut
                                     onClick={handleLogOut}

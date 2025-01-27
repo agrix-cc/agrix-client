@@ -166,7 +166,7 @@ const OrderView = (props) => {
                                         (order.CropListing && [
                                             {label: "Pending", value: "pending"},
                                             {label: "Processing", value: "processing"},
-                                            {label: "Cancelled", value: "canceled"},
+                                            {label: "Cancelled", value: "cancelled"},
                                             {label: "Delivered", value: "delivered"},
                                         ]) || (order.TransportListing && [
                                             {label: "Pending", value: "pending"},
@@ -174,7 +174,7 @@ const OrderView = (props) => {
                                             {label: "Awaiting", value: "awaiting"},
                                             {label: "In transit", value: "intransit"},
                                             {label: "Delivered", value: "delivered"},
-                                            {label: "Cancelled", value: "canceled"},
+                                            {label: "Cancelled", value: "cancelled"},
                                         ]) || (order.StorageListing && [
                                             {label: "Pending", value: "pending"},
                                             {label: "Accepted", value: "accepted"},
@@ -183,7 +183,7 @@ const OrderView = (props) => {
                                             {label: "Completed", value: "completed"},
                                             {label: "Overdue", value: "overdue"},
                                             {label: "Abandoned", value: "abandoned"},
-                                            {label: "Cancelled", value: "canceled"},
+                                            {label: "Cancelled", value: "cancelled"},
                                         ])
                                     }
                                     onChange={(value) => {

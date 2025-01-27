@@ -108,6 +108,7 @@ const CropInformation = (props) => {
         quality_grade,
         delivery_options,
         delivery_fare_per_kg,
+        best_before_date,
         harvested_date,
         available_quantity,
         crop_name,
@@ -129,10 +130,12 @@ const CropInformation = (props) => {
                 <li className="text-gray-500">Quality: <span className="text-black">Grade {quality_grade}</span></li>
                 <li className="text-gray-500">Harvested date: <span
                     className="text-black">{new Date(harvested_date).toLocaleDateString()}</span></li>
+                <li className="text-gray-500">Best before date: <span
+                    className="text-black">{new Date(best_before_date).toLocaleDateString()}</span></li>
                 <li className="text-gray-500">Delivery: <span
                     className="capitalize text-black">{delivery_options === "both" ? 'Pickup and Deliver both' : delivery_options}</span>
                 </li>
-                {delivery_fare_per_kg &&
+                {delivery_fare_per_kg !== 0 &&
                     <li className="text-gray-500">Delivery fare per kg: <span
                         className="capitalize text-black">Rs. {delivery_fare_per_kg.toFixed(2)}</span></li>
                 }

@@ -14,9 +14,9 @@ const FlashSalesPage = () => {
 
     // Fetch flash sale items
     useEffect(() => {
-        const fetchFlashSales = async () => {
+        const fetchData = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/listings/flash-sales`);
+                const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/flash-sale`);
                 const updatedListings = response.data.listings.map((item) => ({
                     ...item,
                     quantity: 1, // Initialize quantity for each item
@@ -27,8 +27,8 @@ const FlashSalesPage = () => {
             } finally {
                 setLoading(false);
             }
-        };
-        fetchFlashSales();
+        }
+        fetchData();
     }, []);
 
     // Update quantity of items
@@ -89,8 +89,8 @@ const FlashSalesPage = () => {
                             data-testid={`flash-sale-item-${item.id}`}
                             className="relative mt-[40px] rounded-lg border bg-white shadow-md transition-shadow hover:shadow-lg"
                         >
-                            <div className="relative">
-                                <ListingImagesSlider images={item.images}/>
+                            <div className="relative overflow-hidden">
+                                <img src={item.images[0]} alt="" className="object-cover w-full aspect-[4/3]"/>
                             </div>
 
                             <div className="p-4">
@@ -105,6 +105,12 @@ const FlashSalesPage = () => {
                                     data-testid={`item-available-quantity-${item.id}`}
                                 >
                                     Available Amount: {item.crop.available_quantity} Kg
+                                </p>
+                                <p
+                                    className="mt-2 line-clamp-2 text-gray-600"
+                                    data-testid={`item-available-quantity-${item.id}`}
+                                >
+                                    Best before date: {new Date(item.crop.best_before_date).toLocaleDateString()}
                                 </p>
                                 <p
                                     className="text-m mt-2 line-clamp-2 text-green-600 line-through"
@@ -126,47 +132,48 @@ const FlashSalesPage = () => {
                                 </p>
 
                                 <div
-                                    className="mt-4 flex items-center justify-between rounded-md bg-green-500 p-4"
+                                    className="mt-4 rounded-md bg-green-500 p-4"
                                     data-testid={`quantity-controls-${item.id}`}
                                 >
-                                    <div className="flex items-center space-x-4">
-                                        <button
-                                            onClick={() =>
-                                                handleQuantityChange(
-                                                    item.id,
-                                                    Math.max(1, item.quantity - 1)
-                                                )
-                                            }
-                                            className="text-xl font-bold text-white"
-                                            data-testid={`decrease-quantity-${item.id}`}
-                                        >
-                                            -
-                                        </button>
+                                    <div className="w-full justify-between items-center flex mb-4">
+                                        <div className="flex items-center space-x-4">
+                                            <button
+                                                onClick={() =>
+                                                    handleQuantityChange(
+                                                        item.id,
+                                                        Math.max(1, item.quantity - 1)
+                                                    )
+                                                }
+                                                className="text-xl font-bold text-white"
+                                                data-testid={`decrease-quantity-${item.id}`}
+                                            >
+                                                -
+                                            </button>
+                                            <p
+                                                className="text-lg font-semibold text-white"
+                                                data-testid={`quantity-${item.id}`}
+                                            >
+                                                {item.quantity} kg
+                                            </p>
+                                            <button
+                                                onClick={() =>
+                                                    handleQuantityChange(item.id, item.quantity + 1)
+                                                }
+                                                className="text-xl font-bold text-white"
+                                                data-testid={`increase-quantity-${item.id}`}
+                                            >
+                                                +
+                                            </button>
+                                        </div>
                                         <p
-                                            className="text-lg font-semibold text-white"
-                                            data-testid={`quantity-${item.id}`}
+                                            className="text-xl font-semibold text-white"
+                                            data-testid={`total-price-${item.id}`}
                                         >
-                                            {item.quantity} kg
+                                            Rs. {totalPrice}
                                         </p>
-                                        <button
-                                            onClick={() =>
-                                                handleQuantityChange(item.id, item.quantity + 1)
-                                            }
-                                            className="text-xl font-bold text-white"
-                                            data-testid={`increase-quantity-${item.id}`}
-                                        >
-                                            +
-                                        </button>
                                     </div>
-                                    <p
-                                        className="text-xl font-semibold text-white"
-                                        data-testid={`total-price-${item.id}`}
-                                    >
-                                        Rs. {totalPrice}
-                                    </p>
                                     <button
-
-                                        className="rounded-md px-4 py-2 font-semibold bg-white text-green-500"
+                                        className="w-full rounded-md px-4 py-2 font-semibold bg-white text-green-500"
                                         data-testid={`buy-now-${item.id}`}
                                         onClick={() => {
                                             setSelectedItem(item);

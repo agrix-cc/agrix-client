@@ -82,7 +82,7 @@ const OrderRow = (props) => {
             case "abandoned":
                 setBadgeColor("red");
                 return;
-            case "canceled":
+            case "cancelled":
                 setBadgeColor("red");
                 return;
             default:
