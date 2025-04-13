@@ -94,7 +94,7 @@ const Dashboard = () => {
                                     label="Create new listing"
                                 />
                                 {
-                                    user.profile_type !== "generalUser" &&
+                                    user.profile_type !== "generaluser" &&
                                     <HomeButton
                                         onClick={() => navigate("reports")}
                                         icon={<HiDocumentReport/>}
